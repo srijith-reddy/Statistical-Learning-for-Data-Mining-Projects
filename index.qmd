@@ -1,0 +1,12 @@
+---
+title: "Welcome"
+format: html
+---
+
+# My Portfolio
+
+Explore my projects in statistical learning and data mining.
+
+- [Project 1](project1.qmd)
+- [Project 2](project2.qmd)
+- [Project 3](project3.qmd)
