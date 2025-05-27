@@ -1,14 +1,18 @@
 ---
 title: "STA 9890 Project: Property Valuation"
-format: html
-execute: true
----
+format: 
+  html:
+    code-fold: true  # collapses code blocks by default
+    code-tools: true # adds copy/download buttons
+execute:
+  echo: true         # show code
+  output: true       # show output
+  eval: false       
 
+---
 ## 📄 Full Report
 
 [Download the full PDF report](files/9890_Final_Report.pdf)
-
----
 
 ## 🔍 Summary
 
@@ -2898,74 +2902,6 @@ test_merged = test.merge(pivoted, on='acct', how='left')
 
 ```{python}
 acct_test = test_merged[['acct']].copy() if 'acct' in test_merged.columns else None
-```
-
-```{python}
-import numpy as np
-import pandas as pd
-import optuna
-import logging
-from sklearn.metrics import root_mean_squared_error
-from sklearn.model_selection import train_test_split
-
-# === Setup Logging ===
-logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
-logger = logging.getLogger("OptunaBlender")
-optuna.logging.set_verbosity(optuna.logging.INFO)
-
-# === Load base model predictions ===
-oof_xgb = np.load("oof_preds_xgbreg.npy")
-ridge_oof = np.load("ridgecv_oof_preds.npy")
-oof_lgb=np.load("oof_preds_lgbm.npy")
-test_xgb = np.load("test_preds_xgbreg.npy")
-ridge_test_preds = np.load("ridgecv_test_preds.npy")
-test_lgb=np.load("test_preds_lgbm_shap.npy")
-huber_oof=np.load('oof_preds_huber.npy')
-huber_test=np.load("test_preds_huber.npy")
-# === Targets and prediction stack ===
-y_meta = train['TARGET'].values
-X_base = np.vstack([oof_xgb, ridge_oof,oof_lgb,huber_oof]).T
-X_test_base = np.vstack([test_xgb, ridge_test_preds,test_lg,huber_test]).T
-
-# === Holdout split ===
-X_train, X_holdout, y_train, y_holdout = train_test_split(X_base, y_meta, test_size=0.2, random_state=42)
-
-# === Objective Function ===
-def objective(trial):
-    weights = [trial.suggest_float(f"w{i}", 0, 1) for i in range(X_train.shape[1])]
-    weights = np.array(weights)
-    weights /= weights.sum()  # normalize
-
-    preds = X_holdout @ weights
-    rmse = root_mean_squared_error(y_holdout, preds)
-
-    logger.info(f"Trial {trial.number} | Weights: {np.round(weights, 3).tolist()} | RMSE: {rmse:,.4f}")
-    return rmse
-
-# === Run Study ===
-logger.info(" Starting Optuna optimization for weighted blending...")
-study = optuna.create_study(direction="minimize")
-study.optimize(objective, n_trials=100)
-
-# === Best weights ===
-best_weights = np.array([study.best_trial.params[f"w{i}"] for i in range(X_base.shape[1])])
-best_weights /= best_weights.sum()
-logger.info(f" Best weights: {np.round(best_weights, 4)}")
-logger.info(f" Best RMSE: {study.best_value:.4f}")
-
-# === Final test prediction ===
-meta_preds = X_test_base @ best_weights
-
-# === Save predictions ===
-np.save("test_preds_optuna_blended.npy", meta_preds)
-account_ids = acct_test.values.ravel()
-submission = pd.DataFrame({
-    "ACCOUNT": account_ids,
-    "TARGET": meta_preds
-})
-submission.to_csv("submission_optuna_blended.csv", index=False)
-logger.info(" Saved: test_preds_optuna_blended.npy and submission_optuna_blended.csv")
-
 ```
 
 ```{python}

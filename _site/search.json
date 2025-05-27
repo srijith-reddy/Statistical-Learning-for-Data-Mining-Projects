@@ -1,0 +1,30 @@
+[
+  {
+    "objectID": "project3.html",
+    "href": "project3.html",
+    "title": "STA 9890 Project: Property Valuation",
+    "section": "",
+    "text": "Download the full PDF report"
+  },
+  {
+    "objectID": "project3.html#full-report",
+    "href": "project3.html#full-report",
+    "title": "STA 9890 Project: Property Valuation",
+    "section": "",
+    "text": "Download the full PDF report"
+  },
+  {
+    "objectID": "project3.html#summary",
+    "href": "project3.html#summary",
+    "title": "STA 9890 Project: Property Valuation",
+    "section": "🔍 Summary",
+    "text": "🔍 Summary\n\nTask: Predict 2019 assessed property value using structured property records from 2015–2019\nModels: RidgeCV, XGBoost, LightGBM\nFeature Selection: SHAP + Gain union\nEnsembling: Optuna weights + ElasticNet stacked\nTop RMSE: 36,021 on private leaderboard (ElasticNet ensemble)"
+  },
+  {
+    "objectID": "project3.html#full-modeling-pipeline",
+    "href": "project3.html#full-modeling-pipeline",
+    "title": "STA 9890 Project: Property Valuation",
+    "section": "🚀 Full Modeling Pipeline",
+    "text": "🚀 Full Modeling Pipeline"
+  }
+]
