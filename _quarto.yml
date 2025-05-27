@@ -12,7 +12,7 @@ website:
       - href: project2.qmd
         text: Ensemble Learning Techniques for Fair Classification
       - href: project3.qmd
-        text: Forecasting Property Valuations in a Mid-Sized U.S. City: A SHAP-Gain Feature Selection and ElasticNet-Ensembled Approach with Optuna-Tuned XGBoost
+        text: Forecasting Property Valuations in a Mid-Sized U.S. City:A SHAP-Gain Feature Selection and ElasticNet-Ensembled Approach with Optuna-Tuned XGBoost
 
 format:
   html:
