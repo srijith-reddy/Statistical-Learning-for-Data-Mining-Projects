@@ -42,9 +42,10 @@ This logic was applied across multiple feature groups:
 - Valuation features: building value, land value, assessed
 - Categorical building attributes: foundation type, grade, building condition, quality, quality description, physical condition, exterior walls, has cooling, has heat
 ```{python}
-  echo: true
-  output: false
-  collapse: true
+#| echo: true
+#| output: false
+#| collapse: true
+
 def backfill_categorical_year_features(df, features, years):
     for feature in features:
         year_cols = [f"{feature}_{y}" for y in years if f"{feature}_{y}" in df.columns]
@@ -71,9 +72,10 @@ In cases where `floor_area_total_2019 = 0`, we treated the property as non-resid
 
 These records were retained in the dataset rather than dropped, as they likely represent a distinct class of properties where valuation is driven primarily by land characteristics. Explicitly identifying and treating these properties allowed the model to better separate residential and non-residential valuation patterns.
 ```{python}
-echo: true
-output: false
-collapse: true
+#| echo: true
+#| output: false
+#| collapse: true
+
 # === STEP 0: Define base feature names ===
 numeric_bases = [
     'garage_area', 'porch_area', 'floors', 'half_bath', 'full_bath',
@@ -126,9 +128,10 @@ for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)
 **Feature Drop Based on Sparse Signals:**
 For features that appeared largely irrelevant or unused across the dataset, we calculated the percentage of zero values in columns such as mobile home area, deck area, and porch area. If a column contained over 90% zeros, it was considered non-informative and dropped from the modeling pipeline to reduce dimensionality and noise.
 ```{python}
-echo: true
-output: false
-collapse: true
+#| echo: true
+#| output: false
+#| collapse: true
+
 cols_to_drop = [col for col in train_merged.columns if col.startswith("mobile_home_area")]
 
 # Drop from both sets
@@ -144,9 +147,10 @@ After applying logic-based pruning, we used a three-level median imputation stra
 - Level 3: global median (fallback)
 
 ```{python}
-echo: true
-output: false
-collapse: true
+#| echo: true
+#| output: false
+#| collapse: true
+
 # List of all assessed columns to impute
 assessed_cols = ['assessed_2015', 'assessed_2016', 'assessed_2017', 'assessed_2018']
 
@@ -201,9 +205,10 @@ Using the merged and imputed stats, we computed derived features such as:
 
 These features helped contextualize each property’s assessed value relative to other properties within the same neighborhood or region. They proved useful in capturing outliers and potentially undervalued homes that deviated from local valuation patterns.
 ```{python}
-echo: true
-output: false
-collapse: true
+#| echo: true
+#| output: false
+#| collapse: true
+
 # === Step 1: Compute neighborhood-level stats ===
 neigh_stats = train_merged.groupby('neighborhood')['assessed_2018'].agg([
     ('neigh_assess_mean', 'mean'),
@@ -276,9 +281,10 @@ This encoding strategy served two purposes:
 
 Finally, frequency encoding avoids the dimensional explosion caused by one-hot encoding, which is especially problematic for variables with high cardinality like neighborhood or subneighborhood.
 ```{python}
-echo: true
-output: false
-collapse: true
+#| echo: true
+#| output: false
+#| collapse: true
+
 for col in ['neighborhood', 'region','zone','subneighborhood']:
     if col in train_merged.columns:
         # Step 1: Compute frequency from training data
@@ -300,9 +306,10 @@ for col in ['neighborhood', 'region','zone','subneighborhood']:
 **Ordinal Encoding:** For ordinal features such as quality, quality description, grade, building condition, and physical condition, we performed domain-informed cleaning and then applied ordinal encoding based on defined category hierarchies. Prior to encoding, raw values were standardized through column-specific replacements. For instance, extreme or ambiguous values like X, None, or overly granular subgrades (e.g., X-, E+) were either mapped to more interpretable categories or treated as missing. Some detailed conditions like Unsound and Very Poor were collapsed into broader categories such as Poor. Unknown values were handled gracefully by assigning an encoded fallback of -1. This process ensured that ordinal information was preserved in a numerically meaningful way, allowing models to leverage the ordered nature of these features without exploding dimensionality as one-hot encoding would.
 
 ```{python}
-echo: true
-output: false
-collapse: true
+#| echo: true
+#| output: false
+#| collapse: true
+
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import OrdinalEncoder
@@ -376,9 +383,10 @@ To avoid overfitting and data leakage, we implemented a 5-fold cross-validated t
 
 This method enabled us to capture predictive signal from nominal features without creating high-dimensional one-hot encodings or imposing artificial ordinal structure.
 ```{python}
-echo: true
-output: false
-collapse: true
+#| echo: true
+#| output: false
+#| collapse: true
+
 # === STEP 3: Target Encoding (2015–2019 only) ===
 def group_and_target_encode_cv(train_df, test_df, target_name, column, rare_threshold=0.001, smoothing=10, n_splits=5):
     freq = train_df[column].value_counts(normalize=True)
@@ -428,9 +436,10 @@ To enhance robustness and reduce sensitivity to outliers, we converted few conti
 
 Additionally, we binned year built final into five quantiles to capture generational differences in construction periods. This replaced raw year values with interpretable ordinal categories. Original continuous features were removed after binning to avoid redundancy and reduce multicollinearity.
 ```{python}
-echo: true
-output: false
-collapse: true
+#| echo: true
+#| output: false
+#| collapse: true
+
 # === Step 1: List your growth features ===
 growth_features = ['land_value_growth', 'building_value_growth', 'assessed_growth']
 
@@ -482,9 +491,10 @@ Following frequency encoding of high-cardinality spatial variables (region, neig
 
 The intuition behind this strategy is that extremely rare spatial groupings may not provide reliable or generalizable signals to the model. Treating them as a common fallback class (i.e., assigning them a frequency of zero) improves model stability and reduces overfitting to idiosyncratic, low-support locations. This transformation preserves the informativeness of frequent categories while smoothing out sparse tail behavior in the feature space.
 ```{python}
-echo: true
-output: false
-collapse: true
+#| echo: true
+#| output: false
+#| collapse: true
+
 # Define frequency columns and threshold
 freq_cols = ['region_freq', 'neighborhood_freq', 'zone_freq', 'subneighborhood_freq']
 rare_thresh = 0.001
@@ -506,9 +516,10 @@ To satisfy linear model assumptions and reduce skew-related distortion in Ridge 
 
 This transformation was particularly useful for the Ridge regression model, which benefits from normally distributed inputs and is sensitive to extreme values. By selectively applying log1p only to features with high skew, we preserved model interpretability while enhancing numerical stability and predictive performance.
 ```{python}
-echo: true
-output: false
-collapse: true
+#| echo: true
+#| output: false
+#| collapse: true
+
 import numpy as np
 
 # === Step 1: Skew-based Log Transformation (2015–2019 only) ===
@@ -546,9 +557,10 @@ For ultra-skewed features, we applied clipping at the 0.5th and 99.5th percentil
 These transformations were specifically designed for use with XGBoost and LightGBM, where reducing the influence of outliers improves model generalization and enhances interpretability in leaf-based decision structures.
 
 ```{python}
-echo: true
-output: false
-collapse: true
+#| echo: true
+#| output: false
+#| collapse: true
+
 import pandas as pd
 
 
@@ -605,9 +617,10 @@ To enrich model expressiveness, we engineered a comprehensive set of interaction
 
 Additionally, we created a specialized set of log-transformed interaction terms—such as log area x grade, log assess x age, and log value diff—used exclusively in the Ridge pipeline. These features helped linearize multiplicative relationships and reduce skew, improving fit under Ridge’s sensitivity to input distribution. Log-based interactions were excluded from tree models, which are inherently robust to skew and insensitive to monotonic transformations like log, as they rely only on the relative ordering of feature values when making splits.
 ```{python}
-echo: true
-output: false
-collapse: true
+#| echo: true
+#| output: false
+#| collapse: true
+
 # === Interaction Features for Ridge Regression ===
 def add_features(df):
     df = df.copy()
@@ -649,9 +662,10 @@ test_merged = add_features(test_merged)
 
 ```
 ```{python}
-echo: true
-output: false
-collapse: true
+#| echo: true
+#| output: false
+#| collapse: true
+
 # === Interaction Features for Tree models ===
 def add_features(df):
     df = df.copy()
@@ -711,9 +725,10 @@ The final out-of-fold RMSE across all folds was 41,239.79, with an average best 
 
 We saved both OOF predictions and test forecasts as NumPy arrays—`ridgecv_oof_preds.npy` and `ridgecv_test_preds.npy`—for later use in model ensembling. These stored outputs served as reliable building blocks for downstream blending and stacking strategies.
 ```{python}
-echo: true
-output: false
-collapse: true
+#| echo: true
+#| output: false
+#| collapse: true
+
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import RidgeCV
@@ -782,9 +797,10 @@ To capture nonlinear interactions and leverage automatic handling of missing val
 
 **Step 1: Hyperparameter Tuning with Optuna.** For each model, we defined an Optuna objective that trained 3-fold cross-validated models using early stopping. We explored hyperparameter ranges tailored to each algorithm, with LightGBM using a native pruning callback and XGBoost leveraging `XGBoostPruningCallback`. During tuning, we stored the best out-of-fold (OOF) predictions across all trials to later use in ensembling.
 ```{python}
-echo: true
-output: false
-collapse: true
+#| echo: true
+#| output: false
+#| collapse: true
+
 import numpy as np
 import pandas as pd
 import optuna
@@ -884,9 +900,10 @@ np.save("oof_preds_lgbm.npy", global_oof_preds)
 print(" Saved: oof_preds_lgbm.npy")
 ```
 ```{python}
-echo: true
-output: false
-collapse: true
+#| echo: true
+#| output: false
+#| collapse: true
+
 import numpy as np
 import pandas as pd
 import optuna
@@ -985,9 +1002,10 @@ print(" Saved: oof_preds_xgbreg.npy")
 ```
 **Step 2: SHAP and Gain-Based Feature Selection.** After tuning, we trained new LightGBM and XGBoost models using the best parameters on each fold of the training data. For each fold, we computed SHAP importance values and LightGBM/XGBoost gain importances. We retained features that collectively accounted for 95% of total importance in either SHAP or gain, and constructed a union of these high-signal features across all folds. This union was used to define the final reduced feature space for retraining.
 ```{python}
-echo: true
-output: false
-collapse: true
+#| echo: true
+#| output: false
+#| collapse: true
+
 # === STEP 3: SHAP + GAIN Feature Selection for LGBM ===
 kf = KFold(n_splits=3, shuffle=True, random_state=42)
 selected_feature_sets = []
@@ -1029,9 +1047,10 @@ print(" Final Union Feature Count:", len(final_union_features))
 filtered_cat_cols = [col for col in cat_cols if col in final_union_features]
 ```
 ```{python}
-echo: true
-output: false
-collapse: true
+#| echo: true
+#| output: false
+#| collapse: true
+
 # === STEP 3: Post-Optuna SHAP + Gain Feature Selection for XGBoost ===
 kf = KFold(n_splits=3, shuffle=True, random_state=42)
 selected_feature_sets = []
@@ -1066,9 +1085,10 @@ print(" Final Union Feature Count:", len(final_union_features))
 **Step 3: Final Model Training and Inference.** Each final model was retrained on the full training set using only the selected features, with early stopping enabled to prevent overfitting. Predictions on the test set were generated using the best iteration count. All model outputs—including OOF predictions and test forecasts—were saved for submission and later use in ensemble blending.
 
 ```{python}
-echo: true
-output: false
-collapse: true
+#| echo: true
+#| output: false
+#| collapse: true
+
 # === STEP 5: Final Model on Selected Features for LGBM ===
 X_full_selected = X_full[final_union_features]
 X_test_selected = X_test[final_union_features]
@@ -1098,9 +1118,10 @@ submission.to_csv("submission_lgbm_shap.csv", index=False)
 print(" Submission saved: submission_lgbm_shap.csv")
 ```
 ```{python}
-echo: true
-output: false
-collapse: true
+#| echo: true
+#| output: false
+#| collapse: true
+
 # === STEP 5: Final Model on Selected Features for XGBoost ===
 X_full_selected = X_full[final_union_features]
 X_test_selected = X_test[final_union_features]
@@ -1142,9 +1163,10 @@ An Optuna study was run for 100 trials, where each trial proposed a new set of b
 
 These weights were then used to produce a final blended prediction for the test set. The resulting predictions achieved an RMSE of 36,239.91 on the holdout set—outperforming all individual base models and demonstrating the value of combining linear and tree-based perspectives.
 ```{python}
-echo: true
-output: false
-collapse: true
+#| echo: true
+#| output: false
+#| collapse: true
+
 import numpy as np
 import pandas as pd
 import optuna
@@ -1221,9 +1243,10 @@ To complement our Optuna-based weighted average ensemble, we implemented a stack
 
 On the competition leaderboard, the ElasticNetCV ensemble—combining Ridge, XGBoost, and LightGBM predictions—secured the top rank with a private leaderboard RMSE of 36,021, just 2 points above the public leaderboard score of 36,019. Interestingly, while an Optuna-weighted linear blend achieved a lower public RMSE, it ranked below the ElasticNet ensemble on the final evaluation, underscoring the latter’s generalization strength.
 ```{python}
-echo: true
-output: false
-collapse: true
+#| echo: true
+#| output: false
+#| collapse: true
+
 import numpy as np
 from sklearn.linear_model import ElasticNetCV
 from sklearn.pipeline import make_pipeline
@@ -1298,18 +1321,24 @@ To evaluate model robustness, we conducted residual analysis across key dimensio
 3. **Poor Generalization in Sparse Neighborhoods:** Residuals were more variable and extreme in neighborhoods with low frequency in the training data. This suggests weaker model generalization in underrepresented regions. Frequency-aware encodings or collapsing sparse neighborhoods into broader groups may enhance stability and reduce prediction noise in these areas.
 
 ::: {.columns}
+
 ::: {.column width="33%"}
-![Neighborhood Frequency](images/residuals_vs_neighborhood_freq.png){fig-cap="Residuals vs. Neighborhood Frequency" width=100%}
+![Neighborhood Frequency](images/residuals_vs_neighborhood_freq.png){width=100%}
+<center>Neighborhood Frequency</center>
 :::
 
 ::: {.column width="33%"}
-![Protest Count](images/residuals_by_protest_count.png){fig-cap="Residuals by Protest Count (2015–2018)" width=100%}
+![Protest Count](images/residuals_by_protest_count.png){width=100%}
+<center>Protest Count (2015–2018)</center>
 :::
 
 ::: {.column width="33%"}
-![Actual Value](images/residuals_vs_actual_value.png){fig-cap="Residuals vs. Actual Value" width=100%}
+![Actual Value](images/residuals_vs_actual_value.png){width=100%}
+<center>Actual Value</center>
 :::
+
 :::
+
 
 
 # 7. SHAP-Based Interpretability and Insights
@@ -1321,13 +1350,16 @@ SHAP analysis revealed that features like assessed 2018, building value 2018, an
 ## Low-Impact Features
 
 Although SHAP-ranked bottom 30 features showed limited average contribution, they were retained via the 95% SHAP + Gain union due to their potential complementary value. Examples include early-year indicators like quality description 2015, fireplaces 2016, and spatial ratios like porch ratio. Their inclusion likely enhanced generalization by supporting edge cases, and their low impact helped confirm that more aggressive feature pruning would have offered little gain.
+
 ::: {.columns}
 ::: {.column width="50%"}
-![SHAP Bottom 30](images/shap_summary_bottom30_union.png){fig-cap="Bottom 30 SHAP Features" width=100%}
+![SHAP Bottom 30](images/shap_summary_bottom30_union.png){width=100%}
+<center>Bottom 30 SHAP Features</center>
 :::
 
 ::: {.column width="50%"}
-![SHAP Top 30](images/shap_summary_top30_union.png){fig-cap="Top 30 SHAP Features" width=100%}
+![SHAP Top 30](images/shap_summary_top30_union.png){width=100%}
+<center>Top 30 SHAP Features</center>
 :::
 :::
 
