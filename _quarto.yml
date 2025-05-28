@@ -1,5 +1,6 @@
 project:
   type: website
+  output-dir: _site
 
 website:
   title: "Statisitical Learning for Data Mining Project Portfolio"

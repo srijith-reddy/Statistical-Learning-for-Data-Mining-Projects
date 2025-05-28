@@ -1,323 +1,50 @@
+
 ---
 title: "STA 9890 Project: Property Valuation"
-format: 
+format:
   html:
-    code-fold: true  # collapses code blocks by default
-    code-tools: true # adds copy/download buttons
+    code-tools: true
+    toc: true
+    toc-depth: 3
 execute:
-  echo: true         # show code
-  output: true       # show output
-  eval: false       
-
----
-## 📄 Full Report
-
-[Download the full PDF report](files/9890_Final_Report.pdf)
-
-## 🔍 Summary
-
-- **Task**: Predict 2019 assessed property value using structured property records from 2015–2019
-- **Models**: RidgeCV, XGBoost, LightGBM
-- **Feature Selection**: SHAP + Gain union
-- **Ensembling**: Optuna weights + ElasticNet stacked
-- **Top RMSE**: 36,021 on private leaderboard (ElasticNet ensemble)
-
+  echo: true
+  output: true
+  eval: false
 ---
 
-## 🚀 Full Modeling Pipeline
+# 1. Background on Property Valuation and Machine Learning
 
+## 1.1 Why Prediction Accuracy and Interpretability Matter
 
-# Ridge Regression Pipeline
+Property assessment values directly influence individual tax obligations, urban development decisions, and housing affordability analyses. However, public datasets are often noisy and incomplete—featuring missing renovation records, outdated area measurements, or abrupt shifts in land valuation. Therefore, a high-performing ML model must not only minimize prediction error but also provide interpretable insights that help stakeholders understand, trust, and audit the predictions—especially when such predictions may inform public policy or fiscal planning.
 
+# 2. Data Description and Objective
+
+The task is to predict 2019 assessed property values using historical records from 2015 to 2019. Each record includes detailed building features, land area and value, protested assessments, and neighborhood-level identifiers.
+
+The final 2019 target is defined as:
+
+**TARGET = building value 2019 + land value 2019**
+
+This is a regression problem with approximately 600,000 training records and 400,000 test records. No external data was permitted.
+
+# 3. Feature Engineering
+Feature engineering plays a critical role in unlocking predictive signals from raw data, particularly in structured datasets involving temporal and categorical variables. Our goal was to construct meaningful, leakage-free features that improve model performance while maintaining generalization to unseen data. Before initiating any feature transformations, we performed a strict comparison of columns between the training and test datasets to ensure no information advantage was present. This safeguards against data leakage and ensures that engineered features reflect patterns learnable at inference time.
+
+## 3.1 Logic-Driven Missing Value Handling and Imputation
+
+**Backfilling Year-Based Columns Across Feature Groups:**
+To handle missing values in temporally structured features (e.g., building area, quality, full bath), we designed a consistent backfilling approach that uses older data to impute more recent years. Specifically, columns were ordered from newest to oldest (i.e., 2019, 2018, ..., 2015), and we applied `bfill(axis=1)` across these columns. This setup causes older values (e.g., from 2015 or 2016) to be used to fill in newer year columns (e.g., 2018 or 2019), effectively implementing a forward fill in temporal logic. This approach assumes that older data reflects the property’s original state more accurately and helps prevent later-year anomalies or missing values from distorting long-term trends.
+
+This logic was applied across multiple feature groups:
+- Residential count features: floors, full bath, half bath, bedrooms, total rooms
+- Area-based features: building area, land area
+- Valuation features: building value, land value, assessed
+- Categorical building attributes: foundation type, grade, building condition, quality, quality description, physical condition, exterior walls, has cooling, has heat
 ```{python}
-import pandas as pd
-import numpy as np
-
-# ===== Load Data =====
-folder_path = '/Users/Srijith97/Downloads/STA 9890 Housing Data/'
-
-building_years = []
-for year in range(2015, 2020):
-    df = pd.read_csv(folder_path + f'building_details_{year}.csv')
-    df['year'] = year
-    building_years.append(df)
-
-
-building_all = pd.concat(building_years, ignore_index=True)
-building_all = building_all.drop_duplicates(subset=['acct', 'year'], keep='first')
-pivoted = building_all.pivot(index='acct', columns='year')
-pivoted.columns = [f'{col}_{year}' for col, year in pivoted.columns]
-pivoted = pivoted.reset_index()
-
-train = pd.read_csv(folder_path + 'assessment_history_train.csv')
-test = pd.read_csv(folder_path + 'assessment_history_test.csv')
-
-train_merged = train.merge(pivoted, on='acct', how='left')
-test_merged = test.merge(pivoted, on='acct', how='left')
-```
-
-```{python}
-# Step 1: Identify all '2019' columns in train
-train_2019_cols = [col for col in train_merged.columns if '2019' in col]
-
-# Step 2: Find which 2019 columns are missing in test
-train_only_2019_cols = [col for col in train_2019_cols if col not in test_merged.columns]
-
-# Step 3: Always drop 'protested_2019' due to leakage risk
-train_only_2019_cols.append('protested_2019')
-
-# Step 4: Drop the identified columns from train
-train_merged = train_merged.drop(columns=train_only_2019_cols, errors='ignore')
-
-# Step 5: Optional logging
-print(f"Dropped {len(train_only_2019_cols)} columns from train (including protested_2019 if present):")
-print(train_only_2019_cols)
-```
-
-```{python}
-for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-    if 'protested_2019' in df.columns:
-        df.drop(columns='protested_2019', inplace=True)
-        print(f"Dropped 'protested_2019' from {df_name}")
-    else:
-        print(f"'protested_2019' not found in {df_name}")
-
-```
-
-```{python}
-## Get all '2019' columns in train and test
-train_2019_cols = sorted([col for col in train_merged.columns if '2019' in col])
-test_2019_cols = sorted([col for col in test_merged.columns if '2019' in col])
-
-# Print train columns
-print("2019 Columns in train_merged:")
-for col in train_2019_cols:
-    print(f" - {col}")
-
-print("\n 2019 Columns in test_merged:")
-for col in test_2019_cols:
-    print(f" - {col}")
-
-```
-
-```{python}
-# Compare sets
-train_only_2019 = sorted(list(set(train_2019_cols) - set(test_2019_cols)))
-test_only_2019 = sorted(list(set(test_2019_cols) - set(train_2019_cols)))
-
-# Print comparison result
-if not train_only_2019 and not test_only_2019:
-    print("\n All 2019 columns match between train_merged and test_merged.")
-else:
-    print("\n Mismatched 2019 columns found:")
-
-    if train_only_2019:
-        print(" In train_merged but not in test_merged:")
-        for col in train_only_2019:
-            print(f"   - {col}")
-
-    if test_only_2019:
-        print(" In test_merged but not in train_merged:")
-        for col in test_only_2019:
-            print(f"   - {col}")
-```
-
-```{python}
-# Step 1: Store target separately
-y_train = train_merged["TARGET"].values
-
-# Step 4: Confirm sizes
-print(f"Train shape: {train.shape}")
-print(f"Test shape: {test.shape}")
-
-```
-
-```{python}
-# Calculate % of missing values in each column of TRAIN only
-train_na = (train_merged.isnull().sum() / train_merged.shape[0]) * 100
-
-# Drop columns with no missing values, sort the rest
-train_na = train_na[train_na > 0].sort_values(ascending=False)
-
-# Optional: Show top 200 missing features
-missing_data = pd.DataFrame({'Missing Ratio (%)': train_na})
-
-# Display
-print("Top columns with missing data (based on training set only):")
-missing_data.head(20)
-
-
-```
-
-```{python}
-def create_floor_area_totals(df, years):
-    for y in years:
-        primary_col = f'floor_area_primary_{y}'
-        upper_col   = f'floor_area_upper_{y}'
-        lower_col   = f'floor_area_lower_{y}'
-        total_col   = f'floor_area_total_{y}'
-
-        if all(col in df.columns for col in [primary_col, upper_col, lower_col]):
-            df[total_col] = (
-                df[primary_col].fillna(0) +
-                df[upper_col].fillna(0) +
-                df[lower_col].fillna(0)
-            )
-            print(f" Created: {total_col}")
-        else:
-            print(f" Skipping {total_col} — one or more components missing.")
-    return df
-
-# Apply for years 2015–2019
-years = ['2015', '2016', '2017', '2018', '2019']
-train_merged = create_floor_area_totals(train_merged, years)
-test_merged = create_floor_area_totals(test_merged, years)
-
-
-```
-
-```{python}
-zero_pct = (train_merged['mobile_home_area_2015'] == 0).mean() * 100
-print(f" mobile_home_area_2015 is 0 in {zero_pct:.2f}% of training rows")
-
-```
-
-```{python}
-cols_to_drop = [col for col in train_merged.columns if col.startswith("mobile_home_area")]
-
-# Drop from both sets
-train_merged.drop(columns=cols_to_drop, inplace=True)
-test_merged.drop(columns=cols_to_drop, inplace=True)
-
-print(f" Dropped columns from train/test: {cols_to_drop}")
-
-
-```
-
-```{python}
-zero_pct = (train_merged['deck_area_2015'] == 0).mean() * 100
-print(f" deck_area_2015 is 0 in {zero_pct:.2f}% of training rows")
-
-
-```
-
-```{python}
-# Use training columns to identify which deck_area columns exist
-cols_to_drop = [col for col in train_merged.columns if col.startswith("deck_area")]
-
-# Drop those columns from both datasets
-train_merged.drop(columns=cols_to_drop, inplace=True)
-test_merged.drop(columns=cols_to_drop, inplace=True)
-
-print(f" Dropped columns from train/test: {cols_to_drop}")
-
-
-```
-
-```{python}
-def backfill_yearly_features(df, base_features, years):
-    for feature in base_features:
-        cols = [f"{feature}_{y}" for y in years if f"{feature}_{y}" in df.columns]
-        if len(cols) >= 2:
-            # Backfill all relevant year columns in-place
-            df[cols] = df[cols].bfill(axis=1)
-            print(f" Backfilled: {feature} across {cols}")
-        else:
-            print(f" Skipping {feature} — not enough year columns found.")
-    return df
-
-# Years in reverse so that bfill works from most recent (2019) to oldest (2015)
-years = ['2019', '2018', '2017', '2016', '2015']
-features = ['garage_area', 'porch_area']
-
-# Apply to both train and test
-train_merged = backfill_yearly_features(train_merged, features, years)
-test_merged = backfill_yearly_features(test_merged, features, years)
-
-```
-
-```{python}
-def backfill_yearly_features(df, features, years):
-    for feature in features:
-        year_cols = [f"{feature}_{y}" for y in years if f"{feature}_{y}" in df.columns]
-        if len(year_cols) >= 2:
-            df[year_cols] = df[year_cols].bfill(axis=1)
-            print(f" Backfilled: {feature} across {year_cols}")
-        else:
-            print(f" Skipped: Not enough year columns for '{feature}'")
-    return df
-
-# Use years in reverse for proper backfill (newest to oldest)
-years = ['2019', '2018', '2017', '2016', '2015']
-features = ['floors', 'half_bath', 'full_bath', 'total_rooms', 'bedrooms']
-
-# Apply to both train and test
-train_merged = backfill_yearly_features(train_merged, features, years)
-test_merged = backfill_yearly_features(test_merged, features, years)
-
-
-
-```
-
-```{python}
-# Identify elevator-related columns from training set
-elevator_cols = [col for col in train_merged.columns if col.startswith("elevator")]
-
-# Drop from both train and test
-train_merged.drop(columns=elevator_cols, inplace=True)
-test_merged.drop(columns=elevator_cols, inplace=True)
-
-print(f"🗑️ Dropped elevator-related columns from train/test: {elevator_cols}")
-
-```
-
-```{python}
-def backfill_year_features(df, features, years):
-    for feature in features:
-        cols = [f"{feature}_{y}" for y in years if f"{feature}_{y}" in df.columns]
-        if len(cols) >= 2:
-            df[cols] = df[cols].bfill(axis=1)
-            print(f" Backfilled: {feature} across {cols}")
-        else:
-            print(f" Skipped {feature} — not enough year-based columns found.")
-    return df
-
-def create_year_built_final(df):
-    year_cols = [f"year_built_{y}" for y in ['2019', '2018', '2017', '2016', '2015'] if f"year_built_{y}" in df.columns]
-    if year_cols:
-        df['year_built_final'] = df[year_cols].bfill(axis=1).iloc[:, 0]
-        print(f" Created year_built_final from: {year_cols}")
-    else:
-        print(" Skipped: no year_built_* columns found.")
-    return df
-
-# Define reverse years for backfill (latest → oldest)
-years = ['2019', '2018', '2017', '2016', '2015']
-features_to_backfill = ['fireplaces', 'quality', 'quality_description']
-
-# Apply to both train and test
-train_merged = backfill_year_features(train_merged, features_to_backfill, years)
-train_merged = create_year_built_final(train_merged)
-
-test_merged = backfill_year_features(test_merged, features_to_backfill, years)
-test_merged = create_year_built_final(test_merged)
-
-```
-
-```{python}
-## Identify columns to drop from training data
-cols_to_drop = [col for col in train_merged.columns if col.startswith("year_remodeled")]
-
-# Drop from both train and test
-train_merged.drop(columns=cols_to_drop, inplace=True)
-test_merged.drop(columns=cols_to_drop, inplace=True)
-
-print(f"🗑️ Dropped year_remodeled-related columns from train/test: {cols_to_drop}")
-
-
-```
-
-```{python}
+  echo: true
+  output: false
+  collapse: true
 def backfill_categorical_year_features(df, features, years):
     for feature in features:
         year_cols = [f"{feature}_{y}" for y in years if f"{feature}_{y}" in df.columns]
@@ -336,207 +63,90 @@ features = ['building_condition', 'foundation_type', 'grade', 'has_cooling',
 # Apply to train and test
 train_merged = backfill_categorical_year_features(train_merged, features, years)
 test_merged = backfill_categorical_year_features(test_merged, features, years)
-
-
 ```
+**Zero-Aware Property Filtering:**
+In cases where `floor_area_total_2019 = 0`, we treated the property as non-residential or commercial and applied domain-specific logic to avoid inappropriate imputations or distortions in the modeling process:
+- All related residential building features—such as full bath, total rooms, garage area, and porch area—were set to zero.
+- We also zeroed out all building area variables and the corresponding building value variables to reflect the absence of a residential structure.
 
+These records were retained in the dataset rather than dropped, as they likely represent a distinct class of properties where valuation is driven primarily by land characteristics. Explicitly identifying and treating these properties allowed the model to better separate residential and non-residential valuation patterns.
 ```{python}
-def backfill_year_columns(df, features, years):
-    for feature in features:
-        cols = [f"{feature}_{y}" for y in years if f"{feature}_{y}" in df.columns]
-        if len(cols) >= 2:
-            df[cols] = df[cols].bfill(axis=1)
-            print(f" Backfilled: {feature} across {cols}")
-        else:
-            print(f" Skipped: {feature} — not enough year-based columns found.")
-    return df
+echo: true
+output: false
+collapse: true
+# === STEP 0: Define base feature names ===
+numeric_bases = [
+    'garage_area', 'porch_area', 'floors', 'half_bath', 'full_bath',
+    'total_rooms', 'bedrooms', 'fireplaces', 'building_area', 'building_value'
+]
 
-# Define year ranges
-area_years = ['2019', '2018', '2017', '2016', '2015']
-value_years = ['2018', '2017', '2016', '2015']
-
-# Define feature groups
-area_features = ['building_area', 'land_area']
-value_features = ['building_value', 'land_value', 'assessed']
-
-# Apply to train and test
-train_merged = backfill_year_columns(train_merged, area_features, area_years)
-train_merged = backfill_year_columns(train_merged, value_features, value_years)
-
-test_merged = backfill_year_columns(test_merged, area_features, area_years)
-test_merged = backfill_year_columns(test_merged, value_features, value_years)
-
-```
-
-```{python}
-def backfill_protested_columns(df, years):
-    cols = [f"protested_{y}" for y in years if f"protested_{y}" in df.columns]
-    if len(cols) >= 2:
-        df[cols] = df[cols].bfill(axis=1)
-        print(f" Backfilled: protested across {cols}")
-    else:
-        print(" Skipped protested — not enough year-based columns found.")
-    return df
-
-# Only use pre-2019 years to avoid leakage
-years = ['2018', '2017', '2016', '2015']
-
-# Apply to both datasets
-train_merged = backfill_protested_columns(train_merged, years)
-test_merged = backfill_protested_columns(test_merged, years)
-
-
-```
-
-```{python}
-# Save 'acct' from test_merged only
-acct_test = test_merged[['acct']].copy() if 'acct' in test_merged.columns else None
-
-# Drop 'acct' from both train and test
-for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-    if 'acct' in df.columns:
-        df.drop(columns='acct', inplace=True)
-        print(f"🗑️ Dropped 'acct' from {df_name}")
-
-
-
-```
-
-```{python}
-for col in ['zone', 'subneighborhood', 'neighborhood', 'region']:
-    if col in train_merged.columns:
-        print(f"{col}: {train_merged[col].nunique()} unique values in training set")
-    else:
-        print(f"⚠️ {col} not found in training set")
-
-```
-
-```{python}
-for col in ['neighborhood', 'region','zone','subneighborhood']:
-    if col in train_merged.columns:
-        # Step 1: Compute frequency from training data
-        freq_map = train_merged[col].value_counts(normalize=True)
-
-        # Step 2: Apply to both datasets
-        train_merged[f'{col}_freq'] = train_merged[col].map(freq_map)
-        test_merged[f'{col}_freq'] = test_merged[col].map(freq_map)
-
-        print(f" Frequency encoded: {col} → {col}_freq (based on training set)")
-    else:
-        print(f" Column '{col}' not found in training set")
-
-```
-
-```{python}
-if all(col in train_merged.columns for col in ['land_area_2019', 'land_area_2015']):
-    growth = train_merged['land_area_2019'] - train_merged['land_area_2015']
-    changed_pct = (growth != 0).mean() * 100
-    print(f" Percentage of homes with land area change (2015→2019): {changed_pct:.2f}%")
-else:
-    print(" One or both columns ('land_area_2015', 'land_area_2019') not found in training set")
-
-
-```
-
-```{python}
-for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-    if 'year_built_final' in df.columns:
-        df['year_built_final'] = df['year_built_final'].astype(str)
-        print(f" Converted 'year_built_final' to string in {df_name}")
-    else:
-        print(f" 'year_built_final' not found in {df_name}")
-
-```
-
-```{python}
-for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-    if 'floor_area_total_final' in df.columns and 'year_built_final' in df.columns:
-        df.loc[df['floor_area_total_final'] == 0, 'year_built_final'] = 'None'
-        print(f" Set 'year_built_final' to 'None' where 'floor_area_total_final' == 0 in {df_name}")
-    else:
-        print(f" Required columns missing in {df_name}")
-
-```
-
-```{python}
-# Define year ranges per feature type
-value_years = range(2015, 2019)   # 2015–2018 for value columns
-area_years  = range(2015, 2020)   # 2015–2019 for area columns
-
-# Define base columns
-base_cols_year_map = {
-    'building_value': value_years,
-    'land_value': value_years,
-    'building_area': area_years,
-    'land_area': area_years,
+categorical_fill_map = {
+    'quality': 'None',
+    'quality_description': 'None',
+    'building_condition': 'None',
+    'foundation_type': 'None',
+    'grade': 'None',
+    'has_cooling': False,
+    'has_heat': False,
+    'physical_condition': 'None',
+    'exterior_walls': 'None',
+    'protested': False
 }
 
-# Generate full list of columns to impute
-cols_to_impute = []
-for base, years in base_cols_year_map.items():
-    for year in years:
-        cols_to_impute.append(f"{base}_{year}")
+# Generate full list of columns (2015–2019 only, no final columns)
+numeric_cols_to_zero = [
+    f'{base}_{year}' for base in numeric_bases for year in range(2015, 2020)
+] + ['building_value_growth']
 
-# Impute using neighborhood → region strategy
-for col in cols_to_impute:
-    # First, fill by neighborhood (train only)
-    if 'neighborhood' in train_merged.columns:
-        medians_by_neigh = train_merged.groupby('neighborhood')[col].median()
-        train_merged[col] = train_merged.apply(
-            lambda row: medians_by_neigh[row['neighborhood']] if pd.isna(row[col]) else row[col], axis=1)
-        test_merged[col] = test_merged.apply(
-            lambda row: medians_by_neigh.get(row['neighborhood'], np.nan) if pd.isna(row[col]) else row[col], axis=1)
+categorical_cols_to_fill = {
+    f'{base}_{year}': val
+    for base, val in categorical_fill_map.items()
+    for year in range(2015, 2020)
+}
 
-    # Then, fill remaining by region (train only)
-    if 'region' in train_merged.columns:
-        medians_by_region = train_merged.groupby('region')[col].median()
-        train_merged[col] = train_merged.apply(
-            lambda row: medians_by_region[row['region']] if pd.isna(row[col]) else row[col], axis=1)
-        test_merged[col] = test_merged.apply(
-            lambda row: medians_by_region.get(row['region'], np.nan) if pd.isna(row[col]) else row[col], axis=1)
-
-    print(f" Imputed '{col}' using group medians (neighborhood → region) from training data")
-
-
-```
-
-```{python}
-from pandas.api.types import is_numeric_dtype
-
-# Step 1: Coerce non-numeric to NaN in both sets
+# === STEP 1: Apply imputation if floor_area_total_2019 == 0 ===
 for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-    if 'year_built_final' in df.columns:
-        df['year_built_final'] = pd.to_numeric(df['year_built_final'], errors='coerce')
-        print(f" Coerced 'year_built_final' to numeric in {df_name}")
+    if 'floor_area_total_2019' in df.columns:
+        zero_floor_mask = df['floor_area_total_2019'] == 0
 
-# Step 2: Group-based imputation (use training data only)
-if 'year_built_final' in train_merged.columns and 'neighborhood' in train_merged.columns:
-    # Neighborhood-based median from train
-    neigh_medians = train_merged.groupby('neighborhood')['year_built_final'].median()
+        # Fill numeric columns with 0
+        for col in numeric_cols_to_zero:
+            if col in df.columns:
+                df.loc[zero_floor_mask, col] = df.loc[zero_floor_mask, col].fillna(0)
 
-    # Apply to train
-    train_merged['year_built_final'] = train_merged.apply(
-        lambda row: neigh_medians[row['neighborhood']] if pd.isna(row['year_built_final']) else row['year_built_final'], axis=1)
+        # Fill categorical/boolean columns
+        for col, fill_val in categorical_cols_to_fill.items():
+            if col in df.columns:
+                df.loc[zero_floor_mask, col] = df.loc[zero_floor_mask, col].fillna(fill_val)
 
-    # Apply to test
-    test_merged['year_built_final'] = test_merged.apply(
-        lambda row: neigh_medians.get(row['neighborhood'], np.nan) if pd.isna(row['year_built_final']) else row['year_built_final'], axis=1)
-
-if 'region' in train_merged.columns:
-    # Region-based fallback median from train
-    region_medians = train_merged.groupby('region')['year_built_final'].median()
-
-    train_merged['year_built_final'] = train_merged.apply(
-        lambda row: region_medians[row['region']] if pd.isna(row['year_built_final']) else row['year_built_final'], axis=1)
-
-    test_merged['year_built_final'] = test_merged.apply(
-        lambda row: region_medians.get(row['region'], np.nan) if pd.isna(row['year_built_final']) else row['year_built_final'], axis=1)
-
-print(" Imputed 'year_built_final' using neighborhood → region medians from training set")
-
+        print(f" Filled structure-dependent missing values in {df_name} for {zero_floor_mask.sum()} rows")
+    else:
+        print(f" 'floor_area_total_2019' not found in {df_name}")
 ```
+**Feature Drop Based on Sparse Signals:**
+For features that appeared largely irrelevant or unused across the dataset, we calculated the percentage of zero values in columns such as mobile home area, deck area, and porch area. If a column contained over 90% zeros, it was considered non-informative and dropped from the modeling pipeline to reduce dimensionality and noise.
+```{python}
+echo: true
+output: false
+collapse: true
+cols_to_drop = [col for col in train_merged.columns if col.startswith("mobile_home_area")]
+
+# Drop from both sets
+train_merged.drop(columns=cols_to_drop, inplace=True)
+test_merged.drop(columns=cols_to_drop, inplace=True)
+
+print(f" Dropped columns from train/test: {cols_to_drop}")
+```
+**Multi-Level Median and Mode Imputation:**
+After applying logic-based pruning, we used a three-level median imputation strategy for continuous features (e.g., assessed value 2017, building area 2017) based on the following hierarchy:
+- Level 1: neighborhood-level median
+- Level 2: region-level median
+- Level 3: global median (fallback)
 
 ```{python}
+echo: true
+output: false
+collapse: true
 # List of all assessed columns to impute
 assessed_cols = ['assessed_2015', 'assessed_2016', 'assessed_2017', 'assessed_2018']
 
@@ -578,8 +188,22 @@ for col in assessed_cols:
 
 
 ```
+For categorical variables such as foundation type or building condition, we applied single-level mode imputation using the most frequent category within the training data. While this approach is less localized, it provided a simple and stable method for handling missing values in features with low cardinality.
+## 3.2 Neighborhood and Region-Level Statistical Features
 
+To capture localized pricing dynamics and identify anomalies in property assessments, we engineered a suite of statistical features using the 2018 assessed values as a proxy for prior valuation context. We first computed neighborhood-level metrics including the mean, median, standard deviation, and interquartile range (IQR) of assessed 2018, grouped by neighborhood. Similarly, region-level statistics were computed using the region variable.
+
+Using the merged and imputed stats, we computed derived features such as:
+- **assess minus neigh mean**: the raw deviation of a property’s 2018 assessed value from its neighborhood mean
+- **assess ratio neigh mean**: a normalized ratio of a property’s value to its local average
+- **z score assess neigh**: a z-score based on neighborhood-level variation
+- **Corresponding region-level counterparts**: assess minus region mean, assess ratio region mean, and z score assess region
+
+These features helped contextualize each property’s assessed value relative to other properties within the same neighborhood or region. They proved useful in capturing outliers and potentially undervalued homes that deviated from local valuation patterns.
 ```{python}
+echo: true
+output: false
+collapse: true
 # === Step 1: Compute neighborhood-level stats ===
 neigh_stats = train_merged.groupby('neighborhood')['assessed_2018'].agg([
     ('neigh_assess_mean', 'mean'),
@@ -642,132 +266,43 @@ for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)
 print(" Completed: Stats merge + std fallback + z-score computation.")
 
 ```
+## 3.3 Frequency Encoding of High-Cardinality Geographic Variables
 
+To convert high-cardinality categorical variables into numerical features while preserving signal strength, we applied frequency encoding to four key geographic identifiers: neighborhood, region, zone, and subneighborhood.
+
+This encoding strategy served two purposes:
+1. It allowed the model to retain information about how common or rare a spatial unit was. A frequently occurring neighborhood (i.e., one with high frequency) likely has more properties, which implies greater residential or commercial development in that area.
+2. Areas with more properties are also likely to have more consistent and well-understood assessment patterns—the government has “seen” more properties there, which may reduce valuation volatility. These areas are more visible or prioritized in municipal processes.
+
+Finally, frequency encoding avoids the dimensional explosion caused by one-hot encoding, which is especially problematic for variables with high cardinality like neighborhood or subneighborhood.
 ```{python}
-cols_to_drop = ['neighborhood', 'region','zone','subneighborhood']
+echo: true
+output: false
+collapse: true
+for col in ['neighborhood', 'region','zone','subneighborhood']:
+    if col in train_merged.columns:
+        # Step 1: Compute frequency from training data
+        freq_map = train_merged[col].value_counts(normalize=True)
 
-for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-    drop_cols = [col for col in cols_to_drop if col in df.columns]
-    if drop_cols:
-        df.drop(columns=drop_cols, inplace=True)
-        print(f"🗑️ Dropped columns from {df_name}: {drop_cols}")
+        # Step 2: Apply to both datasets
+        train_merged[f'{col}_freq'] = train_merged[col].map(freq_map)
+        test_merged[f'{col}_freq'] = test_merged[col].map(freq_map)
 
-```
-
-```{python}
-growth_pairs = {
-    'building_value_growth': ('building_value_2018', 'building_value_2015'),
-    'land_value_growth':     ('land_value_2018', 'land_value_2015'),
-    'assessed_growth':       ('assessed_2018', 'assessed_2015')
-}
-
-for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-    for new_col, (final_col, base_col) in growth_pairs.items():
-        if final_col in df.columns and base_col in df.columns:
-            df[new_col] = df[final_col] - df[base_col]
-            print(f" Created {new_col} in {df_name}")
-        else:
-            print(f" Skipped {new_col} in {df_name}: missing {final_col} or {base_col}")
-
-    # === Building Age ===
-    if 'year_built_final' in df.columns:
-        df['year_built_final'] = pd.to_numeric(df['year_built_final'], errors='coerce')  # handle 'Vacant', etc.
-        df['building_age'] = 2018 - df['year_built_final']
-        print(f" Created building_age in {df_name}")
+        print(f" Frequency encoded: {col} → {col}_freq (based on training set)")
     else:
-        print(f" Skipped building_age in {df_name}: missing year_built_final")
+        print(f" Column '{col}' not found in training set")
 
 ```
+## 3.4 Boolean and Ordinal Encoding
+
+**Boolean Encoding:** We focused on three boolean variables: has cooling, has heat, and protested. These features were encoded across all five years using binary values (0/1).
+
+**Ordinal Encoding:** For ordinal features such as quality, quality description, grade, building condition, and physical condition, we performed domain-informed cleaning and then applied ordinal encoding based on defined category hierarchies. Prior to encoding, raw values were standardized through column-specific replacements. For instance, extreme or ambiguous values like X, None, or overly granular subgrades (e.g., X-, E+) were either mapped to more interpretable categories or treated as missing. Some detailed conditions like Unsound and Very Poor were collapsed into broader categories such as Poor. Unknown values were handled gracefully by assigning an encoded fallback of -1. This process ensured that ordinal information was preserved in a numerically meaningful way, allowing models to leverage the ordered nature of these features without exploding dimensionality as one-hot encoding would.
 
 ```{python}
-if 'school_dist' in train_merged.columns:
-    missing_pct = train_merged['school_dist'].isna().mean() * 100
-    missing_count = train_merged['school_dist'].isna().sum()
-
-    print(f" 'school_dist' has {missing_count} missing values ({missing_pct:.2f}%) in training set")
-else:
-    print(" 'school_dist' not found in training set")
-
-```
-
-```{python}
-if 'school_dist' in train_merged.columns:
-    school_dist_median = train_merged['school_dist'].median()
-
-    for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-        if 'school_dist' in df.columns:
-            df['school_dist'] = df['school_dist'].fillna(school_dist_median)
-            print(f" Filled missing 'school_dist' in {df_name} using train median ({school_dist_median})")
-else:
-    print(" 'school_dist' not found in train_merged")
-
-```
-
-```{python}
-if 'year_built_final' in train_merged.columns:
-    missing_pct = train_merged['year_built_final'].isna().mean() * 100
-    missing_count = train_merged['year_built_final'].isna().sum()
-
-    print(f" 'year_built_final' has {missing_count} missing values ({missing_pct:.2f}%) in training set")
-else:
-    print(" 'year_built_final' not found in training set")
-
-```
-
-```{python}
-# === STEP 0: Define base feature names ===
-numeric_bases = [
-    'garage_area', 'porch_area', 'floors', 'half_bath', 'full_bath',
-    'total_rooms', 'bedrooms', 'fireplaces', 'building_area', 'building_value'
-]
-
-categorical_fill_map = {
-    'quality': 'None',
-    'quality_description': 'None',
-    'building_condition': 'None',
-    'foundation_type': 'None',
-    'grade': 'None',
-    'has_cooling': False,
-    'has_heat': False,
-    'physical_condition': 'None',
-    'exterior_walls': 'None',
-    'protested': False
-}
-
-# Generate full list of columns (2015–2019 only, no final columns)
-numeric_cols_to_zero = [
-    f'{base}_{year}' for base in numeric_bases for year in range(2015, 2020)
-] + ['building_value_growth']
-
-categorical_cols_to_fill = {
-    f'{base}_{year}': val
-    for base, val in categorical_fill_map.items()
-    for year in range(2015, 2020)
-}
-
-# === STEP 1: Apply imputation if floor_area_total_2019 == 0 ===
-for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-    if 'floor_area_total_2019' in df.columns:
-        zero_floor_mask = df['floor_area_total_2019'] == 0
-
-        # Fill numeric columns with 0
-        for col in numeric_cols_to_zero:
-            if col in df.columns:
-                df.loc[zero_floor_mask, col] = df.loc[zero_floor_mask, col].fillna(0)
-
-        # Fill categorical/boolean columns
-        for col, fill_val in categorical_cols_to_fill.items():
-            if col in df.columns:
-                df.loc[zero_floor_mask, col] = df.loc[zero_floor_mask, col].fillna(fill_val)
-
-        print(f" Filled structure-dependent missing values in {df_name} for {zero_floor_mask.sum()} rows")
-    else:
-        print(f" 'floor_area_total_2019' not found in {df_name}")
-
-
-```
-
-```{python}
+echo: true
+output: false
+collapse: true
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import OrdinalEncoder
@@ -833,8 +368,17 @@ for base in ordinal_bases:
 
 
 ```
+## 3.5 Target Encoding of Nominal Categorical Variables (2015–2019)
 
+For certain nominal features that lacked ordinal structure but exhibited high cardinality, such as foundation type and exterior walls, we applied target encoding across all years from 2015 to 2019. This encoding replaces each category with a smoothed version of the mean target value (assessed 2018) observed for that category.
+
+To avoid overfitting and data leakage, we implemented a 5-fold cross-validated target encoding procedure. For each fold, the mean target value was computed from the training portion and mapped to the validation fold. We used a smoothing parameter of 10 to balance the influence of the global mean versus the category-specific mean, especially for infrequent categories.
+
+This method enabled us to capture predictive signal from nominal features without creating high-dimensional one-hot encodings or imposing artificial ordinal structure.
 ```{python}
+echo: true
+output: false
+collapse: true
 # === STEP 3: Target Encoding (2015–2019 only) ===
 def group_and_target_encode_cv(train_df, test_df, target_name, column, rare_threshold=0.001, smoothing=10, n_splits=5):
     freq = train_df[column].value_counts(normalize=True)
@@ -877,28 +421,16 @@ for col in target_encodable_cols_all:
         train_merged.drop(columns=[col], inplace=True)
         test_merged.drop(columns=[col], inplace=True)
 
-print(" Done: Boolean, Ordinal, and Target Encoding for 2015–2019 features only.")
 ```
+## 3.6 Quantile Binning of Features
 
+To enhance robustness and reduce sensitivity to outliers, we converted few continuous features into categorical bins using quantile-based binning. Growth metrics such as land value growth, building value growth, and assessed growth were binned into four quantiles, with thresholds computed only on the training data to prevent information leakage. If quantile binning failed due to low cardinality (e.g., repeated values), we defaulted to equal-width binning. All binned variables were explicitly cast as categorical to ensure compatibility with tree-based models.
+
+Additionally, we binned year built final into five quantiles to capture generational differences in construction periods. This replaced raw year values with interpretable ordinal categories. Original continuous features were removed after binning to avoid redundancy and reduce multicollinearity.
 ```{python}
-# Step 1: Get growth columns from training set
-growth_cols = [col for col in train_merged.columns if '_growth' in col]
-
-# Step 2: Compute medians from train_merged only
-growth_medians = {col: train_merged[col].median() for col in growth_cols}
-
-# Step 3: Apply to both train and test
-for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-    for col in growth_cols:
-        if col in df.columns:
-            df[f'{col}_missing'] = df[col].isna().astype(int)
-            df[col].fillna(growth_medians[col], inplace=True)
-    print(f" Filled and flagged missing values in {df_name} for: {growth_cols}")
-
-```
-
-```{python}
-
+echo: true
+output: false
+collapse: true
 # === Step 1: List your growth features ===
 growth_features = ['land_value_growth', 'building_value_growth', 'assessed_growth']
 
@@ -943,36 +475,16 @@ train_merged.drop(columns=cols_to_drop, inplace=True)
 test_merged.drop(columns=cols_to_drop, inplace=True)
 
 print(" Binned growth & year_built features safely with no leakage.")
-
-
 ```
+## 3.7 Rare Frequency Suppression in Spatial Encodings
 
+Following frequency encoding of high-cardinality spatial variables (region, neighborhood, zone, subneighborhood), we applied a rare-value suppression step to mitigate the noise introduced by sparsely represented categories. For each frequency-encoded column, we identified values that occurred in less than 0.1% of the training data and replaced them with a neutral value of zero in both the training and test sets. This was done using thresholds derived solely from the training distribution to prevent data leakage.
+
+The intuition behind this strategy is that extremely rare spatial groupings may not provide reliable or generalizable signals to the model. Treating them as a common fallback class (i.e., assigning them a frequency of zero) improves model stability and reduces overfitting to idiosyncratic, low-support locations. This transformation preserves the informativeness of frequent categories while smoothing out sparse tail behavior in the feature space.
 ```{python}
-rare_threshold = 0.001  # 0.1%
-
-cat_cols = [
-    "quality_description_final",
-    "foundation_type_final_te",
-    "physical_condition_final",
-    "exterior_walls_final_te",
-    "region_freq",
-    "neighborhood_freq"
-]
-
-for col in cat_cols:
-    if col in train_merged.columns:
-        freq = train_merged[col].value_counts(normalize=True)
-        rare = freq[freq < rare_threshold]
-        if not rare.empty:
-            print(f"\n Rare categories in '{col}' (less than 0.1% of training data):\n{rare}")
-    else:
-        print(f" Column '{col}' not found in train_merged")
-
-
-
-```
-
-```{python}
+echo: true
+output: false
+collapse: true
 # Define frequency columns and threshold
 freq_cols = ['region_freq', 'neighborhood_freq', 'zone_freq', 'subneighborhood_freq']
 rare_thresh = 0.001
@@ -987,10 +499,16 @@ for col in freq_cols:
     else:
         print(f" Column {col} not found in train_merged — skipping.")
 
-
 ```
+## 3.8 Log Transformation and Distribution Smoothing for Ridge Regression
 
+To satisfy linear model assumptions and reduce skew-related distortion in Ridge regression, we applied a targeted log transformation to select continuous features. Specifically, we identified variables related to building size, land area, and valuation (e.g., building value 2019, land area 2018, neigh assess mean) whose skewness exceeded a threshold of 2.0 in the training set. For these features, we applied a log1p transformation, which effectively stabilized variance, compressed long-tailed distributions, and improved linear fit potential.
+
+This transformation was particularly useful for the Ridge regression model, which benefits from normally distributed inputs and is sensitive to extreme values. By selectively applying log1p only to features with high skew, we preserved model interpretability while enhancing numerical stability and predictive performance.
 ```{python}
+echo: true
+output: false
+collapse: true
 import numpy as np
 
 # === Step 1: Skew-based Log Transformation (2015–2019 only) ===
@@ -1018,32 +536,79 @@ for col in log_transform_cols:
         else:
             print(f"ℹ Skipped: {col} (skew={skew:.2f})")
 
-# === Step 2: Percentile Clipping at 0.1%–99.9% ===
-clip_bases = ['floors', 'full_bath', 'total_rooms', 'bedrooms']
-clip_cols = [f"{base}_{year}" for base in clip_bases for year in range(2015, 2020)]
-clip_cols += ['neigh_count']  # add any other specific columns if needed
+```
+## 3.9 Adaptive Quantile Clipping for Tree-Based Models
 
-# Compute clipping bounds from train
-clip_bounds = {
-    col: (
+To further control the influence of extreme values in tree-based models, we implemented an adaptive quantile clipping strategy informed by skewness severity. Using a precomputed skewness report, we categorized numeric features (excluding binary and target-encoded variables) into two groups: ultra-skewed (skewness > 100) and moderately-skewed (2 < skewness ≤ 100). Features were considered only if they had more than ten unique values and were not binary.
+
+For ultra-skewed features, we applied clipping at the 0.5th and 99.5th percentiles. For moderately skewed features, we clipped at the 0.1st and 99.9th percentiles. All thresholds were derived solely from the training data and applied to both training and test sets to ensure leakage-free transformations. This clipping procedure helped suppress extreme values that might otherwise dominate decision paths or split criteria in tree-based learners.
+
+These transformations were specifically designed for use with XGBoost and LightGBM, where reducing the influence of outliers improves model generalization and enhances interpretability in leaf-based decision structures.
+
+```{python}
+echo: true
+output: false
+collapse: true
+import pandas as pd
+
+
+# === Step 1: Categorize features by skew level ===
+ultra_skewed = []
+moderately_skewed = []
+
+for _, row in skew_df.iterrows():
+    feature = row['feature']
+    skew = row['skewness']
+    
+    if feature not in train_merged.columns:
+        continue
+
+    unique_vals = train_merged[feature].nunique()
+    is_binary = set(train_merged[feature].dropna().unique()).issubset({0, 1})
+
+    if unique_vals > 10 and not is_binary and not feature.endswith('_te'):
+        if skew > 100:
+            ultra_skewed.append(feature)
+        elif 2< skew <= 100:
+            moderately_skewed.append(feature)
+
+print(f" {len(ultra_skewed)} ultra-skewed features to clip at 0.995.")
+print(f" {len(moderately_skewed)} moderately-skewed features to clip at 0.999.")
+
+# === Step 2: Compute quantile clipping bounds ===
+clip_bounds = {}
+
+for col in ultra_skewed:
+    clip_bounds[col] = (
+        train_merged[col].quantile(0.005),
+        train_merged[col].quantile(0.995)
+    )
+
+for col in moderately_skewed:
+    clip_bounds[col] = (
         train_merged[col].quantile(0.001),
         train_merged[col].quantile(0.999)
     )
-    for col in clip_cols if col in train_merged.columns
-}
 
-# Apply clipping to both train and test
-for col, (lower, upper) in clip_bounds.items():
-    for df in [train_merged, test_merged]:
+# === Step 3: Apply clipping to both train and test ===
+for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
+    for col, (lower, upper) in clip_bounds.items():
         if col in df.columns:
-            df[col] = np.clip(df[col], lower, upper)
-    print(f" Clipped: {col} to [{lower:.2f}, {upper:.2f}]")
+            df[col] = df[col].clip(lower, upper)
 
-print("\n Finished: Skew-aware log transformation + 0.001–0.999 percentile clipping.")
+print(" Adaptive clipping applied: 0.995 for ultra-skewed, 0.999 for moderately-skewed features.")
 
 ```
+## 3.10 Interaction Features for Linear and Nonlinear Models
 
+To enrich model expressiveness, we engineered a comprehensive set of interaction features used across both Ridge regression and tree-based models (XGBoost and LightGBM). These included multiplicative and ratio-based terms such as grade quality index, value per age, area x quality, and assess to neigh mean, capturing relationships between physical dimensions, valuation, quality, and neighborhood context. For Ridge regression, these features acted as implicit basis expansions—effectively enabling the linear model to capture non-additive effects by introducing new combinations of input features.
+
+Additionally, we created a specialized set of log-transformed interaction terms—such as log area x grade, log assess x age, and log value diff—used exclusively in the Ridge pipeline. These features helped linearize multiplicative relationships and reduce skew, improving fit under Ridge’s sensitivity to input distribution. Log-based interactions were excluded from tree models, which are inherently robust to skew and insensitive to monotonic transformations like log, as they rely only on the relative ordering of feature values when making splits.
 ```{python}
+echo: true
+output: false
+collapse: true
+# === Interaction Features for Ridge Regression ===
 def add_features(df):
     df = df.copy()
 
@@ -1083,95 +648,72 @@ train_merged = add_features(train_merged)
 test_merged = add_features(test_merged)
 
 ```
-
 ```{python}
-# Select numeric columns only
-numeric_features = train_merged.select_dtypes(include=['int64', 'float64'])
+echo: true
+output: false
+collapse: true
+# === Interaction Features for Tree models ===
+def add_features(df):
+    df = df.copy()
+    
+    # === Ratio features ===
+    df['area_ratio'] = df['building_area_2019'] / (df['land_area_2019'] + 1)
+    df['porch_ratio'] = df['porch_area_2019'] / (df['building_area_2019'] + 1)
+    df['floor_density'] = df['floor_area_total_2019'] / (df['land_area_2019'] + 1)
+    
+    df['value_ratio'] = df['building_value_2018'] / (df['land_value_2018'] + 1)
+    df['value_per_sqft'] = df['building_value_2018'] / (df['building_area_2019'] + 1)
+    df['price_per_sqft'] = df['assessed_2018'] / (df['building_area_2019'] + 1)
 
-# Calculate skewness
-skewness = numeric_features.skew(numeric_only=True)
+    # === Bathroom & room structure ===
+    df['bathroom_score'] = df['full_bath_2019'] + 0.5 * df['half_bath_2019']
+    df['bathroom_density'] = df['bathroom_score'] / (df['total_rooms_2019'] + 1)
+    df['bedroom_ratio'] = df['bedrooms_2019'] / (df['total_rooms_2019'] + 1)
+    df['rooms_per_floor'] = df['total_rooms_2019'] / (df['floors_2019'] + 1)
 
-# Filter and sort features with skewness > 30
-highly_skewed = skewness[skewness > 2].sort_values(ascending=False)
+    # === Core interactions ===
+    df['bedrooms_x_floors'] = df['bedrooms_2019'] * df['floors_2019']
+    df['rooms_x_quality'] = df['total_rooms_2019'] * df['quality_2019']
+    df['assess_x_age'] = df['assessed_2018'] * df['building_age']
+    df['grade_quality_index'] = df['grade_2019'] * df['quality_2019']
 
-print(" Features with skewness > 2:")
-print(highly_skewed)
+    # === Selected high-signal interactions ===
+    df['area_x_quality'] = df['building_area_2019'] * df['quality_2019']
+    df['floor_area_x_grade'] = df['floor_area_total_2019'] * df['grade_2019']
+    df['value_to_neigh_median'] = df['building_value_2018'] / (df['neigh_assess_median'] + 1)
+    df['assess_to_neigh_mean'] = df['assessed_2018'] / (df['neigh_assess_mean'] + 1)
+    df['value_per_age'] = df['building_value_2018'] / (df['building_age'] + 1)
+
+    # === Clean up ===
+    df = df.replace([np.inf, -np.inf], np.nan)
+    df = df.fillna(0)
+    
+    return df
+
+# === Apply to train and test sets ===
+train_merged = add_features(train_merged)
+test_merged = add_features(test_merged)
 
 
 ```
 
+# 4. Model Development and Tuning
+
+## 4.1 Ridge Regression with Cross-Validation
+
+We implemented a Ridge regression model using RidgeCV to automatically select the regularization strength α through nested cross-validation. A 3-fold outer loop was used for estimating out-of-fold (OOF) performance, while each inner fold evaluated a grid of α values ranging from 10⁻³ to 10² on a logarithmic scale. Input features were standardized within a Pipeline using StandardScaler to ensure scale-invariant regression coefficients. The model selected a different optimal α for each fold, reflecting local variance in validation behavior:
+
+- Fold 1 RMSE: 42,050.33—Best α: 2.1544
+- Fold 2 RMSE: 41,036.52—Best α: 27.8256
+- Fold 3 RMSE: 40,619.40—Best α: 0.5995
+
+The final out-of-fold RMSE across all folds was 41,239.79, with an average best α of approximately 10.1932. This indicates that moderate regularization consistently improved generalization across different training splits.
+
+We saved both OOF predictions and test forecasts as NumPy arrays—`ridgecv_oof_preds.npy` and `ridgecv_test_preds.npy`—for later use in model ensembling. These stored outputs served as reliable building blocks for downstream blending and stacking strategies.
 ```{python}
-# List of columns to drop due to extreme skewness
-cols_to_drop = ['building_value_growth_missing', 'land_value_growth_missing','assessed_growth_missing']
-
-# Drop from both train and test
-train_merged.drop(columns=cols_to_drop, inplace=True, errors='ignore')
-test_merged.drop(columns=cols_to_drop, inplace=True, errors='ignore')
-
-print("Dropped extremely skewed columns related to value growth missingness.")
-
-```
-
-```{python}
-import numpy as np
-
-# Features to log-transform due to extreme skew
-skewed_cols = ['price_per_sqft', 'value_per_sqft', 'porch_ratio', 'value_ratio','land_area_2015','land_area_2016','land_area_2017','land_area_2018','land_area_2019']
-
-for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-    for col in skewed_cols:
-        if col in df.columns:
-            df[f'log_{col}'] = np.log1p(df[col])
-            df.drop(columns=col, inplace=True)
-
-print("Log-transformed and dropped raw versions of highly skewed ratio features.")
-
-```
-
-```{python}
-if "TARGET" in train_merged.columns:
-    train_merged.drop("TARGET", axis=1,inplace=True)
-else:
-    print("TARGET not found in columns:", train_merged.columns.tolist())
-```
-
-```{python}
-# Define columns to drop
-year_built_cols = [f'year_built_{year}' for year in range(2015, 2020)]
-
-# Drop if columns exist
-train_merged.drop(columns=[col for col in year_built_cols if col in train_merged.columns], inplace=True)
-test_merged.drop(columns=[col for col in year_built_cols if col in test_merged.columns], inplace=True)
-
-print("Dropped year_built_2015 to year_built_2018 from both train and test sets.")
-
-```
-
-```{python}
-train_cols = set(train_merged.columns)
-test_cols = set(test_merged.columns)
-
-missing_in_test = train_cols - test_cols
-missing_in_train = test_cols - train_cols
-
-print(" Columns in train but not in test:")
-print(sorted(missing_in_test))
-
-print("\n Columns in test but not in train:")
-print(sorted(missing_in_train))
-
-```
-
-```{python}
-# Check if column sets match
-print(set(train_merged.columns) == set(test_merged.columns))  # Should be True
-
-# Check if column order matches
-print(list(train_merged.columns) == list(test_merged.columns))  # Must also be True
-
-```
-
-```{python}
+echo: true
+output: false
+collapse: true
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import RidgeCV
@@ -1234,1234 +776,15 @@ np.save("ridgecv_test_preds.npy", ridge_test_preds)
 print(" Saved: ridgecv_oof_preds.npy and ridgecv_test_preds.npy")
 
 ```
+## 4.2 Tree-Based Models with Optuna and SHAP-Gain Feature Selection
 
-# XGBoost & LightGBM Pipeline
+To capture nonlinear interactions and leverage automatic handling of missing values and categorical splits, we trained two gradient boosting models: LightGBM and XGBoost. Both models followed a structured pipeline consisting of hyperparameter optimization using Optuna, followed by SHAP- and gain-based feature selection, and a final retraining on the selected features.
 
+**Step 1: Hyperparameter Tuning with Optuna.** For each model, we defined an Optuna objective that trained 3-fold cross-validated models using early stopping. We explored hyperparameter ranges tailored to each algorithm, with LightGBM using a native pruning callback and XGBoost leveraging `XGBoostPruningCallback`. During tuning, we stored the best out-of-fold (OOF) predictions across all trials to later use in ensembling.
 ```{python}
-import pandas as pd
-import numpy as np
-# ===== Load Data =====
-folder_path = '/Users/Srijith97/Downloads/STA 9890 Housing Data/'
-
-building_years = []
-for year in range(2015, 2020):
-    df = pd.read_csv(folder_path + f'building_details_{year}.csv')
-    df['year'] = year
-    building_years.append(df)
-
-
-building_all = pd.concat(building_years, ignore_index=True)
-building_all = building_all.drop_duplicates(subset=['acct', 'year'], keep='first')
-pivoted = building_all.pivot(index='acct', columns='year')
-pivoted.columns = [f'{col}_{year}' for col, year in pivoted.columns]
-pivoted = pivoted.reset_index()
-
-train = pd.read_csv(folder_path + 'assessment_history_train.csv')
-test = pd.read_csv(folder_path + 'assessment_history_test.csv')
-
-train_merged = train.merge(pivoted, on='acct', how='left')
-test_merged = test.merge(pivoted, on='acct', how='left')
-```
-
-```{python}
-# Step 1: Identify all '2019' columns in train
-train_2019_cols = [col for col in train_merged.columns if '2019' in col]
-
-# Step 2: Find which 2019 columns are missing in test
-train_only_2019_cols = [col for col in train_2019_cols if col not in test_merged.columns]
-
-# Step 3: Always drop 'protested_2019' due to leakage risk
-train_only_2019_cols.append('protested_2019')
-
-# Step 4: Drop the identified columns from train
-train_merged = train_merged.drop(columns=train_only_2019_cols, errors='ignore')
-
-# Step 5: Optional logging
-print(f" Dropped {len(train_only_2019_cols)} columns from train (including protested_2019 if present):")
-print(train_only_2019_cols)
-
-```
-
-```{python}
-for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-    if 'protested_2019' in df.columns:
-        df.drop(columns='protested_2019', inplace=True)
-        print(f" Dropped 'protested_2019' from {df_name}")
-    else:
-        print(f" 'protested_2019' not found in {df_name}")
-
-```
-
-```{python}
-## Get all '2019' columns in train and test
-train_2019_cols = sorted([col for col in train_merged.columns if '2019' in col])
-test_2019_cols = sorted([col for col in test_merged.columns if '2019' in col])
-
-# Print train columns
-print(" 2019 Columns in train_merged:")
-for col in train_2019_cols:
-    print(f" - {col}")
-
-print("\n 2019 Columns in test_merged:")
-for col in test_2019_cols:
-    print(f" - {col}")
-
-
-```
-
-```{python}
-# Compare sets
-train_only_2019 = sorted(list(set(train_2019_cols) - set(test_2019_cols)))
-test_only_2019 = sorted(list(set(test_2019_cols) - set(train_2019_cols)))
-
-# Print comparison result
-if not train_only_2019 and not test_only_2019:
-    print("\n All 2019 columns match between train_merged and test_merged.")
-else:
-    print("\n Mismatched 2019 columns found:")
-
-    if train_only_2019:
-        print(" In train_merged but not in test_merged:")
-        for col in train_only_2019:
-            print(f"   - {col}")
-
-    if test_only_2019:
-        print(" In test_merged but not in train_merged:")
-        for col in test_only_2019:
-            print(f"   - {col}")
-```
-
-```{python}
-# Step 1: Store target separately
-y_train = train_merged["TARGET"].values
-
-# Step 4: Confirm sizes
-print(f"Train shape: {train.shape}")
-print(f"Test shape: {test.shape}")
-
-```
-
-```{python}
-# Calculate % of missing values in each column of TRAIN only
-train_na = (train_merged.isnull().sum() / train_merged.shape[0]) * 100
-
-# Drop columns with no missing values, sort the rest
-train_na = train_na[train_na > 0].sort_values(ascending=False)
-
-# Optional: Show top 200 missing features
-missing_data = pd.DataFrame({'Missing Ratio (%)': train_na})
-
-# Display
-print("Top columns with missing data (based on training set only):")
-missing_data.head(20)
-
-
-```
-
-```{python}
-def create_floor_area_totals(df, years):
-    for y in years:
-        primary_col = f'floor_area_primary_{y}'
-        upper_col   = f'floor_area_upper_{y}'
-        lower_col   = f'floor_area_lower_{y}'
-        total_col   = f'floor_area_total_{y}'
-
-        if all(col in df.columns for col in [primary_col, upper_col, lower_col]):
-            df[total_col] = (
-                df[primary_col].fillna(0) +
-                df[upper_col].fillna(0) +
-                df[lower_col].fillna(0)
-            )
-            print(f" Created: {total_col}")
-        else:
-            print(f" Skipping {total_col} — one or more components missing.")
-    return df
-
-# Apply for years 2015–2019
-years = ['2015', '2016', '2017', '2018', '2019']
-train_merged = create_floor_area_totals(train_merged, years)
-test_merged = create_floor_area_totals(test_merged, years)
-
-
-
-
-
-```
-
-```{python}
-zero_pct = (train_merged['mobile_home_area_2015'] == 0).mean() * 100
-print(f" mobile_home_area_2015 is 0 in {zero_pct:.2f}% of training rows")
-
-```
-
-```{python}
-cols_to_drop = [col for col in train_merged.columns if col.startswith("mobile_home_area")]
-
-# Drop from both sets
-train_merged.drop(columns=cols_to_drop, inplace=True, errors='ignore')
-test_merged.drop(columns=cols_to_drop, inplace=True, errors='ignore')
-
-print(f" Dropped columns from train/test: {cols_to_drop}")
-
-
-```
-
-```{python}
-zero_pct = (train_merged['deck_area_2015'] == 0).mean() * 100
-print(f" deck_area_2015 is 0 in {zero_pct:.2f}% of training rows")
-
-
-```
-
-```{python}
-# Use training columns to identify which deck_area columns exist
-cols_to_drop = [col for col in train_merged.columns if col.startswith("deck_area")]
-
-# Drop those columns from both datasets
-train_merged.drop(columns=cols_to_drop, inplace=True)
-test_merged.drop(columns=cols_to_drop, inplace=True)
-
-print(f" Dropped columns from train/test: {cols_to_drop}")
-
-
-```
-
-```{python}
-def backfill_yearly_features(df, base_features, years):
-    for feature in base_features:
-        cols = [f"{feature}_{y}" for y in years if f"{feature}_{y}" in df.columns]
-        if len(cols) >= 2:
-            # Backfill all relevant year columns in-place
-            df[cols] = df[cols].bfill(axis=1)
-            print(f" Backfilled: {feature} across {cols}")
-        else:
-            print(f" Skipping {feature} — not enough year columns found.")
-    return df
-
-# Years in reverse so that bfill works from most recent (2019) to oldest (2015)
-years = ['2019', '2018', '2017', '2016', '2015']
-features = ['garage_area', 'porch_area']
-
-# Apply to both train and test
-train_merged = backfill_yearly_features(train_merged, features, years)
-test_merged = backfill_yearly_features(test_merged, features, years)
-
-
-```
-
-```{python}
-def backfill_yearly_features(df, features, years):
-    for feature in features:
-        year_cols = [f"{feature}_{y}" for y in years if f"{feature}_{y}" in df.columns]
-        if len(year_cols) >= 2:
-            df[year_cols] = df[year_cols].bfill(axis=1)
-            print(f" Backfilled: {feature} across {year_cols}")
-        else:
-            print(f" Skipped: Not enough year columns for '{feature}'")
-    return df
-
-# Use years in reverse for proper backfill (newest to oldest)
-years = ['2019', '2018', '2017', '2016', '2015']
-features = ['floors', 'half_bath', 'full_bath', 'total_rooms', 'bedrooms']
-
-# Apply to both train and test
-train_merged = backfill_yearly_features(train_merged, features, years)
-test_merged = backfill_yearly_features(test_merged, features, years)
-
-
-
-```
-
-```{python}
-# Identify elevator-related columns from training set
-elevator_cols = [col for col in train_merged.columns if col.startswith("elevator")]
-
-# Drop from both train and test
-train_merged.drop(columns=elevator_cols, inplace=True)
-test_merged.drop(columns=elevator_cols, inplace=True)
-
-print(f" Dropped elevator-related columns from train/test: {elevator_cols}")
-
-```
-
-```{python}
-def backfill_year_features(df, features, years):
-    for feature in features:
-        cols = [f"{feature}_{y}" for y in years if f"{feature}_{y}" in df.columns]
-        if len(cols) >= 2:
-            df[cols] = df[cols].bfill(axis=1)
-            print(f" Backfilled: {feature} across {cols}")
-        else:
-            print(f" Skipped {feature} — not enough year-based columns found.")
-    return df
-
-def create_year_built_final(df):
-    year_cols = [f"year_built_{y}" for y in ['2019', '2018', '2017', '2016', '2015'] if f"year_built_{y}" in df.columns]
-    if year_cols:
-        df['year_built_final'] = df[year_cols].bfill(axis=1).iloc[:, 0]
-        print(f" Created year_built_final from: {year_cols}")
-    else:
-        print(" Skipped: no year_built_* columns found.")
-    return df
-
-# Define reverse years for backfill (latest → oldest)
-years = ['2019', '2018', '2017', '2016', '2015']
-features_to_backfill = ['fireplaces', 'quality', 'quality_description']
-
-# Apply to both train and test
-train_merged = backfill_year_features(train_merged, features_to_backfill, years)
-train_merged = create_year_built_final(train_merged)
-
-test_merged = backfill_year_features(test_merged, features_to_backfill, years)
-test_merged = create_year_built_final(test_merged)
-
-
-```
-
-```{python}
-## Identify columns to drop from training data
-cols_to_drop = [col for col in train_merged.columns if col.startswith("year_remodeled")]
-
-# Drop from both train and test
-train_merged.drop(columns=cols_to_drop, inplace=True)
-test_merged.drop(columns=cols_to_drop, inplace=True)
-
-print(f"🗑️ Dropped year_remodeled-related columns from train/test: {cols_to_drop}")
-
-
-```
-
-```{python}
-def backfill_categorical_year_features(df, features, years):
-    for feature in features:
-        year_cols = [f"{feature}_{y}" for y in years if f"{feature}_{y}" in df.columns]
-        if len(year_cols) >= 2:
-            df[year_cols] = df[year_cols].bfill(axis=1)
-            print(f" Backfilled: {feature} across {year_cols}")
-        else:
-            print(f" Skipped: {feature} — not enough year-based columns.")
-    return df
-
-# Backfill from most recent year to oldest
-years = ['2019', '2018', '2017', '2016', '2015']
-features = ['building_condition', 'foundation_type', 'grade', 'has_cooling', 
-            'has_heat', 'physical_condition', 'exterior_walls']
-
-# Apply to train and test
-train_merged = backfill_categorical_year_features(train_merged, features, years)
-test_merged = backfill_categorical_year_features(test_merged, features, years)
-
-
-
-```
-
-```{python}
-def backfill_year_columns(df, features, years):
-    for feature in features:
-        cols = [f"{feature}_{y}" for y in years if f"{feature}_{y}" in df.columns]
-        if len(cols) >= 2:
-            df[cols] = df[cols].bfill(axis=1)
-            print(f" Backfilled: {feature} across {cols}")
-        else:
-            print(f" Skipped: {feature} — not enough year-based columns found.")
-    return df
-
-# Define year ranges
-area_years = ['2019', '2018', '2017', '2016', '2015']
-value_years = ['2018', '2017', '2016', '2015']
-
-# Define feature groups
-area_features = ['building_area', 'land_area']
-value_features = ['building_value', 'land_value', 'assessed']
-
-# Apply to train and test
-train_merged = backfill_year_columns(train_merged, area_features, area_years)
-train_merged = backfill_year_columns(train_merged, value_features, value_years)
-
-test_merged = backfill_year_columns(test_merged, area_features, area_years)
-test_merged = backfill_year_columns(test_merged, value_features, value_years)
-
-
-
-```
-
-```{python}
-def backfill_protested_columns(df, years):
-    cols = [f"protested_{y}" for y in years if f"protested_{y}" in df.columns]
-    if len(cols) >= 2:
-        df[cols] = df[cols].bfill(axis=1)
-        print(f" Backfilled: protested across {cols}")
-    else:
-        print(" Skipped protested — not enough year-based columns found.")
-    return df
-
-# Only use pre-2019 years to avoid leakage
-years = ['2018', '2017', '2016', '2015']
-
-# Apply to both datasets
-train_merged = backfill_protested_columns(train_merged, years)
-test_merged = backfill_protested_columns(test_merged, years)
-
-
-
-```
-
-```{python}
-# Save 'acct' from test_merged only
-acct_test = test_merged[['acct']].copy() if 'acct' in test_merged.columns else None
-
-# Drop 'acct' from both train and test
-for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-    if 'acct' in df.columns:
-        df.drop(columns='acct', inplace=True)
-        print(f" Dropped 'acct' from {df_name}")
-
-
-
-```
-
-```{python}
-for col in ['zone', 'subneighborhood', 'neighborhood', 'region']:
-    if col in train_merged.columns:
-        print(f"{col}: {train_merged[col].nunique()} unique values in training set")
-    else:
-        print(f" {col} not found in training set")
-
-```
-
-cols_to_drop = ['zone', 'subneighborhood']
-
-for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-    drop_cols = [col for col in cols_to_drop if col in df.columns]
-    if drop_cols:
-        df.drop(columns=drop_cols, inplace=True)
-        print(f"🗑️ Dropped columns from {df_name}: {drop_cols}")
-
-
-```{python}
-for col in ['neighborhood', 'region','zone','subneighborhood']:
-    if col in train_merged.columns:
-        # Step 1: Compute frequency from training data
-        freq_map = train_merged[col].value_counts(normalize=True)
-
-        # Step 2: Apply to both datasets
-        train_merged[f'{col}_freq'] = train_merged[col].map(freq_map)
-        test_merged[f'{col}_freq'] = test_merged[col].map(freq_map)
-
-        print(f" Frequency encoded: {col} → {col}_freq (based on training set)")
-    else:
-        print(f" Column '{col}' not found in training set")
-
-```
-
-```{python}
-if all(col in train_merged.columns for col in ['land_area_2019', 'land_area_2015']):
-    growth = train_merged['land_area_2019'] - train_merged['land_area_2015']
-    changed_pct = (growth != 0).mean() * 100
-    print(f" Percentage of homes with land area change (2015→2019): {changed_pct:.2f}%")
-else:
-    print(" One or both columns ('land_area_2015', 'land_area_2019') not found in training set")
-
-
-
-```
-
-```{python}
-for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-    if 'year_built_final' in df.columns:
-        df['year_built_final'] = df['year_built_final'].astype(str)
-        print(f" Converted 'year_built_final' to string in {df_name}")
-    else:
-        print(f" 'year_built_final' not found in {df_name}")
-
-```
-
-```{python}
-for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-    if 'floor_area_total_final' in df.columns and 'year_built_final' in df.columns:
-        df.loc[df['floor_area_total_final'] == 0, 'year_built_final'] = 'None'
-        print(f" Set 'year_built_final' to 'None' where 'floor_area_total_final' == 0 in {df_name}")
-    else:
-        print(f" Required columns missing in {df_name}")
-
-```
-
-```{python}
-# Define year ranges per feature type
-value_years = range(2015, 2019)   # 2015–2018 for value columns
-area_years  = range(2015, 2020)   # 2015–2019 for area columns
-
-# Define base columns
-base_cols_year_map = {
-    'building_value': value_years,
-    'land_value': value_years,
-    'building_area': area_years,
-    'land_area': area_years,
-}
-
-# Generate full list of columns to impute
-cols_to_impute = []
-for base, years in base_cols_year_map.items():
-    for year in years:
-        cols_to_impute.append(f"{base}_{year}")
-
-# Impute using neighborhood → region strategy
-for col in cols_to_impute:
-    # First, fill by neighborhood (train only)
-    if 'neighborhood' in train_merged.columns:
-        medians_by_neigh = train_merged.groupby('neighborhood')[col].median()
-        train_merged[col] = train_merged.apply(
-            lambda row: medians_by_neigh[row['neighborhood']] if pd.isna(row[col]) else row[col], axis=1)
-        test_merged[col] = test_merged.apply(
-            lambda row: medians_by_neigh.get(row['neighborhood'], np.nan) if pd.isna(row[col]) else row[col], axis=1)
-
-    # Then, fill remaining by region (train only)
-    if 'region' in train_merged.columns:
-        medians_by_region = train_merged.groupby('region')[col].median()
-        train_merged[col] = train_merged.apply(
-            lambda row: medians_by_region[row['region']] if pd.isna(row[col]) else row[col], axis=1)
-        test_merged[col] = test_merged.apply(
-            lambda row: medians_by_region.get(row['region'], np.nan) if pd.isna(row[col]) else row[col], axis=1)
-
-    print(f" Imputed '{col}' using group medians (neighborhood → region) from training data")
-
-
-```
-
-```{python}
-from pandas.api.types import is_numeric_dtype
-
-# Step 1: Coerce non-numeric to NaN in both sets
-for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-    if 'year_built_final' in df.columns:
-        df['year_built_final'] = pd.to_numeric(df['year_built_final'], errors='coerce')
-        print(f" Coerced 'year_built_final' to numeric in {df_name}")
-
-# Step 2: Group-based imputation (use training data only)
-if 'year_built_final' in train_merged.columns and 'neighborhood' in train_merged.columns:
-    # Neighborhood-based median from train
-    neigh_medians = train_merged.groupby('neighborhood')['year_built_final'].median()
-
-    # Apply to train
-    train_merged['year_built_final'] = train_merged.apply(
-        lambda row: neigh_medians[row['neighborhood']] if pd.isna(row['year_built_final']) else row['year_built_final'], axis=1)
-
-    # Apply to test
-    test_merged['year_built_final'] = test_merged.apply(
-        lambda row: neigh_medians.get(row['neighborhood'], np.nan) if pd.isna(row['year_built_final']) else row['year_built_final'], axis=1)
-
-if 'region' in train_merged.columns:
-    # Region-based fallback median from train
-    region_medians = train_merged.groupby('region')['year_built_final'].median()
-
-    train_merged['year_built_final'] = train_merged.apply(
-        lambda row: region_medians[row['region']] if pd.isna(row['year_built_final']) else row['year_built_final'], axis=1)
-
-    test_merged['year_built_final'] = test_merged.apply(
-        lambda row: region_medians.get(row['region'], np.nan) if pd.isna(row['year_built_final']) else row['year_built_final'], axis=1)
-
-print(" Imputed 'year_built_final' using neighborhood → region medians from training set")
-
-```
-
-```{python}
-# List of all assessed columns to impute
-assessed_cols = ['assessed_2015', 'assessed_2016', 'assessed_2017', 'assessed_2018']
-
-for col in assessed_cols:
-    if col not in train_merged.columns:
-        continue
-
-    # Step 1: Compute medians from training data only
-    neigh_medians = train_merged.groupby('neighborhood')[col].median()
-    region_medians = train_merged.groupby('region')[col].median()
-    global_median = train_merged[col].median()
-
-    # Step 2: Train set imputation
-    train_merged[col] = train_merged.apply(
-        lambda row: neigh_medians[row['neighborhood']]
-        if pd.isna(row[col]) and row['neighborhood'] in neigh_medians else
-        region_medians[row['region']]
-        if pd.isna(row[col]) and row['region'] in region_medians else
-        global_median
-        if pd.isna(row[col]) else
-        row[col],
-        axis=1
-    )
-
-    # Step 3: Test set imputation (using train medians only)
-    test_merged[col] = test_merged.apply(
-        lambda row: neigh_medians.get(row['neighborhood'], np.nan)
-        if pd.isna(row[col]) else row[col],
-        axis=1
-    )
-    test_merged[col] = test_merged.apply(
-        lambda row: region_medians.get(row['region'], np.nan)
-        if pd.isna(row[col]) else row[col],
-        axis=1
-    )
-    test_merged[col].fillna(global_median, inplace=True)
-
-    print(f" Imputed '{col}' using neighborhood → region → global medians (from training data)")
-
-```
-
-```{python}
-# === Step 1: Compute neighborhood-level stats ===
-neigh_stats = train_merged.groupby('neighborhood')['assessed_2018'].agg([
-    ('neigh_assess_mean', 'mean'),
-    ('neigh_assess_median', 'median'),
-    ('neigh_assess_std', 'std'),
-    ('neigh_assess_q1', lambda x: x.quantile(0.25)),
-    ('neigh_assess_q3', lambda x: x.quantile(0.75)),
-]).reset_index()
-neigh_stats['neigh_assess_iqr'] = neigh_stats['neigh_assess_q3'] - neigh_stats['neigh_assess_q1']
-
-# === Step 2: Compute region-level stats ===
-region_stats = train_merged.groupby('region')['assessed_2018'].agg([
-    ('region_assess_mean', 'mean'),
-    ('region_assess_median', 'median'),
-    ('region_assess_std', 'std'),
-    ('region_assess_q1', lambda x: x.quantile(0.25)),
-    ('region_assess_q3', lambda x: x.quantile(0.75)),
-]).reset_index()
-region_stats['region_assess_iqr'] = region_stats['region_assess_q3'] - region_stats['region_assess_q1']
-
-# === Step 3: Fallback std maps from training data ===
-# For neighborhood fallback, group region medians of neighborhood std
-neigh_std_by_region = neigh_stats.merge(train_merged[['neighborhood', 'region']], on='neighborhood', how='left') \
-                                  .groupby('region')['neigh_assess_std'].median()
-global_neigh_std = neigh_stats['neigh_assess_std'].median()
-
-region_std_by_neigh = region_stats.merge(train_merged[['neighborhood', 'region']], on='region', how='left') \
-                                   .groupby('neighborhood')['region_assess_std'].median()
-global_region_std = region_stats['region_assess_std'].median()
-
-# === Step 4: Merge into train/test and compute features ===
-for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-    df = df.merge(neigh_stats, on='neighborhood', how='left')
-    df = df.merge(region_stats, on='region', how='left')
-
-    # Fill missing std values via fallback
-    df['neigh_assess_std'] = df['neigh_assess_std'].fillna(
-        df['region'].map(neigh_std_by_region)
-    ).fillna(global_neigh_std)
-
-    df['region_assess_std'] = df['region_assess_std'].fillna(
-        df['neighborhood'].map(region_std_by_neigh)
-    ).fillna(global_region_std)
-
-    # Compute derived features
-    df['assess_minus_neigh_mean'] = df['assessed_2018'] - df['neigh_assess_mean']
-    df['assess_ratio_neigh_mean'] = df['assessed_2018'] / (df['neigh_assess_mean'] + 1e-6)
-    df['z_score_assess_neigh'] = df['assess_minus_neigh_mean'] / (df['neigh_assess_std'] + 1e-6)
-
-    df['assess_minus_region_mean'] = df['assessed_2018'] - df['region_assess_mean']
-    df['assess_ratio_region_mean'] = df['assessed_2018'] / (df['region_assess_mean'] + 1e-6)
-    df['z_score_assess_region'] = df['assess_minus_region_mean'] / (df['region_assess_std'] + 1e-6)
-
-    # Save back
-    if df_name == 'train_merged':
-        train_merged = df
-    else:
-        test_merged = df
-
-print(" Completed: Stats merge + std fallback + z-score computation.")
-
-```
-
-```{python}
-cols_to_drop = ['neighborhood', 'region','zone','subneighborhood']
-
-for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-    drop_cols = [col for col in cols_to_drop if col in df.columns]
-    if drop_cols:
-        df.drop(columns=drop_cols, inplace=True)
-        print(f" Dropped columns from {df_name}: {drop_cols}")
-
-```
-
-```{python}
-growth_pairs = {
-    'building_value_growth': ('building_value_2018', 'building_value_2015'),
-    'land_value_growth':     ('land_value_2018', 'land_value_2015'),
-    'assessed_growth':       ('assessed_2018', 'assessed_2015')
-}
-
-for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-    for new_col, (final_col, base_col) in growth_pairs.items():
-        if final_col in df.columns and base_col in df.columns:
-            df[new_col] = df[final_col] - df[base_col]
-            print(f" Created {new_col} in {df_name}")
-        else:
-            print(f" Skipped {new_col} in {df_name}: missing {final_col} or {base_col}")
-
-    # === Building Age ===
-    if 'year_built_final' in df.columns:
-        df['year_built_final'] = pd.to_numeric(df['year_built_final'], errors='coerce')  # handle 'Vacant', etc.
-        df['building_age'] = 2018 - df['year_built_final']
-        print(f" Created building_age in {df_name}")
-    else:
-        print(f" Skipped building_age in {df_name}: missing year_built_final")
-
-```
-
-```{python}
-if 'school_dist' in train_merged.columns:
-    missing_pct = train_merged['school_dist'].isna().mean() * 100
-    missing_count = train_merged['school_dist'].isna().sum()
-
-    print(f" 'school_dist' has {missing_count} missing values ({missing_pct:.2f}%) in training set")
-else:
-    print(" 'school_dist' not found in training set")
-
-```
-
-```{python}
-if 'school_dist' in train_merged.columns:
-    school_dist_median = train_merged['school_dist'].median()
-
-    for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-        if 'school_dist' in df.columns:
-            df['school_dist'] = df['school_dist'].fillna(school_dist_median)
-            print(f" Filled missing 'school_dist' in {df_name} using train median ({school_dist_median})")
-else:
-    print(" 'school_dist' not found in train_merged")
-
-```
-
-```{python}
-if 'year_built_final' in train_merged.columns:
-    missing_pct = train_merged['year_built_final'].isna().mean() * 100
-    missing_count = train_merged['year_built_final'].isna().sum()
-
-    print(f" 'year_built_final' has {missing_count} missing values ({missing_pct:.2f}%) in training set")
-else:
-    print(" 'year_built_final' not found in training set")
-
-```
-
-```{python}
-# === STEP 0: Define base feature names ===
-numeric_bases = [
-    'garage_area', 'porch_area', 'floors', 'half_bath', 'full_bath',
-    'total_rooms', 'bedrooms', 'fireplaces', 'building_area', 'building_value'
-]
-
-categorical_fill_map = {
-    'quality': 'None',
-    'quality_description': 'None',
-    'building_condition': 'None',
-    'foundation_type': 'None',
-    'grade': 'None',
-    'has_cooling': False,
-    'has_heat': False,
-    'physical_condition': 'None',
-    'exterior_walls': 'None',
-    'protested': False
-}
-
-# Generate full list of columns (2015–2019 only, no final columns)
-numeric_cols_to_zero = [
-    f'{base}_{year}' for base in numeric_bases for year in range(2015, 2020)
-] + ['building_value_growth']
-
-categorical_cols_to_fill = {
-    f'{base}_{year}': val
-    for base, val in categorical_fill_map.items()
-    for year in range(2015, 2020)
-}
-
-# === STEP 1: Apply imputation if floor_area_total_2019 == 0 ===
-for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-    if 'floor_area_total_2019' in df.columns:
-        zero_floor_mask = df['floor_area_total_2019'] == 0
-
-        # Fill numeric columns with 0
-        for col in numeric_cols_to_zero:
-            if col in df.columns:
-                df.loc[zero_floor_mask, col] = df.loc[zero_floor_mask, col].fillna(0)
-
-        # Fill categorical/boolean columns
-        for col, fill_val in categorical_cols_to_fill.items():
-            if col in df.columns:
-                df.loc[zero_floor_mask, col] = df.loc[zero_floor_mask, col].fillna(fill_val)
-
-        print(f" Filled structure-dependent missing values in {df_name} for {zero_floor_mask.sum()} rows")
-    else:
-        print(f" 'floor_area_total_2019' not found in {df_name}")
-
-
-```
-
-```{python}
-import numpy as np
-import pandas as pd
-from sklearn.preprocessing import OrdinalEncoder
-from sklearn.model_selection import KFold
-
-# Clear specific variables
-for var in ['ordinal_cols_all', 'bool_cols_all']:
-    if var in locals():
-        del globals()[var]
-
-# === STEP 1: Boolean Encoding (2015–2019 only) ===
-bool_bases = ['has_cooling', 'has_heat', 'protested']
-bool_cols_all = [f"{base}_{year}" for base in bool_bases for year in range(2015, 2020)]
-
-for col in bool_cols_all:
-    if col in train_merged.columns:
-        mode_val = train_merged[col].mode(dropna=True)[0]
-        train_merged[col] = train_merged[col].fillna(mode_val).astype(int)
-        test_merged[col] = test_merged[col].fillna(mode_val).astype(int)
-
-# === STEP 2: Ordinal Cleaning and Encoding (2015–2019 only) ===
-ordinal_bases = [
-    'quality', 'quality_description', 'grade',
-    'building_condition', 'physical_condition'
-]
-
-ordinal_cols_all = [f"{base}_{year}" for base in ordinal_bases for year in range(2015, 2020)]
-
-# Column-specific replacements
-replacement_maps = {
-    'quality': {'E': 'D', 'F': 'D', 'X': np.nan, 'None': np.nan},
-    'quality_description': {'Poor': 'Very Low', 'None': np.nan},
-    'grade': {'X': 'F', 'X-': 'F', 'X+': 'F', 'E': 'D', 'E-': 'D-', 'E+': 'D+', 'None': np.nan},
-    'building_condition': {'Very Poor': 'Poor', 'Unsound': 'Poor', 'None': np.nan},
-    'physical_condition': {'Very Poor': 'Poor', 'Unsound': 'Poor', 'None': np.nan}
-}
-
-# Ordinal category order
-ord_categories = {
-    'quality': ['D', 'C', 'B', 'A'],
-    'quality_description': ['Very Low', 'Low', 'Average', 'Good', 'Excellent', 'Superior'],
-    'grade': ['F', 'D-', 'D', 'D+', 'C-', 'C', 'C+', 'B-', 'B', 'B+', 'A-', 'A', 'A+'],
-    'building_condition': ['Poor', 'Fair', 'Average', 'Good', 'Very Good', 'Excellent'],
-    'physical_condition': ['Poor', 'Fair', 'Average', 'Good', 'Very Good', 'Excellent']
-}
-
-# Clean and encode
-for base in ordinal_bases:
-    for year in range(2015, 2020):
-        col = f"{base}_{year}"
-        if col in train_merged.columns:
-            replacements = replacement_maps.get(base, {})
-            train_merged[col] = train_merged[col].replace(replacements)
-            test_merged[col] = test_merged[col].replace(replacements)
-
-            mode_val = train_merged[col].mode(dropna=True)[0]
-            train_merged[col] = train_merged[col].fillna(mode_val)
-            test_merged[col] = test_merged[col].fillna(mode_val)
-
-            encoder = OrdinalEncoder(categories=[ord_categories[base]], handle_unknown='use_encoded_value', unknown_value=-1)
-            train_merged[[col]] = encoder.fit_transform(train_merged[[col]])
-            test_merged[[col]] = encoder.transform(test_merged[[col]])
-
-
-```
-
-```{python}
-# === STEP 3: Target Encoding (2015–2019 only) ===
-def group_and_target_encode_cv(train_df, test_df, target_name, column, rare_threshold=0.001, smoothing=10, n_splits=5):
-    freq = train_df[column].value_counts(normalize=True)
-    rare_cats = freq[freq < rare_threshold].index
-    train_df[column] = train_df[column].replace(rare_cats, 'Other')
-    test_df[column] = test_df[column].replace(rare_cats, 'Other')
-
-    global_mean = train_df[target_name].mean()
-    oof_encoded = pd.Series(index=train_df.index, dtype='float64')
-
-    kf = KFold(n_splits=n_splits, shuffle=True, random_state=42)
-    for train_idx, val_idx in kf.split(train_df):
-        X_tr, X_val = train_df.iloc[train_idx], train_df.iloc[val_idx]
-        stats = X_tr.groupby(column)[target_name].agg(['mean', 'count'])
-        smooth = (stats['mean'] * stats['count'] + global_mean * smoothing) / (stats['count'] + smoothing)
-        oof_encoded.iloc[val_idx] = X_val[column].map(smooth).fillna(global_mean)
-
-    final_stats = train_df.groupby(column)[target_name].agg(['mean', 'count'])
-    final_smooth = (final_stats['mean'] * final_stats['count'] + global_mean * smoothing) / (final_stats['count'] + smoothing)
-    test_encoded = test_df[column].map(final_smooth).fillna(global_mean)
-
-    return oof_encoded, test_encoded
-
-# Target-encodable nominal columns
-target_encodable_bases = ['foundation_type', 'exterior_walls']
-target_encodable_cols_all = [f"{base}_{year}" for base in target_encodable_bases for year in range(2015, 2020)]
-
-# Apply target encoding
-for col in target_encodable_cols_all:
-    if col in train_merged.columns:
-        mode_val = train_merged[col].mode(dropna=True)[0]
-        train_merged[col] = train_merged[col].fillna(mode_val)
-        test_merged[col] = test_merged[col].fillna(mode_val)
-
-        train_merged[f'{col}_te'], test_merged[f'{col}_te'] = group_and_target_encode_cv(
-            train_merged, test_merged, target_name='assessed_2018', column=col,
-            rare_threshold=0.001, smoothing=10, n_splits=5
-        )
-
-        train_merged.drop(columns=[col], inplace=True)
-        test_merged.drop(columns=[col], inplace=True)
-
-print(" Done: Boolean, Ordinal, and Target Encoding for 2015–2019 features only.")
-```
-
-```{python}
-# Step 1: Get growth columns from training set
-growth_cols = [col for col in train_merged.columns if '_growth' in col]
-
-# Step 2: Compute medians from train_merged only
-growth_medians = {col: train_merged[col].median() for col in growth_cols}
-
-# Step 3: Apply to both train and test
-for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-    for col in growth_cols:
-        if col in df.columns:
-            df[f'{col}_missing'] = df[col].isna().astype(int)
-            df[col].fillna(growth_medians[col], inplace=True)
-    print(f" Filled and flagged missing values in {df_name} for: {growth_cols}")
-
-```
-
-```{python}
-
-# === Step 1: List your growth features ===
-growth_features = ['land_value_growth', 'building_value_growth', 'assessed_growth']
-
-# === Step 2: Binning Function (train-based binning) ===
-def bin_growth_feature_safe(train_df, test_df, feature, bins=4):
-    try:
-        # Quantile binning on train only
-        train_df[f'{feature}_bin'], bin_edges = pd.qcut(train_df[feature], q=bins, labels=False, retbins=True, duplicates='drop')
-        test_df[f'{feature}_bin'] = pd.cut(test_df[feature], bins=bin_edges, labels=False, include_lowest=True)
-    except ValueError:
-        # Fallback: Equal-width binning
-        min_val = train_df[feature].min()
-        max_val = train_df[feature].max()
-        bin_edges = np.linspace(min_val, max_val, bins + 1)
-        train_df[f'{feature}_bin'] = pd.cut(train_df[feature], bins=bin_edges, labels=False, include_lowest=True)
-        test_df[f'{feature}_bin'] = pd.cut(test_df[feature], bins=bin_edges, labels=False, include_lowest=True)
-
-    # Convert to category
-    train_df[f'{feature}_bin'] = train_df[f'{feature}_bin'].astype('category')
-    test_df[f'{feature}_bin'] = test_df[f'{feature}_bin'].astype('category')
-    return train_df, test_df
-
-# === Step 3: Apply to train_merged and test_merged ===
-for feature in growth_features:
-    train_merged, test_merged = bin_growth_feature_safe(train_merged, test_merged, feature)
-
-# === Step 4: Bin year_built_final using train-based quantiles ===
-train_merged['year_built_bin'], bin_edges = pd.qcut(
-    train_merged['year_built_final'], q=5, retbins=True, labels=False, duplicates='drop'
-)
-test_merged['year_built_bin'] = pd.cut(
-    test_merged['year_built_final'], bins=bin_edges, labels=False, include_lowest=True
-)
-
-# Convert to category
-train_merged['year_built_bin'] = train_merged['year_built_bin'].astype('category')
-test_merged['year_built_bin'] = test_merged['year_built_bin'].astype('category')
-
-
-print(" Binned growth & year_built features safely with no leakage.")
-
-
-```
-
-```{python}
-# === Step 5: Drop original continuous columns ===
-cols_to_drop = growth_features + ['year_built_final']
-train_merged=train_merged.drop(columns=cols_to_drop)
-test_merged=test_merged.drop(columns=cols_to_drop)
-```
-
-```{python}
-rare_threshold = 0.001  # 0.1%
-
-cat_cols = [
-    "quality_description_final",
-    "foundation_type_final_te",
-    "physical_condition_final",
-    "exterior_walls_final_te",
-    "region_freq",
-    "neighborhood_freq"
-]
-
-for col in cat_cols:
-    if col in train_merged.columns:
-        freq = train_merged[col].value_counts(normalize=True)
-        rare = freq[freq < rare_threshold]
-        if not rare.empty:
-            print(f"\n Rare categories in '{col}' (less than 0.1% of training data):\n{rare}")
-    else:
-        print(f" Column '{col}' not found in train_merged")
-
-
-
-```
-
-```{python}
-# Define frequency columns and threshold
-freq_cols = ['region_freq', 'neighborhood_freq', 'zone_freq', 'subneighborhood_freq']
-rare_thresh = 0.001
-
-# Apply rare value replacement for each frequency column
-for col in freq_cols:
-    if col in train_merged.columns:
-        rare_vals = train_merged[col].value_counts(normalize=True)[lambda x: x < rare_thresh].index
-        train_merged[col] = train_merged[col].replace(rare_vals, 0)
-        test_merged[col] = test_merged[col].replace(rare_vals, 0)
-        print(f" Replaced rare values in {col} using train_merged threshold < {rare_thresh}")
-    else:
-        print(f" Column {col} not found in train_merged — skipping.")
-
-
-```
-
-```{python}
-import pandas as pd
-
-# === Compute skewness for numeric columns ===
-numeric_cols = train_merged.select_dtypes(include=[np.number])
-skew_values = numeric_cols.skew().sort_values(ascending=False)
-
-# === Save skewness to CSV ===
-skew_df = skew_values.reset_index()
-skew_df.columns = ['feature', 'skewness']
-skew_df.to_csv("feature_skewness.csv", index=False)
-
-print(" Saved skewness stats to 'feature_skewness.csv'")
-
-```
-
-```{python}
-import pandas as pd
-
-# Load your skewness report
-skew_df = pd.read_csv("feature_skewness.csv")  # Update path if needed
-
-# === Step 1: Categorize features by skew level ===
-ultra_skewed = []
-moderately_skewed = []
-
-for _, row in skew_df.iterrows():
-    feature = row['feature']
-    skew = row['skewness']
-    
-    if feature not in train_merged.columns:
-        continue
-
-    unique_vals = train_merged[feature].nunique()
-    is_binary = set(train_merged[feature].dropna().unique()).issubset({0, 1})
-
-    if unique_vals > 10 and not is_binary and not feature.endswith('_te'):
-        if skew > 100:
-            ultra_skewed.append(feature)
-        elif 2< skew <= 100:
-            moderately_skewed.append(feature)
-
-print(f" {len(ultra_skewed)} ultra-skewed features to clip at 0.995.")
-print(f" {len(moderately_skewed)} moderately-skewed features to clip at 0.999.")
-
-# === Step 2: Compute quantile clipping bounds ===
-clip_bounds = {}
-
-for col in ultra_skewed:
-    clip_bounds[col] = (
-        train_merged[col].quantile(0.005),
-        train_merged[col].quantile(0.995)
-    )
-
-for col in moderately_skewed:
-    clip_bounds[col] = (
-        train_merged[col].quantile(0.001),
-        train_merged[col].quantile(0.999)
-    )
-
-# === Step 3: Apply clipping to both train and test ===
-for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-    for col, (lower, upper) in clip_bounds.items():
-        if col in df.columns:
-            df[col] = df[col].clip(lower, upper)
-
-print(" Adaptive clipping applied: 0.995 for ultra-skewed, 0.999 for moderately-skewed features.")
-
-```
-
-```{python}
-def add_features(df):
-    df = df.copy()
-    
-    # === Ratio features ===
-    df['area_ratio'] = df['building_area_2019'] / (df['land_area_2019'] + 1)
-    df['porch_ratio'] = df['porch_area_2019'] / (df['building_area_2019'] + 1)
-    df['floor_density'] = df['floor_area_total_2019'] / (df['land_area_2019'] + 1)
-    
-    df['value_ratio'] = df['building_value_2018'] / (df['land_value_2018'] + 1)
-    df['value_per_sqft'] = df['building_value_2018'] / (df['building_area_2019'] + 1)
-    df['price_per_sqft'] = df['assessed_2018'] / (df['building_area_2019'] + 1)
-
-    # === Bathroom & room structure ===
-    df['bathroom_score'] = df['full_bath_2019'] + 0.5 * df['half_bath_2019']
-    df['bathroom_density'] = df['bathroom_score'] / (df['total_rooms_2019'] + 1)
-    df['bedroom_ratio'] = df['bedrooms_2019'] / (df['total_rooms_2019'] + 1)
-    df['rooms_per_floor'] = df['total_rooms_2019'] / (df['floors_2019'] + 1)
-
-    # === Core interactions ===
-    df['bedrooms_x_floors'] = df['bedrooms_2019'] * df['floors_2019']
-    df['rooms_x_quality'] = df['total_rooms_2019'] * df['quality_2019']
-    df['assess_x_age'] = df['assessed_2018'] * df['building_age']
-    df['grade_quality_index'] = df['grade_2019'] * df['quality_2019']
-
-    # === Selected high-signal interactions ===
-    df['area_x_quality'] = df['building_area_2019'] * df['quality_2019']
-    df['floor_area_x_grade'] = df['floor_area_total_2019'] * df['grade_2019']
-    df['value_to_neigh_median'] = df['building_value_2018'] / (df['neigh_assess_median'] + 1)
-    df['assess_to_neigh_mean'] = df['assessed_2018'] / (df['neigh_assess_mean'] + 1)
-    df['value_per_age'] = df['building_value_2018'] / (df['building_age'] + 1)
-
-    # === Clean up ===
-    df = df.replace([np.inf, -np.inf], np.nan)
-    df = df.fillna(0)
-    
-    return df
-
-# === Apply to train and test sets ===
-train_merged = add_features(train_merged)
-test_merged = add_features(test_merged)
-
-
-```
-
-```{python}
-# Select numeric columns only
-numeric_features = train_merged.select_dtypes(include=['int64', 'float64'])
-
-# Calculate skewness
-skewness = numeric_features.skew(numeric_only=True)
-
-# Filter and sort features with skewness > 30
-highly_skewed = skewness[skewness > 5].sort_values(ascending=False)
-
-print("📊 Features with skewness > 5:")
-print(highly_skewed)
-```
-
-```{python}
-import numpy as np
-import pandas as pd
-
-# === Step 1: Drop dummy _missing columns ===
-drop_cols = [
-    'building_value_growth_missing',
-    'land_value_growth_missing',
-    'assessed_growth_missing'
-]
-train_merged = train_merged.drop(columns=drop_cols, errors='ignore')
-test_merged = test_merged.drop(columns=drop_cols, errors='ignore')
-print("🗑️ Dropped dummy _missing columns from train and test.")
-
-# === Step 2: Compute skewness from train_merged only ===
-numeric_cols = train_merged.select_dtypes(include=[np.number])
-skew_series = numeric_cols.skew()
-
-# === Step 3: Categorize by skew level (excluding _te and _missing) ===
-ultra_skewed = []
-moderately_skewed = []
-
-for col, skew_val in skew_series.items():
-    if col.endswith('_te') or col.endswith('_missing'):
-        continue
-    if skew_val > 100:
-        ultra_skewed.append(col)
-    elif skew_val > 2:
-        moderately_skewed.append(col)
-
-print(f" {len(ultra_skewed)} ultra-skewed features (clip at 0.5%–99.5%).")
-print(f" {len(moderately_skewed)} moderately-skewed features (clip at 0.1%–99.9%).")
-
-# === Step 4: Compute clipping bounds ===
-clip_bounds = {}
-
-for col in ultra_skewed:
-    clip_bounds[col] = (
-        train_merged[col].quantile(0.005),
-        train_merged[col].quantile(0.995)
-    )
-
-for col in moderately_skewed:
-    clip_bounds[col] = (
-        train_merged[col].quantile(0.001),
-        train_merged[col].quantile(0.999)
-    )
-
-# === Step 5: Apply clipping to both train and test sets ===
-for df in [train_merged, test_merged]:
-    for col, (lower, upper) in clip_bounds.items():
-        if col in df.columns:
-            df[col] = df[col].clip(lower, upper)
-
-print(" Adaptive clipping complete: 0.995 for ultra-skewed, 0.999 for moderately skewed.")
-
-```
-
-```{python}
-# Define columns to drop
-year_built_cols = [f'year_built_{year}' for year in range(2015, 2020)]
-
-# Drop if columns exist
-train_merged.drop(columns=[col for col in year_built_cols if col in train_merged.columns], inplace=True)
-test_merged.drop(columns=[col for col in year_built_cols if col in test_merged.columns], inplace=True)
-
-print(" Dropped year_built_2015 to year_built_2019 from both train and test sets.")
-```
-
-```{python}
-if "TARGET" in train_merged.columns:
-    train_merged.drop("TARGET", axis=1,inplace=True)
-else:
-    print("TARGET not found in columns:", train_merged.columns.tolist())
-
-```
-
-```{python}
-# Drop floor_area_total_final if it exists
-for df_name, df in [('train_merged', train_merged), ('test_merged', test_merged)]:
-    if 'floor_area_total_final' in df.columns:
-        df.drop(columns='floor_area_total_final', inplace=True)
-        print(f" Dropped 'floor_area_total_final' from {df_name}")
-    else:
-        print(f"ℹ 'floor_area_total_final' not found in {df_name}")
-
-```
-
-```{python}
-train_cols = set(train_merged.columns)
-test_cols = set(test_merged.columns)
-
-missing_in_test = train_cols - test_cols
-missing_in_train = test_cols - train_cols
-
-print(" Columns in train but not in test:")
-print(sorted(missing_in_test))
-
-print("\n Columns in test but not in train:")
-print(sorted(missing_in_train))
-
-```
-
-```{python}
-# Check if column sets match
-print(set(train_merged.columns) == set(test_merged.columns))  # Should be True
-
-# Check if column order matches
-print(list(train_merged.columns) == list(test_merged.columns))  # Must also be True
-
-```
-
-```{python}
+echo: true
+output: false
+collapse: true
 import numpy as np
 import pandas as pd
 import optuna
@@ -2559,77 +882,11 @@ print(" Best RMSE:", study.best_value)
 print(" Best Parameters:", study.best_params)
 np.save("oof_preds_lgbm.npy", global_oof_preds)
 print(" Saved: oof_preds_lgbm.npy")
-
-# === STEP 3: SHAP + GAIN Feature Selection ===
-kf = KFold(n_splits=3, shuffle=True, random_state=42)
-selected_feature_sets = []
-
-for fold, (train_idx, val_idx) in enumerate(kf.split(X_full)):
-    X_train_raw, y_train_fold = X_full.iloc[train_idx], y_full.iloc[train_idx]
-
-    train_dataset = lgb.Dataset(X_train_raw, label=y_train_fold, categorical_feature=cat_cols)
-    model_temp = lgb.train(
-        study.best_params,
-        train_dataset,
-        num_boost_round=200,
-        valid_sets=[train_dataset],
-        callbacks=[log_evaluation(period=100)] 
-    )
-
-    # SHAP importance
-    explainer = shap.TreeExplainer(model_temp)
-    shap_values = explainer.shap_values(X_train_raw)
-    shap_df = pd.DataFrame(np.abs(shap_values), columns=X_train_raw.columns)
-    shap_importance = shap_df.mean().sort_values(ascending=False)
-    shap_cumsum = shap_importance.cumsum() / shap_importance.sum()
-    top_shap = shap_cumsum[shap_cumsum <= 0.95].index.tolist()
-
-    # Gain importance
-    gain_importance = pd.Series(model_temp.feature_importance(importance_type='gain'), index=X_train_raw.columns)
-    gain_sorted = gain_importance.sort_values(ascending=False)
-    gain_cumsum = gain_sorted.cumsum() / gain_sorted.sum()
-    top_gain = gain_cumsum[gain_cumsum <= 0.95].index.tolist()
-
-    selected_features = list(set(top_shap).union(set(top_gain)))
-    selected_feature_sets.append(selected_features)
-
-# === STEP 4: Final Feature Union ===
-final_union_features = list(set().union(*selected_feature_sets))
-print(" Final Union Feature Count:", len(final_union_features))
-
-# Filter only those categorical columns that are in final features
-filtered_cat_cols = [col for col in cat_cols if col in final_union_features]
-
-# === STEP 5: Final Model on Selected Features ===
-X_full_selected = X_full[final_union_features]
-X_test_selected = X_test[final_union_features]
-
-
-final_dataset = lgb.Dataset(X_full_selected, label=y_full, categorical_feature=filtered_cat_cols)
-final_model = lgb.train(
-    study.best_params,
-    final_dataset,
-    num_boost_round=1000,
-    valid_sets=[final_dataset],
-    valid_names=["train"],
-    callbacks=[log_evaluation(period=100)]
-)
-
-# === STEP 6: Predict on Test Set ===
-test_preds = final_model.predict(X_test_selected, num_iteration=final_model.best_iteration)
-np.save("test_preds_lgbm_shap.npy", test_preds)
-print(" Saved: test_preds_lgbm_shap.npy")
-
-# === STEP 7: Save Submission ===
-submission = pd.DataFrame({
-    'ACCOUNT': acct_test.values.ravel(),  # Replace with your ID col
-    'TARGET': test_preds
-})
-submission.to_csv("submission_lgbm_shap.csv", index=False)
-print(" Submission saved: submission_lgbm_shap.csv")
 ```
-
 ```{python}
+echo: true
+output: false
+collapse: true
 import numpy as np
 import pandas as pd
 import optuna
@@ -2725,8 +982,57 @@ print(" Best RMSE:", study.best_value)
 print(" Best Parameters:", study.best_params)
 np.save("oof_preds_xgbreg.npy", global_oof_preds)
 print(" Saved: oof_preds_xgbreg.npy")
+```
+**Step 2: SHAP and Gain-Based Feature Selection.** After tuning, we trained new LightGBM and XGBoost models using the best parameters on each fold of the training data. For each fold, we computed SHAP importance values and LightGBM/XGBoost gain importances. We retained features that collectively accounted for 95% of total importance in either SHAP or gain, and constructed a union of these high-signal features across all folds. This union was used to define the final reduced feature space for retraining.
+```{python}
+echo: true
+output: false
+collapse: true
+# === STEP 3: SHAP + GAIN Feature Selection for LGBM ===
+kf = KFold(n_splits=3, shuffle=True, random_state=42)
+selected_feature_sets = []
 
-# === STEP 3: Post-Optuna SHAP + Gain Feature Selection ===
+for fold, (train_idx, val_idx) in enumerate(kf.split(X_full)):
+    X_train_raw, y_train_fold = X_full.iloc[train_idx], y_full.iloc[train_idx]
+
+    train_dataset = lgb.Dataset(X_train_raw, label=y_train_fold, categorical_feature=cat_cols)
+    model_temp = lgb.train(
+        study.best_params,
+        train_dataset,
+        num_boost_round=200,
+        valid_sets=[train_dataset],
+        callbacks=[log_evaluation(period=100)] 
+    )
+
+    # SHAP importance
+    explainer = shap.TreeExplainer(model_temp)
+    shap_values = explainer.shap_values(X_train_raw)
+    shap_df = pd.DataFrame(np.abs(shap_values), columns=X_train_raw.columns)
+    shap_importance = shap_df.mean().sort_values(ascending=False)
+    shap_cumsum = shap_importance.cumsum() / shap_importance.sum()
+    top_shap = shap_cumsum[shap_cumsum <= 0.95].index.tolist()
+
+    # Gain importance
+    gain_importance = pd.Series(model_temp.feature_importance(importance_type='gain'), index=X_train_raw.columns)
+    gain_sorted = gain_importance.sort_values(ascending=False)
+    gain_cumsum = gain_sorted.cumsum() / gain_sorted.sum()
+    top_gain = gain_cumsum[gain_cumsum <= 0.95].index.tolist()
+
+    selected_features = list(set(top_shap).union(set(top_gain)))
+    selected_feature_sets.append(selected_features)
+
+# === STEP 4: Final Feature Union ===
+final_union_features = list(set().union(*selected_feature_sets))
+print(" Final Union Feature Count:", len(final_union_features))
+
+# Filter only those categorical columns that are in final features
+filtered_cat_cols = [col for col in cat_cols if col in final_union_features]
+```
+```{python}
+echo: true
+output: false
+collapse: true
+# === STEP 3: Post-Optuna SHAP + Gain Feature Selection for XGBoost ===
 kf = KFold(n_splits=3, shuffle=True, random_state=42)
 selected_feature_sets = []
 
@@ -2756,8 +1062,46 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(X_full)):
 # === STEP 4: Final Feature Union ===
 final_union_features = list(set().union(*selected_feature_sets))
 print(" Final Union Feature Count:", len(final_union_features))
+```
+**Step 3: Final Model Training and Inference.** Each final model was retrained on the full training set using only the selected features, with early stopping enabled to prevent overfitting. Predictions on the test set were generated using the best iteration count. All model outputs—including OOF predictions and test forecasts—were saved for submission and later use in ensemble blending.
 
-# === STEP 5: Train Final Model with Early Stopping on Union Features ===
+```{python}
+echo: true
+output: false
+collapse: true
+# === STEP 5: Final Model on Selected Features for LGBM ===
+X_full_selected = X_full[final_union_features]
+X_test_selected = X_test[final_union_features]
+
+
+final_dataset = lgb.Dataset(X_full_selected, label=y_full, categorical_feature=filtered_cat_cols)
+final_model = lgb.train(
+    study.best_params,
+    final_dataset,
+    num_boost_round=1000,
+    valid_sets=[final_dataset],
+    valid_names=["train"],
+    callbacks=[log_evaluation(period=100)]
+)
+
+# === STEP 6: Predict on Test Set ===
+test_preds = final_model.predict(X_test_selected, num_iteration=final_model.best_iteration)
+np.save("test_preds_lgbm_shap.npy", test_preds)
+print(" Saved: test_preds_lgbm_shap.npy")
+
+# === STEP 7: Save Submission ===
+submission = pd.DataFrame({
+    'ACCOUNT': acct_test.values.ravel(),  # Replace with your ID col
+    'TARGET': test_preds
+})
+submission.to_csv("submission_lgbm_shap.csv", index=False)
+print(" Submission saved: submission_lgbm_shap.csv")
+```
+```{python}
+echo: true
+output: false
+collapse: true
+# === STEP 5: Final Model on Selected Features for XGBoost ===
 X_full_selected = X_full[final_union_features]
 X_test_selected = X_test[final_union_features]
 
@@ -2780,131 +1124,27 @@ submission.to_csv("submission_xgbreg.csv", index=False)
 print(" Submission saved: submission_xgbreg.csv")
 
 ```
+This hybrid approach—combining Optuna-based tuning with SHAP-driven interpretability—allowed us to retain only high-impact features, thereby improving generalization and reducing overfitting without sacrificing performance. The best out-of-fold RMSE achieved was 40,925.29 with XGBoost and 41,641.42 with LightGBM, confirming the robustness of both pipelines.
 
+# 5. Ensembling Strategy
+
+## 5.1 Weighted Model Blending with Optuna
+
+To consolidate the strengths of our top-performing base models—XGBoost, RidgeCV, and LightGBM—we employed a weighted blending strategy optimized using Optuna. This approach directly searched for the optimal linear combination of model predictions that minimized RMSE on a holdout set.
+
+We first constructed a meta-training set consisting of out-of-fold (OOF) predictions from each base model. A corresponding test matrix was constructed from each model’s final test predictions. The blending weights were constrained to be non-negative and normalized to sum to one.
+
+An Optuna study was run for 100 trials, where each trial proposed a new set of blending weights and evaluated their performance via RMSE on the holdout split. The final optimized weights were:
+
+- XGBoost: w₀ = 25.98%
+- RidgeCV: w₁ = 33.53%
+- LightGBM: w₂ = 40.49%
+
+These weights were then used to produce a final blended prediction for the test set. The resulting predictions achieved an RMSE of 36,239.91 on the holdout set—outperforming all individual base models and demonstrating the value of combining linear and tree-based perspectives.
 ```{python}
-import pandas as pd
-import numpy as np
-import seaborn as sns
-import matplotlib.pyplot as plt
-
-# === Compute Residuals ===
-residuals = y_full - global_oof_preds
-res_df = X_full.copy()
-res_df["actual"] = y_full
-res_df["predicted"] = global_oof_preds
-res_df["residual"] = residuals
-
-# === Protest Count (2015–2018) ===
-protest_cols = [f"protested_{year}" for year in range(2015, 2019)]
-if all(col in res_df.columns for col in protest_cols):
-    res_df["protest_count"] = res_df[protest_cols].sum(axis=1)
-
-# === Plot 1: Residuals vs Actual Value ===
-plt.figure(figsize=(8, 6))
-sns.scatterplot(data=res_df, x="actual", y="residual", alpha=0.3)
-plt.axhline(0, color="red", linestyle="--")
-plt.title("Residuals vs. Actual Value")
-plt.xlabel("Actual Value")
-plt.ylabel("Residual (Actual - Predicted)")
-plt.tight_layout()
-plt.savefig("residuals_vs_actual_value.png", dpi=300)
-plt.close()
-
-# === Plot 2: Residuals by Protest Count ===
-if "protest_count" in res_df.columns:
-    plt.figure(figsize=(8, 6))
-    sns.boxplot(x="protest_count", y="residual", data=res_df)
-    plt.axhline(0, color="red", linestyle="--")
-    plt.title("Residuals by Protest Count (2015–2018)")
-    plt.xlabel("Number of Years Protested")
-    plt.ylabel("Residual")
-    plt.tight_layout()
-    plt.savefig("residuals_by_protest_count.png", dpi=300)
-    plt.close()
-
-# === Plot 3: Residuals vs. Neighborhood Frequency ===
-if "neighborhood_freq" in res_df.columns:
-    plt.figure(figsize=(8, 6))
-    sns.scatterplot(x="neighborhood_freq", y="residual", data=res_df, alpha=0.3)
-    plt.axhline(0, color="red", linestyle="--")
-    plt.title("Residuals vs. Neighborhood Frequency")
-    plt.xlabel("Neighborhood Frequency")
-    plt.ylabel("Residual")
-    plt.tight_layout()
-    plt.savefig("residuals_vs_neighborhood_freq.png", dpi=300)
-    plt.close()
-
-```
-
-```{python}
-import numpy as np
-import pandas as pd
-import shap
-import matplotlib.pyplot as plt
-
-# === SHAP Setup ===
-explainer = shap.TreeExplainer(final_model)
-shap_values = explainer.shap_values(X_full_selected)
-
-# === SHAP DataFrame ===
-shap_df = pd.DataFrame(np.abs(shap_values), columns=X_full_selected.columns)
-shap_means = shap_df.mean().sort_values(ascending=False)
-shap_importance_df = shap_means.reset_index()
-shap_importance_df.columns = ["feature", "mean_shap"]
-
-# === SHAP Summary Plot: Top 30 ===
-plt.figure()
-shap.summary_plot(shap_values, X_full_selected, max_display=30, show=False)
-plt.tight_layout()
-plt.savefig("shap_summary_top30_union.png", dpi=300)
-plt.close()
-
-# === SHAP Summary Plot: Bottom 30 ===
-bottom_features = shap_importance_df.tail(30)["feature"].tolist()
-shap.summary_plot(
-    shap_values[:, [X_full_selected.columns.get_loc(f) for f in bottom_features]],
-    X_full_selected[bottom_features],
-    show=False
-)
-plt.tight_layout()
-plt.savefig("shap_summary_bottom30_union.png", dpi=300)
-plt.close()
-
-```
-
-# RMSE Optimization
-
-```{python}
-import pandas as pd
-
-# ===== Load Data =====
-folder_path = '/Users/Srijith97/Downloads/STA 9890 Housing Data/'
-
-building_years = []
-for year in range(2015, 2020):
-    df = pd.read_csv(folder_path + f'building_details_{year}.csv')
-    df['year'] = year
-    building_years.append(df)
-
-
-building_all = pd.concat(building_years, ignore_index=True)
-building_all = building_all.drop_duplicates(subset=['acct', 'year'], keep='first')
-pivoted = building_all.pivot(index='acct', columns='year')
-pivoted.columns = [f'{col}_{year}' for col, year in pivoted.columns]
-pivoted = pivoted.reset_index()
-
-train = pd.read_csv(folder_path + 'assessment_history_train.csv')
-test = pd.read_csv(folder_path + 'assessment_history_test.csv')
-
-train_merged = train.merge(pivoted, on='acct', how='left')
-test_merged = test.merge(pivoted, on='acct', how='left')
-```
-
-```{python}
-acct_test = test_merged[['acct']].copy() if 'acct' in test_merged.columns else None
-```
-
-```{python}
+echo: true
+output: false
+collapse: true
 import numpy as np
 import pandas as pd
 import optuna
@@ -2969,8 +1209,21 @@ submission.to_csv("submission_optuna_blended.csv", index=False)
 logger.info(" Saved: test_preds_optuna_blended.npy and submission_optuna_blended.csv")
 
 ```
+## 5.2 Stacked Ensembling with ElasticNetCV
 
+To complement our Optuna-based weighted average ensemble, we implemented a stacked generalization approach using ElasticNetCV as a meta-learner. This method treats out-of-fold (OOF) predictions from the base models—XGBoost, RidgeCV, and LightGBM—as features in a second-level regression model. By learning how to optimally combine base predictions, the meta-model can capture nonlinear inter-model relationships while applying regularization to prevent overfitting.
+
+**Meta-Model Training.** We concatenated the OOF predictions into a 3-column meta-feature matrix and used it to fit an ElasticNetCV model wrapped in a StandardScaler pipeline. The meta-model searched over a grid of `l1_ratio` and `alpha` values, using 3-fold cross-validation to identify the optimal regularization configuration.
+
+**Holdout Evaluation.** For evaluation, we trained the meta-learner on an 80% split and evaluated on a 20% holdout. The resulting RMSE was 36,344.64, closely aligned with the Optuna-weighted blend. The selected `alpha` was 0.01, indicating strong regularization and robust coefficient shrinkage.
+
+**Final Test Predictions.** The final model was retrained on the full meta-feature set and used to predict the test set. This stacked approach provided a robust and regularized alternative to linear averaging, automatically downweighting weaker models while maintaining interpretability and reproducibility.
+
+On the competition leaderboard, the ElasticNetCV ensemble—combining Ridge, XGBoost, and LightGBM predictions—secured the top rank with a private leaderboard RMSE of 36,021, just 2 points above the public leaderboard score of 36,019. Interestingly, while an Optuna-weighted linear blend achieved a lower public RMSE, it ranked below the ElasticNet ensemble on the final evaluation, underscoring the latter’s generalization strength.
 ```{python}
+echo: true
+output: false
+collapse: true
 import numpy as np
 from sklearn.linear_model import ElasticNetCV
 from sklearn.pipeline import make_pipeline
@@ -3036,3 +1289,61 @@ submission.to_csv("submission_elasticnet_blended.csv", index=False)
 print(" ElasticNetCV blended stacking submission saved.")
 
 ```
+# 6. Residual Error Analysis
+
+To evaluate model robustness, we conducted residual analysis across key dimensions. Three consistent patterns emerged:
+
+1. **Underprediction for High-Value Properties:** Residuals increased with actual property value, particularly above $5M. This indicates systematic underestimation of high-end properties, likely due to their rarity and unique characteristics.
+2. **Volatility in Protested Properties:** Properties with multiple protests between 2015–2018 exhibited larger residual variance, despite median residuals near zero. This suggests that frequently disputed properties are harder to predict, potentially due to unrecorded structural changes or historical valuation disagreements not captured in the dataset.
+3. **Poor Generalization in Sparse Neighborhoods:** Residuals were more variable and extreme in neighborhoods with low frequency in the training data. This suggests weaker model generalization in underrepresented regions. Frequency-aware encodings or collapsing sparse neighborhoods into broader groups may enhance stability and reduce prediction noise in these areas.
+
+::: {.columns}
+::: {.column width="33%"}
+![Neighborhood Frequency](images/residuals_vs_neighborhood_freq.png){fig-cap="Residuals vs. Neighborhood Frequency" width=100%}
+:::
+
+::: {.column width="33%"}
+![Protest Count](images/residuals_by_protest_count.png){fig-cap="Residuals by Protest Count (2015–2018)" width=100%}
+:::
+
+::: {.column width="33%"}
+![Actual Value](images/residuals_vs_actual_value.png){fig-cap="Residuals vs. Actual Value" width=100%}
+:::
+:::
+
+
+# 7. SHAP-Based Interpretability and Insights
+
+## Top Predictive Features
+
+SHAP analysis revealed that features like assessed 2018, building value 2018, and land value 2018 were primary drivers of the model’s predictions. Structural attributes such as building area 2019, floor area x grade, and grade 2019 also carried strong explanatory power. These results confirmed the value of engineering ratio and interaction terms that encode economic density, build quality, and age-adjusted valuation. Neighborhood-level variables, especially neigh assess std and frequency encodings, further demonstrated the importance of local context in real estate assessment.
+
+## Low-Impact Features
+
+Although SHAP-ranked bottom 30 features showed limited average contribution, they were retained via the 95% SHAP + Gain union due to their potential complementary value. Examples include early-year indicators like quality description 2015, fireplaces 2016, and spatial ratios like porch ratio. Their inclusion likely enhanced generalization by supporting edge cases, and their low impact helped confirm that more aggressive feature pruning would have offered little gain.
+::: {.columns}
+::: {.column width="50%"}
+![SHAP Bottom 30](images/shap_summary_bottom30_union.png){fig-cap="Bottom 30 SHAP Features" width=100%}
+:::
+
+::: {.column width="50%"}
+![SHAP Top 30](images/shap_summary_top30_union.png){fig-cap="Top 30 SHAP Features" width=100%}
+:::
+:::
+
+# 8. Reflections and Lessons Learned
+
+Our modeling pipeline blended SHAP-driven interpretability with ensemble-based prediction to achieve both transparency and predictive strength. Key lessons emerged across three dimensions:
+
+## What Worked Well
+
+- The SHAP + Gain union was highly effective in denoising the feature space and avoiding overfitting, retaining only high-impact predictors across folds.
+- The ElasticNet ensemble combined linear and non-linear model strengths to capture nuanced patterns in both well-represented and sparse regions.
+- Optuna tuning reduced manual trial-and-error and consistently improved generalization across Ridge, LGBM, and XGBoost pipelines.
+
+## What Could Improve
+
+- We did not model temporal dependencies across yearly features—treating them as time-series sequences or using transformer architectures may better account for evolving valuation dynamics over time.
+- Geographical variation was only partially captured using frequency encoding. Future work could explore residual stacking or blended stacking techniques with subgroup-aware features (e.g., neighborhood frequency, protest history) to correct localized error patterns more explicitly.
+
+Overall, the final ElasticNet ensemble—integrating Ridge, SHAP-informed LGBM, and Optuna-tuned XGBoost—delivered a strong performance on the private leaderboard. Future extensions may benefit from incorporating time-aware modeling, subgroup-specific residual correction, or spatially informed representations to further improve accuracy and fairness in municipal assessment systems.
