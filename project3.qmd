@@ -1324,17 +1324,17 @@ To evaluate model robustness, we conducted residual analysis across key dimensio
 ::: {.columns}
 
 ::: {.column width="33%"}
-![Neighborhood Frequency](images/residuals_vs_neighborhood_freq.png){width=100%}
+![](images/residuals_vs_neighborhood_freq.png){width=100%}
 <center>Neighborhood Frequency</center>
 :::
 
 ::: {.column width="33%"}
-![Protest Count](images/residuals_by_protest_count.png){width=100%}
+![](images/residuals_by_protest_count.png){width=100%}
 <center>Protest Count (2015–2018)</center>
 :::
 
 ::: {.column width="33%"}
-![Actual Value](images/residuals_vs_actual_value.png){width=100%}
+![](images/residuals_vs_actual_value.png){width=100%}
 <center>Actual Value</center>
 :::
 
@@ -1354,12 +1354,12 @@ Although SHAP-ranked bottom 30 features showed limited average contribution, the
 
 ::: {.columns}
 ::: {.column width="50%"}
-![SHAP Bottom 30](images/shap_summary_bottom30_union.png){width=100%}
+![](images/shap_summary_bottom30_union.png){width=100%}
 <center>Bottom 30 SHAP Features</center>
 :::
 
 ::: {.column width="50%"}
-![SHAP Top 30](images/shap_summary_top30_union.png){width=100%}
+![](images/shap_summary_top30_union.png){width=100%}
 <center>Top 30 SHAP Features</center>
 :::
 :::

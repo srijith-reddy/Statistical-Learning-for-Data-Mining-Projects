@@ -116,7 +116,7 @@
     "href": "project3.html#low-impact-features",
     "title": "STA 9890 Project: Property Valuation",
     "section": "Low-Impact Features",
-    "text": "Low-Impact Features\nAlthough SHAP-ranked bottom 30 features showed limited average contribution, they were retained via the 95% SHAP + Gain union due to their potential complementary value. Examples include early-year indicators like quality description 2015, fireplaces 2016, and spatial ratios like porch ratio. Their inclusion likely enhanced generalization by supporting edge cases, and their low impact helped confirm that more aggressive feature pruning would have offered little gain.\n\n\n\n\n\nSHAP Bottom 30\n\n\n\nBottom 30 SHAP Features\n\n\n\n\n\nSHAP Top 30\n\n\n\nTop 30 SHAP Features"
+    "text": "Low-Impact Features\nAlthough SHAP-ranked bottom 30 features showed limited average contribution, they were retained via the 95% SHAP + Gain union due to their potential complementary value. Examples include early-year indicators like quality description 2015, fireplaces 2016, and spatial ratios like porch ratio. Their inclusion likely enhanced generalization by supporting edge cases, and their low impact helped confirm that more aggressive feature pruning would have offered little gain.\n\n\n\n\nBottom 30 SHAP Features\n\n\n\n\nTop 30 SHAP Features"
   },
   {
     "objectID": "project3.html#what-worked-well",
