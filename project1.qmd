@@ -6,6 +6,7 @@ format:
     toc: true
     toc-depth: 3
     code-fold: true
+    math=true
 execute:
   echo: true
   output: true
@@ -300,7 +301,7 @@ $$\hat{\beta} = (X^T X)^{-1} X^T y.$$
 
 
 
-```python
+```{python}
 import numpy as np
 
 # Create a data matrix
@@ -390,7 +391,7 @@ Prevents Overfitting
    - Large values of $\beta$ are penalized, reducing variance and improving generalization.
 
 
-```python
+```{python}
 import numpy as np
 
 # Create a data matrix
@@ -467,7 +468,7 @@ Important things to remember:
 - Feature Scaling:  
   - Gradient Descent works better if features are scaled(like using standardization).
 
-```python
+```{python}
 import numpy as np
 
 # Create a data matrix
@@ -559,7 +560,7 @@ where:
 - The second term shrinks the weights, preventing them from growing too large.
 
 
-```python
+```{python}
 import numpy as np
 
 # Create a data matrix
@@ -653,7 +654,7 @@ As iterations $\to \infty$, the Gradient Descent solution should converge to Rid
 
 
 
-```python
+```{python}
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -894,11 +895,12 @@ In the MSE comparison plot, we observe that Ridge regression has a higher in-sam
 :::
 :::
 
+
 Ridge regression was evaluated across a grid of regularization parameters using k-fold cross-validation with repeated sampling. For each lambda value, the data was split into training and validation sets multiple times to compute stable estimates of out-of-sample mean squared error. The mean MSE across all folds and repetitions was recorded for each lambda, allowing for the identification of the value that yielded the lowest average validation error.
 
 This process resulted in an optimal lambda of approximately 0.1963, which minimized the out-of-sample MSE to 0.7268. In comparison, the corresponding out-of-sample MSE for ordinary least squares, which does not include any regularization, was slightly higher at 0.7505. This demonstrates that a modest amount of regularization can improve generalization performance by balancing bias and variance, especially in settings where noise or multicollinearity is present in the predictors.
 
-```python
+```{python}
 # Storage for Ridge Regression results
 ridge_mse_values = np.zeros(len(lambda_grid))
 kf = KFold(n_splits=k_folds, shuffle=True)
@@ -936,7 +938,7 @@ The curve dips at a lambda value around 0.1963, where the MSE is minimized. This
 Non-Linear DGP:$$y = \frac{1}{1 + \exp(-X\beta)} + \varepsilon$$
 This is a logistic transformation applied only to the first predictor(X0), meaning only X0 affects y. I’ve decided to only use the first predictor because if other predictors are included linearly, the function would become partially nonlinear and partially linear. This will make it harder to isolate the effects of nonlinearity when comparing OLS and Ridge Regression, essentially making it harder to understand when and why linear models fail. Additionally, the remaining predictors will act as noise, making it a good case for Ridge Regression to shrink irrelevant features.
 
-```python
+```{python}
 # Define the Non-Linear Data Generating Process (DGP)
 def generate_nonlinear_data(n, p):
     X = np.random.randn(n, p)
@@ -946,11 +948,12 @@ def generate_nonlinear_data(n, p):
 ```
 Aside from introducing the non-linear transformation through the sigmoid function in the data-generating process, the overall experimental setup remained consistent with the procedures described in Section 3. The same Monte Carlo simulation framework was applied to evaluate the performance of both OLS and Ridge regression under this non-linear setting. For each simulation run, synthetic datasets were generated, models were trained on a subset of the data, and evaluated on held-out test sets to compute key metrics such as bias, variance, and out-of-sample MSE. This allowed for a direct comparison between the linear and non-linear DGPs, highlighting how model assumptions interact with the underlying structure of the data.
 The plot compares the mean squared error of OLS and Ridge regression across increasing sample sizes under the same non-linear setting. At all sample sizes, Ridge maintains a slight advantage over OLS, consistently producing lower MSE. This suggests that even in the presence of model misspecification due to non-linearity, regularization provides a stabilizing effect by reducing variance without dramatically increasing bias. Both models show increasing MSE with larger sample sizes, which is expected in this case, since the sigmoid-transformed targets are bounded and harder to approximate well with a linear model as more data exposes more of the non-linearity.
-![](images/Non Linear MSE Comparison.png){width=80%}
+
+![](images/Non-Linear MSE Comparison.png){width=50%}
 <center>Comparison of OLS and Ridge MSE vs Sample Size (Non-Linear DGP)</center>
 
 The plot shows how Ridge regression performs under a non-linear data-generating process where the response is a sigmoid transformation of a linear combination of predictors. The curve captures out-of-sample MSE across a wide range of lambda values on a logarithmic scale. A noticeable dip occurs around lambda = 0.0069, indicating the optimal regularization strength that minimizes prediction error. Outside this region, the MSE fluctuates more sharply, especially at higher lambda values, where the model likely overshrinks the coefficients. The overall noise in the curve reflects the added complexity of fitting a linear model to a non-linear signal, where small changes in lambda can lead to more volatile performance.
-![](images/Ridge Out of Sample MSE.png){width=80%}
+![](images/Ridge Out of Sample MSE.png){width=50%}
 <center>Out-of-Sample MSE vs Lambda (Log Scale) under Non-Linear DGP</center>
 
 **B-spline Regression**: I used B-spline regression to get the “best approximate” linear regression coefficients. This cubic B-spline regression with 5 degrees of freedom allows the model to smoothly fit approximate the non-linear DGP, avoiding issues of high-degree polynomials. B-spline regression is considered an OLS model because it follows the same fundamental principles of linear regression, however with a transformed feature space.
@@ -998,7 +1001,7 @@ The third plot presents the mean squared error of the spline predictions across 
 
 ::: {.columns}
 ::: {.column width="33%"}
-![](images/Spline approximation to Non Linear Function.png){width=100%}
+![](images/Spline approximation to Non-Linear Function.png){width=100%}
 <center>Spline Approximation to Non-Linear Function</center>
 :::
 

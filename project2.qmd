@@ -6,6 +6,7 @@ format:
     toc: true
     toc-depth: 3
     code-fold: true
+    math=true 
 execute:
   echo: true
   output: true
@@ -104,7 +105,7 @@ To capture structural disparities across programs, we compute each school’s dr
 
 This tier system enables group fairness evaluation across schools with varying institutional prestige.
 
-```python
+```{python}
 import pandas as pd
 import re
 import numpy as np
@@ -336,7 +337,7 @@ H_val = np.vstack([nb_val, lda_val, tree_val, log_plain_val, log_ridge_val, log_
 ```
 Fairness Vector Calculation: To estimate the bias of each base learner, we compute the True Positive Rate (TPR) separately for players from Tier 1 schools and those from lower-tier programs. The difference between these TPRs defines the bias for each learner:
 
-```python
+```{python}
 # --- Fairness Vector ---
 tier_group = (X_val['school_tier'] == 'Tier 1').astype(int)
 def compute_tpr_gap(y_true, y_scores, group, threshold=0.5):
