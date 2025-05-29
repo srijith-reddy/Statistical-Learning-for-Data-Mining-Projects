@@ -879,17 +879,17 @@ In the MSE comparison plot, we observe that Ridge regression has a higher in-sam
 
 ::: {.columns}
 ::: {.column width="33%"}
-![](images/Bias_Comparison.png){width=100%}
+![](images/Bias Comparison.png){width=100%}
 <center>Bias Comparison: OLS vs Ridge</center>
 :::
 
 ::: {.column width="33%"}
-![](images/Variance_Comparison.png){width=100%}
+![](images/Variance Comparison.png){width=100%}
 <center>Variance Comparison: OLS vs Ridge</center>
 :::
 
 ::: {.column width="33%"}
-![](images/MSE_Comparison.png){width=100%}
+![](images/MSE Comparison.png){width=100%}
 <center>MSE Comparison: OLS vs Ridge</center>
 :::
 :::
@@ -929,7 +929,7 @@ optimal_lambda = lambda_grid[np.argmin(ridge_mse_values)]
 
 The MSE existence theorem essentially states that for some optimal λ, Ridge Regression achieves a lower expected MSE than OLS. This graph shows how the out-of-sample mean squared error (MSE) for Ridge regression varies with different values of the regularization parameter lambda, plotted on a logarithmic scale. The blue curve represents Ridge’s MSE across a wide range of lambda values. As lambda increases from very small to very large values, the model transitions from low bias–high variance to high bias–low variance behavior. When lambda is too small, the model risks overfitting, while large lambdas overly shrink the coefficients, hurting predictive accuracy.
 The curve dips at a lambda value around 0.1963, where the MSE is minimized. This value represents the optimal balance between bias and variance for this dataset. Beyond this point, the MSE rises rapidly as excessive regularization starts to dominate. The red dashed line indicates the out-of-sample MSE for OLS, which remains constant since OLS does not involve any regularization. The fact that the Ridge curve falls below this line around the optimal lambda shows that Ridge, when properly tuned, can outperform OLS in terms of generalization.
-![](images/Out_of_Sample_MSE.png){width=80%}
+![](images/Out of Sample MSE.png){width=80%}
 <center>Out-of-Sample MSE vs. Lambda (log scale) for Ridge Regression</center>
     
 # 4. Bias and Variance under Non-Linear DGP
@@ -946,11 +946,11 @@ def generate_nonlinear_data(n, p):
 ```
 Aside from introducing the non-linear transformation through the sigmoid function in the data-generating process, the overall experimental setup remained consistent with the procedures described in Section 3. The same Monte Carlo simulation framework was applied to evaluate the performance of both OLS and Ridge regression under this non-linear setting. For each simulation run, synthetic datasets were generated, models were trained on a subset of the data, and evaluated on held-out test sets to compute key metrics such as bias, variance, and out-of-sample MSE. This allowed for a direct comparison between the linear and non-linear DGPs, highlighting how model assumptions interact with the underlying structure of the data.
 The plot compares the mean squared error of OLS and Ridge regression across increasing sample sizes under the same non-linear setting. At all sample sizes, Ridge maintains a slight advantage over OLS, consistently producing lower MSE. This suggests that even in the presence of model misspecification due to non-linearity, regularization provides a stabilizing effect by reducing variance without dramatically increasing bias. Both models show increasing MSE with larger sample sizes, which is expected in this case, since the sigmoid-transformed targets are bounded and harder to approximate well with a linear model as more data exposes more of the non-linearity.
-![](images/Non_Linear_MSE_Comparison.png){width=80%}
+![](images/Non Linear MSE Comparison.png){width=80%}
 <center>Comparison of OLS and Ridge MSE vs Sample Size (Non-Linear DGP)</center>
 
 The plot shows how Ridge regression performs under a non-linear data-generating process where the response is a sigmoid transformation of a linear combination of predictors. The curve captures out-of-sample MSE across a wide range of lambda values on a logarithmic scale. A noticeable dip occurs around lambda = 0.0069, indicating the optimal regularization strength that minimizes prediction error. Outside this region, the MSE fluctuates more sharply, especially at higher lambda values, where the model likely overshrinks the coefficients. The overall noise in the curve reflects the added complexity of fitting a linear model to a non-linear signal, where small changes in lambda can lead to more volatile performance.
-![](images/Ridge_Out_of_Sample_MSE.png){width=80%}
+![](images/Ridge Out of Sample MSE.png){width=80%}
 <center>Out-of-Sample MSE vs Lambda (Log Scale) under Non-Linear DGP</center>
 
 **B-spline Regression**: I used B-spline regression to get the “best approximate” linear regression coefficients. This cubic B-spline regression with 5 degrees of freedom allows the model to smoothly fit approximate the non-linear DGP, avoiding issues of high-degree polynomials. B-spline regression is considered an OLS model because it follows the same fundamental principles of linear regression, however with a transformed feature space.
@@ -998,23 +998,25 @@ The third plot presents the mean squared error of the spline predictions across 
 
 ::: {.columns}
 ::: {.column width="33%"}
-![](images/Spline_approximation_to_Non_Linear_Function.png){width=100%}
+![](images/Spline approximation to Non Linear Function.png){width=100%}
 <center>Spline Approximation to Non-Linear Function</center>
 :::
 
 ::: {.column width="33%"}
-![](images/Convergence_of_spline_coeff.png){width=100%}
+![](images/Convergence of spline coeff.png){width=100%}
 <center>Convergence of Best Approximate Spline Coefficients</center>
 :::
 
 ::: {.column width="33%"}
-![](images/MSE_of_Splines_approx.png){width=100%}
+![](images/MSE of Splines approx.png){width=100%}
 <center>MSE of Spline Approximation vs Sample Size</center>
 :::
 :::
 
-References:
-SNU AI. (n.d.). The bias-variance trade-off: A mathematical view. Medium. Retrieved from
-https://medium.com/snu-ai/the-bias-variance-trade-off-a-mathematical-view-14ff9dfe5a3c
-Shubham, S. (n.d.). All about Gauss-Markov theorem for ordinary least squares regression (OLS) & BLUE properties of OLS estimators. Medium. Retrieved from https://medium.com/@shubhamsd100/all-about-gauss- markov-theorem-for-ordinary-least-squares-regression-ols-blue-properties-of-e1e1864fe087
-Weylandt, M. (n.d.). STA9890 notes. Retrieved from https://michael-weylandt.com/STA9890/notes.html
+##  References
+
+- SNU AI. (n.d.). *The bias-variance trade-off: A mathematical view*. Medium. [https://medium.com/snu-ai/the-bias-variance-trade-off-a-mathematical-view-14ff9dfe5a3c](https://medium.com/snu-ai/the-bias-variance-trade-off-a-mathematical-view-14ff9dfe5a3c)
+
+- Shubham, S. (n.d.). *All about Gauss-Markov theorem for ordinary least squares regression (OLS) & BLUE properties of OLS estimators*. Medium. [https://medium.com/@shubhamsd100/all-about-gauss-markov-theorem-for-ordinary-least-squares-regression-ols-blue-properties-of-e1e1864fe087](https://medium.com/@shubhamsd100/all-about-gauss-markov-theorem-for-ordinary-least-squares-regression-ols-blue-properties-of-e1e1864fe087)
+
+- Weylandt, M. (n.d.). *STA9890 Notes*. Retrieved from [https://michael-weylandt.com/STA9890/notes.html](https://michael-weylandt.com/STA9890/notes.html)

@@ -344,7 +344,7 @@ Given two groups ( G_1 ) and ( G_2 ), and a binary classifier ( f : ^p {0, 1} ),
 <span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply to create the height_in column</span></span>
 <span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>college_df[<span class="st">'height_in'</span>] <span class="op">=</span> college_df[<span class="st">'ht'</span>].<span class="bu">apply</span>(convert_excel_date_height)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="06192448" class="cell" data-execution_count="1">
+<div id="c6009137" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- TIER ASSIGNMENT BASED ON DRAFT RATE ---</span></span>
@@ -377,7 +377,7 @@ Given two groups ( G_1 ) and ( G_2 ), and a binary classifier ( f : ^p {0, 1} ),
 <li>Log-likelihoods using the Gaussian log-density function</li>
 </ul>
 <p>For each input vector, the model compares log-posterior probabilities and assigns a label of 1 if the class 1 posterior is greater, and 0 otherwise. This lightweight model is not only computationally simple but also provides useful diversity in the ensemble. Because Naive Bayes is so simple, it acts as a benchmark. If your complex models (like SVM or Lasso) don’t clearly outperform it, you might need to reassess their added complexity or feature use.</p>
-<div id="a2ef86c3" class="cell" data-execution_count="2">
+<div id="31a4478e" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- MANUAL NAIVE BAYES ---</span></span>
@@ -406,7 +406,7 @@ Given two groups ( G_1 ) and ( G_2 ), and a binary classifier ( f : ^p {0, 1} ),
 <li>Solves the linear discriminant function (delta) for each class</li>
 </ul>
 <p>Each data point is assigned to the class with the higher discriminant score. LDA offers a more flexible alternative to Naive Bayes by relaxing the independence assumption while still providing a computationally efficient, interpretable classifier.</p>
-<div id="1adb08b1" class="cell" data-execution_count="3">
+<div id="e086a441" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- MANUAL LDA ---</span></span>
@@ -443,7 +443,7 @@ Given two groups ( G_1 ) and ( G_2 ), and a binary classifier ( f : ^p {0, 1} ),
 </ul>
 <p>Threshold tuning (e.g., using precision-recall curves) was applied to improve model calibration, especially when the dataset is imbalanced. A tuned threshold (e.g., 0.6) helps balance precision and recall based on evaluation metrics.</p>
 <p>A regularization strength of ( = 0.1 ) was selected as a reasonable value to balance overfitting and underfitting. It is strong enough to stabilize the solution but not so aggressive that it suppresses informative features.</p>
-<div id="6191dfa3" class="cell" data-execution_count="4">
+<div id="89b91c19" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> logistic_cvx_preds_binary(X, y, X_eval, reg_type<span class="op">=</span><span class="va">None</span>, lambda_<span class="op">=</span><span class="fl">0.1</span>, thresh<span class="op">=</span><span class="fl">0.6</span>):</span>
@@ -478,7 +478,7 @@ ROC and Precision-Recall Curves for Plain, Ridge, and Lasso Logistic Regression 
 <li>Converts predictions from raw margin scores to 0/1 labels via thresholding</li>
 </ul>
 <p>A decision threshold of 1.52 was selected empirically based on precision-recall and ROC curves to optimize performance. This allowed the classifier to maintain conservative positive predictions, especially useful in a fairness-aware pipeline where over-selection of dominant group members must be mitigated. A regularization parameter of ( = 0.1 ) was chosen to softly penalize large weights while preserving flexibility in the decision boundary. This value was found to offer a stable trade-off between underfitting and overfitting in the fairness setting.</p>
-<div id="f54eccbe" class="cell" data-execution_count="5">
+<div id="b1289b53" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> manual_svm_hinge(X_train, y_train, X_eval, lambda_<span class="op">=</span><span class="fl">0.1</span>):</span>
@@ -507,7 +507,7 @@ ROC and Precision-Recall Curves for SVM (Best Threshold = 1.52)
 <section id="decision-tree" class="level4">
 <h4 class="anchored" data-anchor-id="decision-tree">Decision Tree</h4>
 <p>A decision tree classifier was included as a base learner using the built-in <code>DecisionTreeClassifier</code> from scikit-learn. This model makes hierarchical splits in the feature space to arrive at a decision path for each input. The implementation used the <code>class_weight="balanced"</code> argument to address class imbalance, ensuring the tree did not overly favor the majority class.</p>
-<div id="27366fef" class="cell" data-execution_count="6">
+<div id="cd743e6d" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- DECISION TREE (BUILT-IN ALLOWED) ---</span></span>
@@ -535,7 +535,7 @@ ROC and Precision-Recall Curves for SVM (Best Threshold = 1.52)
 <p>Base Learner Outputs and Stacking Matrix: Each of the seven base learners—Naive Bayes, Linear Discriminant Analysis (LDA), Decision Tree, three logistic regression variants (plain, ridge, lasso), and Support Vector Machine (SVM)—was trained on the training set and evaluated on the validation set. The binary predictions (0/1) of each learner on the validation set were vertically stacked to construct the matrix<br>
 ( H_{} ^{n m} ),<br>
 where ( n ) is the number of validation examples and ( m = 7 ) is the number of base models. This matrix serves as input to the FairStacks optimization routine, allowing us to compute an ensemble prediction as a weighted combination of individual model decisions.</p>
-<div id="a7810ad9" class="cell" data-execution_count="7">
+<div id="e70ad29c" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply your functions</span></span>
@@ -593,7 +593,7 @@ The weights ( ) form a convex combination<br>
 ( (w_j , _j w_j = 1) ), ensuring interpretability and stability.</p></li>
 </ul>
 <p>Here, ( = 10 ) emphasizes fairness by reducing group disparities between players from high-exposure and lower-tier programs. This balance is crucial in the Steph Curry fairness model, where the goal is to counteract systemic undervaluation of talented players from less visible schools.</p>
-<div id="972e1d70" class="cell" data-execution_count="8">
+<div id="c980ca29" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- FairStacks Optimization ---</span></span>
