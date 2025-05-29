@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STA 9890 Project: Ensemble Learning Techniques for Fair Classification – Statisitical Learning for Data Mining Project Portfolio</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Statisitical Learning for Data Mining Project Portfolio</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./project1.html"> 
+<span class="menu-text">Bias and Variance in Linear Regression</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./project2.html" aria-current="page"> 
+<span class="menu-text">Ensemble Learning Techniques for Fair Classification</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./project3.html"> 
+<span class="menu-text">Forecasting Property Valuations in a Mid-Sized U.S. City:A SHAP-Gain Feature Selection and ElasticNet-Ensembled Approach with Optuna-Tuned XGBoost</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#background-on-ml-fairness" id="toc-background-on-ml-fairness" class="nav-link active" data-scroll-target="#background-on-ml-fairness">1. Background on ML Fairness</a>
+  <ul class="collapse">
+  <li><a href="#why-fairness-matters" id="toc-why-fairness-matters" class="nav-link" data-scroll-target="#why-fairness-matters">1.1 Why Fairness Matters?</a></li>
+  <li><a href="#real-world-examples-of-biased-algorithms" id="toc-real-world-examples-of-biased-algorithms" class="nav-link" data-scroll-target="#real-world-examples-of-biased-algorithms">1.2 Real-World Examples of Biased Algorithms</a></li>
+  <li><a href="#how-do-we-measure-fairness-in-ml" id="toc-how-do-we-measure-fairness-in-ml" class="nav-link" data-scroll-target="#how-do-we-measure-fairness-in-ml">2 How Do We Measure Fairness in ML?</a>
+  <ul class="collapse">
+  <li><a href="#group-fairness" id="toc-group-fairness" class="nav-link" data-scroll-target="#group-fairness">2.1 Group Fairness</a></li>
+  <li><a href="#individual-fairness" id="toc-individual-fairness" class="nav-link" data-scroll-target="#individual-fairness">2.2 Individual Fairness</a></li>
+  </ul></li>
+  <li><a href="#raw-data-and-fairness-metric-for-nba-draft-selection-using-ml" id="toc-raw-data-and-fairness-metric-for-nba-draft-selection-using-ml" class="nav-link" data-scroll-target="#raw-data-and-fairness-metric-for-nba-draft-selection-using-ml">3 Raw Data and Fairness Metric for NBA Draft Selection Using ML</a>
+  <ul class="collapse">
+  <li><a href="#dataset-components" id="toc-dataset-components" class="nav-link" data-scroll-target="#dataset-components">Dataset Components</a></li>
+  <li><a href="#fairness-metric-equal-opportunity-for-drafting-talent" id="toc-fairness-metric-equal-opportunity-for-drafting-talent" class="nav-link" data-scroll-target="#fairness-metric-equal-opportunity-for-drafting-talent">3.1 Fairness Metric: Equal Opportunity for Drafting Talent</a></li>
+  <li><a href="#relevant-social-context-biases-in-scouting" id="toc-relevant-social-context-biases-in-scouting" class="nav-link" data-scroll-target="#relevant-social-context-biases-in-scouting">3.2 Relevant Social Context: Biases in Scouting</a></li>
+  <li><a href="#data-preprocessing-and-school-tier-annotation" id="toc-data-preprocessing-and-school-tier-annotation" class="nav-link" data-scroll-target="#data-preprocessing-and-school-tier-annotation">3.3 Data Preprocessing and School Tier Annotation</a></li>
+  </ul></li>
+  <li><a href="#computation---cvx-optimization" id="toc-computation---cvx-optimization" class="nav-link" data-scroll-target="#computation---cvx-optimization">4 Computation - CVX Optimization</a>
+  <ul class="collapse">
+  <li><a href="#implementation-of-the-following-classification-methods-as-base-learners-to-be-used-in-construction-of-the-fairstacks-ensemble" id="toc-implementation-of-the-following-classification-methods-as-base-learners-to-be-used-in-construction-of-the-fairstacks-ensemble" class="nav-link" data-scroll-target="#implementation-of-the-following-classification-methods-as-base-learners-to-be-used-in-construction-of-the-fairstacks-ensemble">4.1 Implementation of the following classification methods as base learners to be used in construction of the FairStacks ensemble:</a></li>
+  </ul></li>
+  <li><a href="#implementation-and-assessment-of-fairstacks" id="toc-implementation-and-assessment-of-fairstacks" class="nav-link" data-scroll-target="#implementation-and-assessment-of-fairstacks">5 Implementation and Assessment of Fairstacks</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">STA 9890 Project: Ensemble Learning Techniques for Fair Classification</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="background-on-ml-fairness" class="level1">
+<h1>1. Background on ML Fairness</h1>
+<p>As machine learning (ML) systems become more integrated into our daily lives—from influencing who is hired to determining who qualifies for medical care—questions about fairness become impossible to ignore.</p>
+<section id="why-fairness-matters" class="level2">
+<h2 class="anchored" data-anchor-id="why-fairness-matters">1.1 Why Fairness Matters?</h2>
+<p>ML systems learn from historical data, and history is not free of bias. If we are not careful, these models can magnify societal inequalities embedded in that data. Fairness in ML is about trying to prevent that. However, fairness is not a one-size-fits-all concept. Different fields define fairness in different ways: • Law: Fairness means protecting people from discrimination (e.g., based on race or gender). • Social sciences: Focus on systems of power and inequality—who gets advantages and who does not. • Computer science and statistics: Treat fairness as a math problem—something we can define and measure. • Philosophy and political theory: See fairness as a question of justice and moral reasoning.</p>
+</section>
+<section id="real-world-examples-of-biased-algorithms" class="level2">
+<h2 class="anchored" data-anchor-id="real-world-examples-of-biased-algorithms">1.2 Real-World Examples of Biased Algorithms</h2>
+<p><strong>The COMPAS Algorithm</strong> Used in the US to predict which defendants are likely to reoffend, the COMPAS algorithm was designed to support bail and sentencing decisions. On the surface, it appeared fair—it was equally accurate for black and white defendants. However, an analysis by ProPublica revealed the following: • Black defendants who would not reoffend were twice as likely to be labeled “high risk.” • White defendants who did reoffend were often mislabeled “low risk.” Although the developers claimed that the model was fair (based on accuracy), it violated fairness in terms of racial bias, reinforcing systemic disparities.</p>
+<p><strong>Biased Healthcare Predictions</strong> In U.S. hospitals, an algorithm used to prioritize patients for preventative care relied on healthcare spending as a proxy for health needs. However, due to systemic disparities, black patients historically incurred lower medical costs—not due to better health, but due to under-treatment. As a result, the algorithm underestimated their needs, leading to biased care allocation.</p>
+</section>
+<section id="how-do-we-measure-fairness-in-ml" class="level2">
+<h2 class="anchored" data-anchor-id="how-do-we-measure-fairness-in-ml">2 How Do We Measure Fairness in ML?</h2>
+<p>Fairness in machine learning is typically categorized into two main types:</p>
+<ul>
+<li><strong>Group Fairness</strong></li>
+<li><strong>Individual Fairness</strong></li>
+</ul>
+<section id="group-fairness" class="level3">
+<h3 class="anchored" data-anchor-id="group-fairness">2.1 Group Fairness</h3>
+<p>Group fairness ensures that different demographic groups (e.g., races or genders) are treated similarly by the model. A common metric used to quantify this is <strong>Demographic Parity</strong>, which aims for equal rates of positive outcomes across groups.</p>
+<p><strong>Demographic Parity Formula</strong><br>
+Given two groups ( G_1 ) and ( G_2 ), and a binary classifier ( f : ^p {0, 1} ), the deviation from demographic parity (DDP) is defined as:</p>
+<p><span class="math display">\[
+\text{DDP}(f) = \left| \mathbb{E}_{x \sim G_1}[f(x)] - \mathbb{E}_{x \sim G_2}[f(x)] \right|
+\]</span></p>
+<p>A DDP of 0 indicates perfect demographic parity, meaning both groups receive positive outcomes at equal rates.</p>
+</section>
+<section id="individual-fairness" class="level3">
+<h3 class="anchored" data-anchor-id="individual-fairness">2.2 Individual Fairness</h3>
+<p>Individual fairness is based on the principle that similar individuals should receive similar outcomes. The main challenge lies in defining what it means for individuals to be “similar.” For example, should two loan applicants with identical incomes be considered similar if they differ in zip code or education level?</p>
+<p>This definition is highly context-dependent and can be subjective, often requiring domain-specific knowledge to determine appropriate fairness constraints.</p>
+</section>
+</section>
+<section id="raw-data-and-fairness-metric-for-nba-draft-selection-using-ml" class="level2">
+<h2 class="anchored" data-anchor-id="raw-data-and-fairness-metric-for-nba-draft-selection-using-ml">3 Raw Data and Fairness Metric for NBA Draft Selection Using ML</h2>
+<p>To evaluate fairness in NBA draft selections, we use college basketball data from 2009 to 2021.</p>
+<section id="dataset-components" class="level3">
+<h3 class="anchored" data-anchor-id="dataset-components">Dataset Components</h3>
+<ul>
+<li>Player Performance Data: Points per game (PPG), assists (APG), shooting efficiency, etc.</li>
+<li>Demographics: Height, school name, conference.</li>
+<li>Draft Data: Draft round and pick number for selected players.</li>
+</ul>
+<p>We merge the datasets by player name and year to construct a binary classification task:<br>
+<strong>Was this player drafted (1) or not (0)?</strong></p>
+</section>
+<section id="fairness-metric-equal-opportunity-for-drafting-talent" class="level3">
+<h3 class="anchored" data-anchor-id="fairness-metric-equal-opportunity-for-drafting-talent">3.1 Fairness Metric: Equal Opportunity for Drafting Talent</h3>
+<p>In a world where physical attributes and college brand often outweigh actual performance, we adopt Equal Opportunity as our fairness metric. In this context:</p>
+<p>Players with comparable game statistics should have equal chances of being drafted, regardless of:</p>
+<ul>
+<li>The prestige of their college (e.g., Davidson vs.&nbsp;Duke)</li>
+<li>The conference in which they played (e.g., Southern vs.&nbsp;ACC)</li>
+<li>Their physical traits, especially height (e.g., undersized guards often being overlooked)</li>
+</ul>
+</section>
+<section id="relevant-social-context-biases-in-scouting" class="level3">
+<h3 class="anchored" data-anchor-id="relevant-social-context-biases-in-scouting">3.2 Relevant Social Context: Biases in Scouting</h3>
+<p>The NBA draft process is deeply influenced by legacy scouting practices:</p>
+<ul>
+<li>Size Bias: Overemphasis on height and athleticism can overlook highly skilled but smaller players.</li>
+<li>Conference Prestige Bias: Players from smaller programs often receive less exposure and fewer opportunities.</li>
+</ul>
+<p>Athletes like Steph Curry and Fred VanVleet exemplify players who may be unfairly penalized by traditional models. Our goal is to mitigate this through fairness-aware machine learning that recognizes talent irrespective of institutional pedigree.</p>
+</section>
+<section id="data-preprocessing-and-school-tier-annotation" class="level3">
+<h3 class="anchored" data-anchor-id="data-preprocessing-and-school-tier-annotation">3.3 Data Preprocessing and School Tier Annotation</h3>
+<p>We begin by merging two datasets: one containing college player statistics (2009–2021) and another listing NBA-drafted players during the same period. To ensure consistency, player names are standardized before matching. A binary ’Drafted‘ label is assigned based on presence in the official draft list.</p>
+<p>To capture structural disparities across programs, we compute each school’s draft rate (number of players drafted divided by total players). Schools are then assigned to one of three tiers based on their draft rate quantiles:</p>
+<ul>
+<li>Tier 1: Top 10% schools by draft rate<br>
+</li>
+<li>Tier 2: 60th to 90th percentile<br>
+</li>
+<li>Tier 3: Bottom 60%</li>
+</ul>
+<p>This tier system enables group fairness evaluation across schools with varying institutional prestige.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>college_df <span class="op">=</span> pd.read_csv(<span class="st">"CollegeBasketballPlayers2009-2021.csv"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>drafted_df <span class="op">=</span> pd.read_excel(<span class="st">"DraftedPlayers2009-2021.xlsx"</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardize names for matching</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>college_df[<span class="st">'player_name'</span>] <span class="op">=</span> college_df[<span class="st">'player_name'</span>].astype(<span class="bu">str</span>).<span class="bu">str</span>.strip().<span class="bu">str</span>.lower()</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>drafted_df[<span class="st">'PLAYER'</span>] <span class="op">=</span> drafted_df[<span class="st">'PLAYER'</span>].astype(<span class="bu">str</span>).<span class="bu">str</span>.strip().<span class="bu">str</span>.lower()</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Add Drafted column: 1 if player in drafted list, 0 otherwise</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>college_df[<span class="st">'Drafted'</span>] <span class="op">=</span> college_df[<span class="st">'player_name'</span>].isin(drafted_df[<span class="st">'PLAYER'</span>]).astype(<span class="bu">int</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> convert_excel_date_height(ht_str):</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert month abbreviations to numbers</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    month_map <span class="op">=</span> {</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">'jan'</span>: <span class="st">'01'</span>, <span class="st">'feb'</span>: <span class="st">'02'</span>, <span class="st">'mar'</span>: <span class="st">'03'</span>, <span class="st">'apr'</span>: <span class="st">'04'</span>,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">'may'</span>: <span class="st">'05'</span>, <span class="st">'jun'</span>: <span class="st">'06'</span>, <span class="st">'jul'</span>: <span class="st">'07'</span>, <span class="st">'aug'</span>: <span class="st">'08'</span>,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">'sep'</span>: <span class="st">'09'</span>, <span class="st">'oct'</span>: <span class="st">'10'</span>, <span class="st">'nov'</span>: <span class="st">'11'</span>, <span class="st">'dec'</span>: <span class="st">'12'</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>        ht_str <span class="op">=</span> <span class="bu">str</span>(ht_str).lower()</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> month, number <span class="kw">in</span> month_map.items():</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>            ht_str <span class="op">=</span> ht_str.replace(month, number)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>        parts <span class="op">=</span> re.findall(<span class="vs">r'\d+'</span>, ht_str)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">len</span>(parts) <span class="op">==</span> <span class="dv">2</span>:</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>            inches, feet <span class="op">=</span> <span class="bu">map</span>(<span class="bu">int</span>, parts)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> feet <span class="op">*</span> <span class="dv">12</span> <span class="op">+</span> inches</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span>:</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.nan</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply to create the height_in column</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>college_df[<span class="st">'height_in'</span>] <span class="op">=</span> college_df[<span class="st">'ht'</span>].<span class="bu">apply</span>(convert_excel_date_height)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="06192448" class="cell" data-execution_count="1">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- TIER ASSIGNMENT BASED ON DRAFT RATE ---</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>school_draft_stats <span class="op">=</span> college_df.groupby(<span class="st">'team'</span>)[<span class="st">'Drafted'</span>].agg([<span class="st">'sum'</span>, <span class="st">'count'</span>])</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>school_draft_stats[<span class="st">'draft_rate'</span>] <span class="op">=</span> school_draft_stats[<span class="st">'sum'</span>] <span class="op">/</span> school_draft_stats[<span class="st">'count'</span>]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>q90 <span class="op">=</span> school_draft_stats[<span class="st">'draft_rate'</span>].quantile(<span class="fl">0.90</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>q60 <span class="op">=</span> school_draft_stats[<span class="st">'draft_rate'</span>].quantile(<span class="fl">0.60</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>school_draft_stats[<span class="st">'school_tier'</span>] <span class="op">=</span> pd.cut(</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    school_draft_stats[<span class="st">'draft_rate'</span>],</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    bins<span class="op">=</span>[<span class="op">-</span><span class="dv">1</span>, q60, q90, <span class="fl">1.0</span>],</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    labels<span class="op">=</span>[<span class="st">'Tier 3'</span>, <span class="st">'Tier 2'</span>, <span class="st">'Tier 1'</span>]</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>college_df <span class="op">=</span> college_df.merge(school_draft_stats[<span class="st">'school_tier'</span>], left_on<span class="op">=</span><span class="st">'team'</span>, right_index<span class="op">=</span><span class="va">True</span>, how<span class="op">=</span><span class="st">'left'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="computation---cvx-optimization" class="level2">
+<h2 class="anchored" data-anchor-id="computation---cvx-optimization">4 Computation - CVX Optimization</h2>
+<p>The CVX optimization framework was employed to formulate and solve convex models underlying fairness-aware NBA draft prediction, including logistic regression variants (plain, ridge, lasso), support vector machines, and the FairStacks ensemble. By expressing these models as convex optimization problems, CVX enabled rapid prototyping without the need for custom algorithmic implementation.</p>
+<p>Although Lasso regression is theoretically designed to drive some coefficients exactly to zero, solutions obtained via general-purpose solvers like CVX often yield near-zero coefficients due to numerical precision limitations. As a result, strict sparsity may require additional post-processing. Nevertheless, the framework provided sufficient flexibility to explore regularization effects and fairness constraints in the context of evaluating how players from less prestigious programs could be assessed more equitably based on game performance rather than institutional pedigree.</p>
+<section id="implementation-of-the-following-classification-methods-as-base-learners-to-be-used-in-construction-of-the-fairstacks-ensemble" class="level3">
+<h3 class="anchored" data-anchor-id="implementation-of-the-following-classification-methods-as-base-learners-to-be-used-in-construction-of-the-fairstacks-ensemble">4.1 Implementation of the following classification methods as base learners to be used in construction of the FairStacks ensemble:</h3>
+<section id="naive-bayes-no-cvx" class="level4">
+<h4 class="anchored" data-anchor-id="naive-bayes-no-cvx">Naive Bayes (no CVX)</h4>
+<p>This implementation assumes conditional independence of features and fits Gaussian distributions separately for each class. The model computes:</p>
+<ul>
+<li>Class-wise means (( _0, _1 )) and pooled variance ( ^2 )</li>
+<li>Prior class probabilities (( _0, _1 ))</li>
+<li>Log-likelihoods using the Gaussian log-density function</li>
+</ul>
+<p>For each input vector, the model compares log-posterior probabilities and assigns a label of 1 if the class 1 posterior is greater, and 0 otherwise. This lightweight model is not only computationally simple but also provides useful diversity in the ensemble. Because Naive Bayes is so simple, it acts as a benchmark. If your complex models (like SVM or Lasso) don’t clearly outperform it, you might need to reassess their added complexity or feature use.</p>
+<div id="a2ef86c3" class="cell" data-execution_count="2">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- MANUAL NAIVE BAYES ---</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> manual_gaussian_nb(X_train, y_train, X_test):</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    X_0 <span class="op">=</span> X_train[y_train<span class="op">==</span> <span class="dv">0</span>]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    X_1 <span class="op">=</span> X_train[y_train<span class="op">==</span> <span class="dv">1</span>]</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    mu_0, mu_1 <span class="op">=</span> np.mean(X_0, axis<span class="op">=</span><span class="dv">0</span>), np.mean(X_1, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    pi_0, pi_1 <span class="op">=</span> X_0.shape[<span class="dv">0</span>] <span class="op">/</span> <span class="bu">len</span>(X_train), X_1.shape[<span class="dv">0</span>] <span class="op">/</span> <span class="bu">len</span>(X_train)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    pooled_var <span class="op">=</span> (np.<span class="bu">sum</span>((X_0 <span class="op">-</span> mu_0) <span class="op">**</span> <span class="dv">2</span>, axis<span class="op">=</span><span class="dv">0</span>) <span class="op">+</span> np.<span class="bu">sum</span>((X_1 <span class="op">-</span> mu_1) <span class="op">**</span> <span class="dv">2</span>, axis<span class="op">=</span><span class="dv">0</span>)) <span class="op">/</span> <span class="bu">len</span>(X_train)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    pooled_var <span class="op">+=</span> <span class="fl">1e-6</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> log_gaussian(x, mu, var):</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> np.<span class="bu">sum</span>(np.log(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> var)) <span class="op">-</span> <span class="fl">0.5</span> <span class="op">*</span> np.<span class="bu">sum</span>(((x <span class="op">-</span> mu) <span class="op">**</span> <span class="dv">2</span>) <span class="op">/</span> var)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array([</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span> <span class="cf">if</span> np.log(pi_1) <span class="op">+</span> log_gaussian(x, mu_1, pooled_var) <span class="op">&gt;</span> np.log(pi_0) <span class="op">+</span> log_gaussian(x, mu_0, pooled_var) <span class="cf">else</span> <span class="dv">0</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> x <span class="kw">in</span> X_test</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    ])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="linear-discriminant-analysis-no-cvx" class="level4">
+<h4 class="anchored" data-anchor-id="linear-discriminant-analysis-no-cvx">Linear Discriminant Analysis (no CVX)</h4>
+<p>This implementation assumes Gaussian class-conditional distributions with a shared covariance matrix. LDA serves as a linear classifier that projects data to maximize class separability under these assumptions. The model performs the following:</p>
+<ul>
+<li>Calculates class-wise means (( _0, _1 ))</li>
+<li>Computes the shared covariance matrix ( ) across both classes</li>
+<li>Solves the linear discriminant function (delta) for each class</li>
+</ul>
+<p>Each data point is assigned to the class with the higher discriminant score. LDA offers a more flexible alternative to Naive Bayes by relaxing the independence assumption while still providing a computationally efficient, interpretable classifier.</p>
+<div id="1adb08b1" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- MANUAL LDA ---</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> manual_lda(X_train, y_train, X_test):</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    X_0 <span class="op">=</span> X_train[y_train <span class="op">==</span> <span class="dv">0</span>]</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    X_1 <span class="op">=</span> X_train[y_train <span class="op">==</span> <span class="dv">1</span>]</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    mu_0, mu_1 <span class="op">=</span> np.mean(X_0, axis<span class="op">=</span><span class="dv">0</span>), np.mean(X_1, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    pi_0, pi_1 <span class="op">=</span> X_0.shape[<span class="dv">0</span>] <span class="op">/</span> <span class="bu">len</span>(X_train), X_1.shape[<span class="dv">0</span>] <span class="op">/</span> <span class="bu">len</span>(X_train)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Regularized shared covariance matrix</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    Sigma <span class="op">=</span> ((X_0 <span class="op">-</span> mu_0).T <span class="op">@</span> (X_0 <span class="op">-</span> mu_0) <span class="op">+</span> (X_1 <span class="op">-</span> mu_1).T <span class="op">@</span> (X_1 <span class="op">-</span> mu_1)) <span class="op">/</span> (<span class="bu">len</span>(X_train) <span class="op">-</span> <span class="dv">2</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    Sigma <span class="op">+=</span> <span class="fl">1e-6</span> <span class="op">*</span> np.eye(Sigma.shape[<span class="dv">0</span>])  <span class="co"># small regularization to ensure invertibility</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> delta(x, mu, pi):</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        a <span class="op">=</span> np.linalg.solve(Sigma, mu)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> x <span class="op">@</span> a <span class="op">-</span> <span class="fl">0.5</span> <span class="op">*</span> mu.T <span class="op">@</span> a <span class="op">+</span> np.log(pi)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array([</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span> <span class="cf">if</span> delta(x, mu_1, pi_1) <span class="op">&gt;</span> delta(x, mu_0, pi_0) <span class="cf">else</span> <span class="dv">0</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> x <span class="kw">in</span> X_test</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    ])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="logistic-regression-use-cvx" class="level4">
+<h4 class="anchored" data-anchor-id="logistic-regression-use-cvx">Logistic Regression (use CVX)</h4>
+<p>To model the probability of being drafted as a logistic function of player statistics, logistic regression was implemented using convex optimization. Three variants were considered: plain logistic regression, ridge-regularization, and lasso-regularization. The model minimizes the average logistic loss, with optional ( _2 ) or ( _1 ) penalty:</p>
+<ul>
+<li><strong>Plain</strong>: Minimizes standard logistic loss<br>
+</li>
+<li><strong>Ridge</strong>: Adds ( _2 ) norm penalty to control weight magnitude<br>
+</li>
+<li><strong>Lasso</strong>: Adds ( _1 ) norm penalty to encourage sparsity</li>
+</ul>
+<p>Threshold tuning (e.g., using precision-recall curves) was applied to improve model calibration, especially when the dataset is imbalanced. A tuned threshold (e.g., 0.6) helps balance precision and recall based on evaluation metrics.</p>
+<p>A regularization strength of ( = 0.1 ) was selected as a reasonable value to balance overfitting and underfitting. It is strong enough to stabilize the solution but not so aggressive that it suppresses informative features.</p>
+<div id="6191dfa3" class="cell" data-execution_count="4">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> logistic_cvx_preds_binary(X, y, X_eval, reg_type<span class="op">=</span><span class="va">None</span>, lambda_<span class="op">=</span><span class="fl">0.1</span>, thresh<span class="op">=</span><span class="fl">0.6</span>):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    n, p <span class="op">=</span> X.shape</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    beta <span class="op">=</span> cp.Variable((p, <span class="dv">1</span>))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    y_ <span class="op">=</span> y.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> cp.<span class="bu">sum</span>(cp.multiply(<span class="op">-</span>y_, X <span class="op">@</span> beta) <span class="op">+</span> cp.logistic(X <span class="op">@</span> beta))<span class="op">/</span>n</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> reg_type <span class="op">==</span> <span class="st">'ridge'</span>:</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        penalty <span class="op">=</span> lambda_ <span class="op">*</span> cp.norm2(beta)<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> reg_type <span class="op">==</span> <span class="st">'lasso'</span>:</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        penalty <span class="op">=</span> lambda_ <span class="op">*</span> cp.norm1(beta)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        penalty <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    cp.Problem(cp.Minimize(loss <span class="op">+</span> penalty)).solve()</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    probs <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>X_eval <span class="op">@</span> beta.value))</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (probs <span class="op">&gt;=</span> thresh).astype(<span class="bu">int</span>).flatten()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<img src="images/ROC_Logistic_Reg.png" class="img-fluid" style="width:100.0%">
+<center>
+ROC and Precision-Recall Curves for Plain, Ridge, and Lasso Logistic Regression (Best Threshold = 0.60)
+</center>
+</section>
+<section id="support-vector-machine-svm" class="level4">
+<h4 class="anchored" data-anchor-id="support-vector-machine-svm">Support Vector Machine (SVM)</h4>
+<p>This implementation was developed using convex optimization with hinge loss and ( _2 ) regularization. This approach seeks to maximize the margin between classes while penalizing misclassifications near the decision boundary. The model performs the following:</p>
+<ul>
+<li>Computes hinge loss ( (0, 1 - y_i x_i^) ) for each point<br>
+</li>
+<li>Adds ( _2 ) regularization to prevent overfitting<br>
+</li>
+<li>Converts predictions from raw margin scores to 0/1 labels via thresholding</li>
+</ul>
+<p>A decision threshold of 1.52 was selected empirically based on precision-recall and ROC curves to optimize performance. This allowed the classifier to maintain conservative positive predictions, especially useful in a fairness-aware pipeline where over-selection of dominant group members must be mitigated. A regularization parameter of ( = 0.1 ) was chosen to softly penalize large weights while preserving flexibility in the decision boundary. This value was found to offer a stable trade-off between underfitting and overfitting in the fairness setting.</p>
+<div id="f54eccbe" class="cell" data-execution_count="5">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> manual_svm_hinge(X_train, y_train, X_eval, lambda_<span class="op">=</span><span class="fl">0.1</span>):</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Train a linear SVM using hinge loss via CVXPY.</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">    - y_train should be in {0, 1} → converted internally to {-1, +1}</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">    - Returns 0/1 predictions for X_eval</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    y_transformed <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> y_train <span class="op">-</span> <span class="dv">1</span>  <span class="co"># convert {0,1} to {-1,+1}</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    n, p <span class="op">=</span> X_train.shape</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    beta <span class="op">=</span> cp.Variable((p, <span class="dv">1</span>))</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    margins <span class="op">=</span> cp.multiply(y_transformed.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>), X_train <span class="op">@</span> beta)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    hinge_loss <span class="op">=</span> cp.<span class="bu">sum</span>(cp.pos(<span class="dv">1</span> <span class="op">-</span> margins)) <span class="op">/</span> n</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    reg <span class="op">=</span> lambda_ <span class="op">*</span> cp.norm2(beta)<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    problem <span class="op">=</span> cp.Problem(cp.Minimize(hinge_loss <span class="op">+</span> reg))</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    problem.solve()</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    raw_preds <span class="op">=</span> X_eval <span class="op">@</span> beta.value</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (raw_preds <span class="op">&gt;=</span> <span class="fl">1.52</span>).astype(<span class="bu">int</span>).flatten()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<img src="images/ROC_SVM.png" class="img-fluid" style="width:100.0%">
+<center>
+ROC and Precision-Recall Curves for SVM (Best Threshold = 1.52)
+</center>
+</section>
+<section id="decision-tree" class="level4">
+<h4 class="anchored" data-anchor-id="decision-tree">Decision Tree</h4>
+<p>A decision tree classifier was included as a base learner using the built-in <code>DecisionTreeClassifier</code> from scikit-learn. This model makes hierarchical splits in the feature space to arrive at a decision path for each input. The implementation used the <code>class_weight="balanced"</code> argument to address class imbalance, ensuring the tree did not overly favor the majority class.</p>
+<div id="27366fef" class="cell" data-execution_count="6">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- DECISION TREE (BUILT-IN ALLOWED) ---</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>tree_model <span class="op">=</span> DecisionTreeClassifier(class_weight<span class="op">=</span><span class="st">'balanced'</span>, random_state<span class="op">=</span><span class="dv">0</span>).fit(X_train, y_train)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>tree_preds <span class="op">=</span> tree_model.predict(X_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+</section>
+<section id="implementation-and-assessment-of-fairstacks" class="level2">
+<h2 class="anchored" data-anchor-id="implementation-and-assessment-of-fairstacks">5 Implementation and Assessment of Fairstacks</h2>
+<p>As we shift toward a fairness-aware ensemble strategy, it becomes critical to structure the data pipeline in a way that supports robust model selection and unbiased performance evaluation. Before learning ensemble weights or assessing bias mitigation, a principled strategy for dividing our dataset into training, validation, and test splits is essential.</p>
+<p>This is especially important in the context of our Steph Curry fairness model, where the number of drafted players is relatively small and the fairness metric—True Positive Rate (TPR) gap between players from high-exposure programs (Tier 1) and lesser-known schools (Tier 3)—requires meaningful group-level comparisons. A careful partitioning ensures that the evaluation of how fairly we treat underdog players is accurate and unbiased.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> [<span class="st">'pts'</span>, <span class="st">'ast'</span>, <span class="st">'stl'</span>, <span class="st">'blk'</span>, <span class="st">'treb'</span>, <span class="st">'height_in'</span>, <span class="st">'TS_per'</span>, <span class="st">'eFG'</span>, <span class="st">'player_name'</span>, <span class="st">'Drafted'</span>,<span class="st">'school_tier'</span>]</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> college_df[features].dropna()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># --- SPLIT ---</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df.drop(columns<span class="op">=</span>[<span class="st">'Drafted'</span>, <span class="st">'player_name'</span>])</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[<span class="st">'Drafted'</span>]</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>X_trainval, X_test, y_trainval, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.2</span>, stratify<span class="op">=</span>y, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>X_train, X_val, y_train, y_val <span class="op">=</span> train_test_split(X_trainval, y_trainval, test_size<span class="op">=</span><span class="fl">0.25</span>, stratify<span class="op">=</span>y_trainval, random_state<span class="op">=</span><span class="dv">42</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To build a model that balances predictive power with fairness, we selected a combination of performance-based and context-aware features. Traditional box score statistics such as points per game, assists, steals, blocks, total rebounds, and shooting efficiency (eFG, TS per) were included to capture a player’s tangible on-court contributions. Additionally, height was included as a proxy for physical attributes that are often overvalued in the draft process.</p>
+<p>Most importantly, we incorporated school tier—a categorical variable based on draft success rates of a player’s college program. This feature serves as the foundation for our fairness assessment, as we aim to detect and mitigate biases that favor players from elite programs (e.g., Duke, Kentucky) over similarly talented players from lesser-known schools (e.g., Davidson). Since our fairness metric is based on TPR disparities across school tiers, this feature is critical for evaluating whether players like Steph Curry, who came from a mid-major program, are systematically undervalued.</p>
+<p>Base Learner Outputs and Stacking Matrix: Each of the seven base learners—Naive Bayes, Linear Discriminant Analysis (LDA), Decision Tree, three logistic regression variants (plain, ridge, lasso), and Support Vector Machine (SVM)—was trained on the training set and evaluated on the validation set. The binary predictions (0/1) of each learner on the validation set were vertically stacked to construct the matrix<br>
+( H_{} ^{n m} ),<br>
+where ( n ) is the number of validation examples and ( m = 7 ) is the number of base models. This matrix serves as input to the FairStacks optimization routine, allowing us to compute an ensemble prediction as a weighted combination of individual model decisions.</p>
+<div id="a7810ad9" class="cell" data-execution_count="7">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply your functions</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>nb_val <span class="op">=</span> manual_gaussian_nb_binary(X_train_raw, y_train.values, X_val_scaled)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>lda_val <span class="op">=</span> manual_lda_binary(X_train_scaled, y_train.values, X_val_scaled)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>tree_val <span class="op">=</span> DecisionTreeClassifier(max_depth<span class="op">=</span><span class="dv">5</span>, class_weight<span class="op">=</span><span class="st">"balanced"</span>, random_state<span class="op">=</span><span class="dv">0</span>).fit(X_train_scaled, y_train).predict(X_val_scaled)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>log_plain_val <span class="op">=</span> logistic_cvx_preds_binary(X_train_scaled, y_train.values, X_val_scaled)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>log_ridge_val <span class="op">=</span> logistic_cvx_preds_binary(X_train_scaled, y_train.values, X_val_scaled, reg_type<span class="op">=</span><span class="st">'ridge'</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>log_lasso_val <span class="op">=</span> logistic_cvx_preds_binary(X_train_scaled, y_train.values, X_val_scaled, reg_type<span class="op">=</span><span class="st">'lasso'</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>svm_val <span class="op">=</span> manual_svm_hinge(X_train_scaled, y_train.values, X_val_scaled)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Build your H matrix using 0/1 predictions</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>H_val <span class="op">=</span> np.vstack([nb_val, lda_val, tree_val, log_plain_val, log_ridge_val, log_lasso_val,svm_val]).T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Fairness Vector Calculation: To estimate the bias of each base learner, we compute the True Positive Rate (TPR) separately for players from Tier 1 schools and those from lower-tier programs. The difference between these TPRs defines the bias for each learner:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Fairness Vector ---</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>tier_group <span class="op">=</span> (X_val[<span class="st">'school_tier'</span>] <span class="op">==</span> <span class="st">'Tier 1'</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_tpr_gap(y_true, y_scores, group, threshold<span class="op">=</span><span class="fl">0.5</span>):</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    preds <span class="op">=</span> (y_scores <span class="op">&gt;=</span> threshold).astype(<span class="bu">int</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    mask_1 <span class="op">=</span> group <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    mask_0 <span class="op">=</span> group <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    tpr_1 <span class="op">=</span> np.<span class="bu">sum</span>((preds[mask_1] <span class="op">==</span> <span class="dv">1</span>) <span class="op">&amp;</span> (y_true[mask_1] <span class="op">==</span> <span class="dv">1</span>)) <span class="op">/</span> np.<span class="bu">sum</span>(y_true[mask_1] <span class="op">==</span> <span class="dv">1</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    tpr_0 <span class="op">=</span> np.<span class="bu">sum</span>((preds[mask_0] <span class="op">==</span> <span class="dv">1</span>) <span class="op">&amp;</span> (y_true[mask_0] <span class="op">==</span> <span class="dv">1</span>)) <span class="op">/</span> np.<span class="bu">sum</span>(y_true[mask_0] <span class="op">==</span> <span class="dv">1</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> tpr_1 <span class="op">-</span> tpr_0</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>b_hat <span class="op">=</span> np.array([</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    compute_tpr_gap(y_val.values, nb_val, tier_group),</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    compute_tpr_gap(y_val.values, lda_val, tier_group),</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    compute_tpr_gap(y_val.values, tree_val, tier_group),</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    compute_tpr_gap(y_val.values, log_plain_val, tier_group),</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    compute_tpr_gap(y_val.values, log_ridge_val, tier_group),</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    compute_tpr_gap(y_val.values, log_lasso_val, tier_group),</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    compute_tpr_gap(y_val.values, svm_val, tier_group)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Binary predictions from each model on the validation set are compared against ground truth labels, and group masks are applied to measure how fairly each learner treats players based on their school’s prestige. The resulting vector ( _j ) quantifies these group-level disparities and is used in the fairness penalty of the FairStacks objective.</p>
+<p><strong>Ensemble Weight Optimization via FairStacks:</strong><br>
+With predictions and corresponding bias scores for each base learner in hand, the FairStacks optimization problem is solved to determine optimal ensemble weights. CVXPY is used to minimize a regularized logistic loss objective, where the penalty term is the absolute weighted sum of TPR gaps across base learners. The constraints ensure that all weights are non-negative and sum to one.</p>
+<p><span class="math display">\[
+\min_{\mathbf{w} \geq 0} \ \frac{1}{n} \sum_{i=1}^{n} \log \left( 1 + \exp(-y_i \cdot \hat{y}_i) \right) + \lambda \left| \sum_j w_j \hat{b}_j \right|,
+\quad \text{subject to} \quad \sum_j w_j = 1
+\]</span></p>
+<ul>
+<li><p><strong>Logistic Loss Term:</strong></p>
+<p><span class="math display">\[
+\frac{1}{n} \sum_{i=1}^{n} \log \left( 1 + \exp(-y_i \cdot \hat{y}_i) \right)
+\]</span></p>
+<p>measures how well the ensemble predicts the true outcome ( y_i ) (drafted or not). Here,<br>
+( _i = _j w_j _j(x_i) ) is the prediction from a weighted combination of base learners. The logistic loss is smooth and convex, making it ideal for binary classification tasks like draft prediction.</p></li>
+<li><p><strong>Fairness Penalty:</strong></p>
+<p><span class="math display">\[
+\lambda \left| \sum_j w_j \hat{b}_j \right|
+\]</span></p>
+<p>penalizes disparity in treatment between groups—specifically, the absolute ensemble-weighted true positive rate (TPR) gap. Each ( _j ) represents the TPR gap of base learner ( j ), and minimizing this term encourages fairness across school tiers.</p></li>
+<li><p><strong>Constraints:</strong><br>
+The weights ( ) form a convex combination<br>
+( (w_j , _j w_j = 1) ), ensuring interpretability and stability.</p></li>
+</ul>
+<p>Here, ( = 10 ) emphasizes fairness by reducing group disparities between players from high-exposure and lower-tier programs. This balance is crucial in the Steph Curry fairness model, where the goal is to counteract systemic undervaluation of talented players from less visible schools.</p>
+<div id="972e1d70" class="cell" data-execution_count="8">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- FairStacks Optimization ---</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> cp.Variable(H_val.shape[<span class="dv">1</span>])</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>y_val_bin <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> y_val.values <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>log_loss <span class="op">=</span> cp.<span class="bu">sum</span>(cp.logistic(<span class="op">-</span>cp.multiply(y_val_bin, H_val <span class="op">@</span> w))) <span class="op">/</span> <span class="bu">len</span>(y_val)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>fairness_penalty <span class="op">=</span> cp.<span class="bu">abs</span>(cp.<span class="bu">sum</span>(cp.multiply(w, b_hat)))</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>lambda_ <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>objective <span class="op">=</span> cp.Minimize(log_loss <span class="op">+</span> lambda_ <span class="op">*</span> fairness_penalty)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>constraints <span class="op">=</span> [w <span class="op">&gt;=</span> <span class="dv">0</span>, cp.<span class="bu">sum</span>(w) <span class="op">==</span> <span class="dv">1</span>]</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>prob <span class="op">=</span> cp.Problem(objective, constraints)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>prob.solve()</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>final_weights <span class="op">=</span> w.value</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Final FairStacks Weights:"</span>, final_weights)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co">#--- Ensemble TPR Gap ---</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>tier_group_test <span class="op">=</span> (X_test[<span class="st">'school_tier'</span>] <span class="op">==</span> <span class="st">'Tier 1'</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>ensemble_tpr_gap <span class="op">=</span> compute_tpr_gap(y_test.values, ensemble_test_preds, tier_group_test)</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Ensemble Test TPR Gap (Tier 1 vs Others):"</span>, ensemble_tpr_gap)</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Accuracy ---</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>ensemble_accuracy <span class="op">=</span> accuracy_score(y_test, ensemble_test_preds)</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ensemble_accuracy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<pre><code>Final FairStacks Weights: [1.15064014e-10 1.02497679e-11 3.06854668e-13 5.65404680e-12
+ 6.72544450e-11 1.00000000e+00 8.35876761e-12]
+Ensemble Test TPR Gap (Tier 1 vs Others): 0.0
+0.9756941583587377</code></pre>
+<p>The final ensemble placed nearly all its weight on the Lasso-regularized logistic regression model. This outcome reflects the model’s ability to balance strong individual accuracy with fairness across school tiers. Despite the availability of other learners, including Decision Trees and SVMs, FairStacks effectively zeroed out their contributions to reduce potential TPR gaps. In terms of performance, the FairStacks ensemble matched the highest observed accuracy of 97.57% and achieved a TPR gap of 0.000. This is on par with Lasso regression alone, but with the added assurance that the model was selected through a fairness-aware optimization pipeline. Meanwhile, base learners such as Naive Bayes and LDA, despite respectable accuracy, exhibited substantial TPR gaps (e.g., -0.0256 and -0.0171), suggesting bias toward non-Tier 1 players. FairStacks thus succeeds in its dual objective: it preserves predictive performance while correcting for institutional bias, a key goal in fairness modeling for the NBA draft.</p>
+<div class="columns">
+<div class="column" style="width:33%;">
+<img src="images/TPR_Gap_Barplot.png" class="img-fluid" style="width:100.0%">
+<center>
+TPR Gap of Base Learners and FairStacks (Tier 1 vs Others)
+</center>
+</div><div class="column" style="width:33%;">
+<img src="images/Accuracy_Barplot.png" class="img-fluid" style="width:100.0%">
+<center>
+Accuracy of Base Learners and FairStacks (Higher is Better)
+</center>
+</div><div class="column" style="width:33%;">
+<img src="images/Ensemble_Weights_Barplot.png" class="img-fluid" style="width:100.0%">
+<center>
+FairStacks Ensemble Weights
+</center>
+</div>
+</div>
+
+
+<!-- -->
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb13" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "STA 9890 Project:  Ensemble Learning Techniques for Fair Classification"</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 3</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: true</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co">  echo: true</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co">  output: true</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co">  eval: false</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="fu"># 1. Background on ML Fairness</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>As machine learning (ML) systems become more integrated into our daily lives—from influencing who is hired to determining who qualifies for medical care—questions about fairness become impossible to ignore.</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1.1 Why Fairness Matters?</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>ML systems learn from historical data, and history is not free of bias. If we are not careful, these models can magnify societal inequalities embedded in that data. Fairness in ML is about trying to prevent that. However, fairness is not a one-size-fits-all concept.</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>Different fields define fairness in different ways:</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>• Law: Fairness means protecting people from discrimination (e.g., based on race or gender).</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>• Social sciences: Focus on systems of power and inequality—who gets advantages and who does not.</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>• Computer science and statistics: Treat fairness as a math problem—something we can define and</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>measure.</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>• Philosophy and political theory: See fairness as a question of justice and moral reasoning.</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1.2 Real-World Examples of Biased Algorithms</span></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>**The COMPAS Algorithm** Used in the US to predict which defendants are likely to reoffend, the COMPAS algorithm was designed to support bail and sentencing decisions. On the surface, it appeared fair—it was equally accurate for black and white defendants. However, an analysis by ProPublica revealed the following:</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>• Black defendants who would not reoffend were twice as likely to be labeled “high risk.” • White defendants who did reoffend were often mislabeled “low risk.”</span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>Although the developers claimed that the model was fair (based on accuracy), it violated fairness in terms of racial bias, reinforcing systemic disparities.</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>**Biased Healthcare Predictions** In U.S. hospitals, an algorithm used to prioritize patients for preventative care relied on healthcare spending as a proxy for health needs. However, due to systemic disparities, black patients historically incurred lower medical costs—not due to better health, but due to under-treatment. As a result, the algorithm underestimated their needs, leading to biased care allocation.</span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2 How Do We Measure Fairness in ML?</span></span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>Fairness in machine learning is typically categorized into two main types:</span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Group Fairness**</span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Individual Fairness**</span>
+<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.1 Group Fairness</span></span>
+<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>Group fairness ensures that different demographic groups (e.g., races or genders) are treated similarly by the model. A common metric used to quantify this is **Demographic Parity**, which aims for equal rates of positive outcomes across groups.</span>
+<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>**Demographic Parity Formula**  </span>
+<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>Given two groups <span class="sc">\(</span> G_1 <span class="sc">\)</span> and <span class="sc">\(</span> G_2 <span class="sc">\)</span>, and a binary classifier <span class="sc">\(</span> f : \mathbb{R}^p \to <span class="sc">\{</span>0, 1<span class="sc">\}</span> <span class="sc">\)</span>, the deviation from demographic parity (DDP) is defined as:</span>
+<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>\text{DDP}(f) = \left| \mathbb{E}_{x \sim G_1}[f(x)] - \mathbb{E}_{x \sim G_2}<span class="co">[</span><span class="ot">f(x)</span><span class="co">]</span> \right|</span>
+<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a>A DDP of 0 indicates perfect demographic parity, meaning both groups receive positive outcomes at equal rates.</span>
+<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.2 Individual Fairness</span></span>
+<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>Individual fairness is based on the principle that similar individuals should receive similar outcomes. The main challenge lies in defining what it means for individuals to be "similar." For example, should two loan applicants with identical incomes be considered similar if they differ in zip code or education level?</span>
+<span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a>This definition is highly context-dependent and can be subjective, often requiring domain-specific knowledge to determine appropriate fairness constraints.</span>
+<span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-63"><a href="#cb13-63" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3 Raw Data and Fairness Metric for NBA Draft Selection Using ML</span></span>
+<span id="cb13-64"><a href="#cb13-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-65"><a href="#cb13-65" aria-hidden="true" tabindex="-1"></a>To evaluate fairness in NBA draft selections, we use college basketball data from 2009 to 2021.</span>
+<span id="cb13-66"><a href="#cb13-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-67"><a href="#cb13-67" aria-hidden="true" tabindex="-1"></a><span class="fu">### Dataset Components</span></span>
+<span id="cb13-68"><a href="#cb13-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-69"><a href="#cb13-69" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Player Performance Data: Points per game (PPG), assists (APG), shooting efficiency, etc.</span>
+<span id="cb13-70"><a href="#cb13-70" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Demographics: Height, school name, conference.</span>
+<span id="cb13-71"><a href="#cb13-71" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Draft Data: Draft round and pick number for selected players.</span>
+<span id="cb13-72"><a href="#cb13-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-73"><a href="#cb13-73" aria-hidden="true" tabindex="-1"></a>We merge the datasets by player name and year to construct a binary classification task:  </span>
+<span id="cb13-74"><a href="#cb13-74" aria-hidden="true" tabindex="-1"></a>**Was this player drafted (1) or not (0)?**</span>
+<span id="cb13-75"><a href="#cb13-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-76"><a href="#cb13-76" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.1 Fairness Metric: Equal Opportunity for Drafting Talent</span></span>
+<span id="cb13-77"><a href="#cb13-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-78"><a href="#cb13-78" aria-hidden="true" tabindex="-1"></a>In a world where physical attributes and college brand often outweigh actual performance, we adopt Equal Opportunity as our fairness metric. In this context:</span>
+<span id="cb13-79"><a href="#cb13-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-80"><a href="#cb13-80" aria-hidden="true" tabindex="-1"></a>Players with comparable game statistics should have equal chances of being drafted, regardless of:</span>
+<span id="cb13-81"><a href="#cb13-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-82"><a href="#cb13-82" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The prestige of their college (e.g., Davidson vs. Duke)</span>
+<span id="cb13-83"><a href="#cb13-83" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The conference in which they played (e.g., Southern vs. ACC)</span>
+<span id="cb13-84"><a href="#cb13-84" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Their physical traits, especially height (e.g., undersized guards often being overlooked)</span>
+<span id="cb13-85"><a href="#cb13-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-86"><a href="#cb13-86" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.2 Relevant Social Context: Biases in Scouting</span></span>
+<span id="cb13-87"><a href="#cb13-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-88"><a href="#cb13-88" aria-hidden="true" tabindex="-1"></a>The NBA draft process is deeply influenced by legacy scouting practices:</span>
+<span id="cb13-89"><a href="#cb13-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-90"><a href="#cb13-90" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Size Bias: Overemphasis on height and athleticism can overlook highly skilled but smaller players.</span>
+<span id="cb13-91"><a href="#cb13-91" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Conference Prestige Bias: Players from smaller programs often receive less exposure and fewer opportunities.</span>
+<span id="cb13-92"><a href="#cb13-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-93"><a href="#cb13-93" aria-hidden="true" tabindex="-1"></a>Athletes like Steph Curry and Fred VanVleet exemplify players who may be unfairly penalized by traditional models. Our goal is to mitigate this through fairness-aware machine learning that recognizes talent irrespective of institutional pedigree.</span>
+<span id="cb13-94"><a href="#cb13-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-95"><a href="#cb13-95" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.3 Data Preprocessing and School Tier Annotation</span></span>
+<span id="cb13-96"><a href="#cb13-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-97"><a href="#cb13-97" aria-hidden="true" tabindex="-1"></a>We begin by merging two datasets: one containing college player statistics (2009–2021) and another listing NBA-drafted players during the same period. To ensure consistency, player names are standardized before matching. A binary ‘Drafted‘ label is assigned based on presence in the official draft list.</span>
+<span id="cb13-98"><a href="#cb13-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-99"><a href="#cb13-99" aria-hidden="true" tabindex="-1"></a>To capture structural disparities across programs, we compute each school’s draft rate (number of players drafted divided by total players). Schools are then assigned to one of three tiers based on their draft rate quantiles:</span>
+<span id="cb13-100"><a href="#cb13-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-101"><a href="#cb13-101" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Tier 1: Top 10% schools by draft rate  </span>
+<span id="cb13-102"><a href="#cb13-102" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Tier 2: 60th to 90th percentile  </span>
+<span id="cb13-103"><a href="#cb13-103" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Tier 3: Bottom 60%</span>
+<span id="cb13-104"><a href="#cb13-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-105"><a href="#cb13-105" aria-hidden="true" tabindex="-1"></a>This tier system enables group fairness evaluation across schools with varying institutional prestige.</span>
+<span id="cb13-106"><a href="#cb13-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-107"><a href="#cb13-107" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb13-108"><a href="#cb13-108" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb13-109"><a href="#cb13-109" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb13-110"><a href="#cb13-110" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb13-111"><a href="#cb13-111" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
+<span id="cb13-112"><a href="#cb13-112" aria-hidden="true" tabindex="-1"></a>college_df <span class="op">=</span> pd.read_csv(<span class="st">"CollegeBasketballPlayers2009-2021.csv"</span>)</span>
+<span id="cb13-113"><a href="#cb13-113" aria-hidden="true" tabindex="-1"></a>drafted_df <span class="op">=</span> pd.read_excel(<span class="st">"DraftedPlayers2009-2021.xlsx"</span>)</span>
+<span id="cb13-114"><a href="#cb13-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-115"><a href="#cb13-115" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardize names for matching</span></span>
+<span id="cb13-116"><a href="#cb13-116" aria-hidden="true" tabindex="-1"></a>college_df[<span class="st">'player_name'</span>] <span class="op">=</span> college_df[<span class="st">'player_name'</span>].astype(<span class="bu">str</span>).<span class="bu">str</span>.strip().<span class="bu">str</span>.lower()</span>
+<span id="cb13-117"><a href="#cb13-117" aria-hidden="true" tabindex="-1"></a>drafted_df[<span class="st">'PLAYER'</span>] <span class="op">=</span> drafted_df[<span class="st">'PLAYER'</span>].astype(<span class="bu">str</span>).<span class="bu">str</span>.strip().<span class="bu">str</span>.lower()</span>
+<span id="cb13-118"><a href="#cb13-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-119"><a href="#cb13-119" aria-hidden="true" tabindex="-1"></a><span class="co"># Add Drafted column: 1 if player in drafted list, 0 otherwise</span></span>
+<span id="cb13-120"><a href="#cb13-120" aria-hidden="true" tabindex="-1"></a>college_df[<span class="st">'Drafted'</span>] <span class="op">=</span> college_df[<span class="st">'player_name'</span>].isin(drafted_df[<span class="st">'PLAYER'</span>]).astype(<span class="bu">int</span>)</span>
+<span id="cb13-121"><a href="#cb13-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-122"><a href="#cb13-122" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> convert_excel_date_height(ht_str):</span>
+<span id="cb13-123"><a href="#cb13-123" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert month abbreviations to numbers</span></span>
+<span id="cb13-124"><a href="#cb13-124" aria-hidden="true" tabindex="-1"></a>    month_map <span class="op">=</span> {</span>
+<span id="cb13-125"><a href="#cb13-125" aria-hidden="true" tabindex="-1"></a>        <span class="st">'jan'</span>: <span class="st">'01'</span>, <span class="st">'feb'</span>: <span class="st">'02'</span>, <span class="st">'mar'</span>: <span class="st">'03'</span>, <span class="st">'apr'</span>: <span class="st">'04'</span>,</span>
+<span id="cb13-126"><a href="#cb13-126" aria-hidden="true" tabindex="-1"></a>        <span class="st">'may'</span>: <span class="st">'05'</span>, <span class="st">'jun'</span>: <span class="st">'06'</span>, <span class="st">'jul'</span>: <span class="st">'07'</span>, <span class="st">'aug'</span>: <span class="st">'08'</span>,</span>
+<span id="cb13-127"><a href="#cb13-127" aria-hidden="true" tabindex="-1"></a>        <span class="st">'sep'</span>: <span class="st">'09'</span>, <span class="st">'oct'</span>: <span class="st">'10'</span>, <span class="st">'nov'</span>: <span class="st">'11'</span>, <span class="st">'dec'</span>: <span class="st">'12'</span></span>
+<span id="cb13-128"><a href="#cb13-128" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb13-129"><a href="#cb13-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-130"><a href="#cb13-130" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb13-131"><a href="#cb13-131" aria-hidden="true" tabindex="-1"></a>        ht_str <span class="op">=</span> <span class="bu">str</span>(ht_str).lower()</span>
+<span id="cb13-132"><a href="#cb13-132" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> month, number <span class="kw">in</span> month_map.items():</span>
+<span id="cb13-133"><a href="#cb13-133" aria-hidden="true" tabindex="-1"></a>            ht_str <span class="op">=</span> ht_str.replace(month, number)</span>
+<span id="cb13-134"><a href="#cb13-134" aria-hidden="true" tabindex="-1"></a>        parts <span class="op">=</span> re.findall(<span class="vs">r'\d+'</span>, ht_str)</span>
+<span id="cb13-135"><a href="#cb13-135" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">len</span>(parts) <span class="op">==</span> <span class="dv">2</span>:</span>
+<span id="cb13-136"><a href="#cb13-136" aria-hidden="true" tabindex="-1"></a>            inches, feet <span class="op">=</span> <span class="bu">map</span>(<span class="bu">int</span>, parts)</span>
+<span id="cb13-137"><a href="#cb13-137" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> feet <span class="op">*</span> <span class="dv">12</span> <span class="op">+</span> inches</span>
+<span id="cb13-138"><a href="#cb13-138" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span>:</span>
+<span id="cb13-139"><a href="#cb13-139" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span></span>
+<span id="cb13-140"><a href="#cb13-140" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.nan</span>
+<span id="cb13-141"><a href="#cb13-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-142"><a href="#cb13-142" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply to create the height_in column</span></span>
+<span id="cb13-143"><a href="#cb13-143" aria-hidden="true" tabindex="-1"></a>college_df[<span class="st">'height_in'</span>] <span class="op">=</span> college_df[<span class="st">'ht'</span>].<span class="bu">apply</span>(convert_excel_date_height)</span>
+<span id="cb13-144"><a href="#cb13-144" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-147"><a href="#cb13-147" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb13-148"><a href="#cb13-148" aria-hidden="true" tabindex="-1"></a><span class="co"># --- TIER ASSIGNMENT BASED ON DRAFT RATE ---</span></span>
+<span id="cb13-149"><a href="#cb13-149" aria-hidden="true" tabindex="-1"></a>school_draft_stats <span class="op">=</span> college_df.groupby(<span class="st">'team'</span>)[<span class="st">'Drafted'</span>].agg([<span class="st">'sum'</span>, <span class="st">'count'</span>])</span>
+<span id="cb13-150"><a href="#cb13-150" aria-hidden="true" tabindex="-1"></a>school_draft_stats[<span class="st">'draft_rate'</span>] <span class="op">=</span> school_draft_stats[<span class="st">'sum'</span>] <span class="op">/</span> school_draft_stats[<span class="st">'count'</span>]</span>
+<span id="cb13-151"><a href="#cb13-151" aria-hidden="true" tabindex="-1"></a>q90 <span class="op">=</span> school_draft_stats[<span class="st">'draft_rate'</span>].quantile(<span class="fl">0.90</span>)</span>
+<span id="cb13-152"><a href="#cb13-152" aria-hidden="true" tabindex="-1"></a>q60 <span class="op">=</span> school_draft_stats[<span class="st">'draft_rate'</span>].quantile(<span class="fl">0.60</span>)</span>
+<span id="cb13-153"><a href="#cb13-153" aria-hidden="true" tabindex="-1"></a>school_draft_stats[<span class="st">'school_tier'</span>] <span class="op">=</span> pd.cut(</span>
+<span id="cb13-154"><a href="#cb13-154" aria-hidden="true" tabindex="-1"></a>    school_draft_stats[<span class="st">'draft_rate'</span>],</span>
+<span id="cb13-155"><a href="#cb13-155" aria-hidden="true" tabindex="-1"></a>    bins<span class="op">=</span>[<span class="op">-</span><span class="dv">1</span>, q60, q90, <span class="fl">1.0</span>],</span>
+<span id="cb13-156"><a href="#cb13-156" aria-hidden="true" tabindex="-1"></a>    labels<span class="op">=</span>[<span class="st">'Tier 3'</span>, <span class="st">'Tier 2'</span>, <span class="st">'Tier 1'</span>]</span>
+<span id="cb13-157"><a href="#cb13-157" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-158"><a href="#cb13-158" aria-hidden="true" tabindex="-1"></a>college_df <span class="op">=</span> college_df.merge(school_draft_stats[<span class="st">'school_tier'</span>], left_on<span class="op">=</span><span class="st">'team'</span>, right_index<span class="op">=</span><span class="va">True</span>, how<span class="op">=</span><span class="st">'left'</span>)</span>
+<span id="cb13-159"><a href="#cb13-159" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-160"><a href="#cb13-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-161"><a href="#cb13-161" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4 Computation - CVX Optimization</span></span>
+<span id="cb13-162"><a href="#cb13-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-163"><a href="#cb13-163" aria-hidden="true" tabindex="-1"></a>The CVX optimization framework was employed to formulate and solve convex models underlying fairness-aware NBA draft prediction, including logistic regression variants (plain, ridge, lasso), support vector machines, and the FairStacks ensemble. By expressing these models as convex optimization problems, CVX enabled rapid prototyping without the need for custom algorithmic implementation.</span>
+<span id="cb13-164"><a href="#cb13-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-165"><a href="#cb13-165" aria-hidden="true" tabindex="-1"></a>Although Lasso regression is theoretically designed to drive some coefficients exactly to zero, solutions obtained via general-purpose solvers like CVX often yield near-zero coefficients due to numerical precision limitations. As a result, strict sparsity may require additional post-processing. Nevertheless, the framework provided sufficient flexibility to explore regularization effects and fairness constraints in the context of evaluating how players from less prestigious programs could be assessed more equitably based on game performance rather than institutional pedigree.</span>
+<span id="cb13-166"><a href="#cb13-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-167"><a href="#cb13-167" aria-hidden="true" tabindex="-1"></a><span class="fu">### 4.1 Implementation of the following classification methods as base learners to be used in construction of the FairStacks ensemble:</span></span>
+<span id="cb13-168"><a href="#cb13-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-169"><a href="#cb13-169" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Naive Bayes (no CVX)</span></span>
+<span id="cb13-170"><a href="#cb13-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-171"><a href="#cb13-171" aria-hidden="true" tabindex="-1"></a>This implementation assumes conditional independence of features and fits Gaussian distributions separately for each class. The model computes:</span>
+<span id="cb13-172"><a href="#cb13-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-173"><a href="#cb13-173" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Class-wise means (<span class="sc">\(</span> \mu_0, \mu_1 <span class="sc">\)</span>) and pooled variance <span class="sc">\(</span> \sigma^2 <span class="sc">\)</span></span>
+<span id="cb13-174"><a href="#cb13-174" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Prior class probabilities (<span class="sc">\(</span> \pi_0, \pi_1 <span class="sc">\)</span>)</span>
+<span id="cb13-175"><a href="#cb13-175" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Log-likelihoods using the Gaussian log-density function</span>
+<span id="cb13-176"><a href="#cb13-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-177"><a href="#cb13-177" aria-hidden="true" tabindex="-1"></a>For each input vector, the model compares log-posterior probabilities and assigns a label of 1 if the class 1 posterior is greater, and 0 otherwise. This lightweight model is not only computationally simple but also provides useful diversity in the ensemble. Because Naive Bayes is so simple, it acts as a benchmark. If your complex models (like SVM or Lasso) don’t clearly outperform it, you might need to reassess their added complexity or feature use.</span>
+<span id="cb13-178"><a href="#cb13-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-181"><a href="#cb13-181" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb13-182"><a href="#cb13-182" aria-hidden="true" tabindex="-1"></a><span class="co"># --- MANUAL NAIVE BAYES ---</span></span>
+<span id="cb13-183"><a href="#cb13-183" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> manual_gaussian_nb(X_train, y_train, X_test):</span>
+<span id="cb13-184"><a href="#cb13-184" aria-hidden="true" tabindex="-1"></a>    X_0 <span class="op">=</span> X_train[y_train<span class="op">==</span> <span class="dv">0</span>]</span>
+<span id="cb13-185"><a href="#cb13-185" aria-hidden="true" tabindex="-1"></a>    X_1 <span class="op">=</span> X_train[y_train<span class="op">==</span> <span class="dv">1</span>]</span>
+<span id="cb13-186"><a href="#cb13-186" aria-hidden="true" tabindex="-1"></a>    mu_0, mu_1 <span class="op">=</span> np.mean(X_0, axis<span class="op">=</span><span class="dv">0</span>), np.mean(X_1, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb13-187"><a href="#cb13-187" aria-hidden="true" tabindex="-1"></a>    pi_0, pi_1 <span class="op">=</span> X_0.shape[<span class="dv">0</span>] <span class="op">/</span> <span class="bu">len</span>(X_train), X_1.shape[<span class="dv">0</span>] <span class="op">/</span> <span class="bu">len</span>(X_train)</span>
+<span id="cb13-188"><a href="#cb13-188" aria-hidden="true" tabindex="-1"></a>    pooled_var <span class="op">=</span> (np.<span class="bu">sum</span>((X_0 <span class="op">-</span> mu_0) <span class="op">**</span> <span class="dv">2</span>, axis<span class="op">=</span><span class="dv">0</span>) <span class="op">+</span> np.<span class="bu">sum</span>((X_1 <span class="op">-</span> mu_1) <span class="op">**</span> <span class="dv">2</span>, axis<span class="op">=</span><span class="dv">0</span>)) <span class="op">/</span> <span class="bu">len</span>(X_train)</span>
+<span id="cb13-189"><a href="#cb13-189" aria-hidden="true" tabindex="-1"></a>    pooled_var <span class="op">+=</span> <span class="fl">1e-6</span></span>
+<span id="cb13-190"><a href="#cb13-190" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> log_gaussian(x, mu, var):</span>
+<span id="cb13-191"><a href="#cb13-191" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> np.<span class="bu">sum</span>(np.log(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> var)) <span class="op">-</span> <span class="fl">0.5</span> <span class="op">*</span> np.<span class="bu">sum</span>(((x <span class="op">-</span> mu) <span class="op">**</span> <span class="dv">2</span>) <span class="op">/</span> var)</span>
+<span id="cb13-192"><a href="#cb13-192" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array([</span>
+<span id="cb13-193"><a href="#cb13-193" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span> <span class="cf">if</span> np.log(pi_1) <span class="op">+</span> log_gaussian(x, mu_1, pooled_var) <span class="op">&gt;</span> np.log(pi_0) <span class="op">+</span> log_gaussian(x, mu_0, pooled_var) <span class="cf">else</span> <span class="dv">0</span></span>
+<span id="cb13-194"><a href="#cb13-194" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> x <span class="kw">in</span> X_test</span>
+<span id="cb13-195"><a href="#cb13-195" aria-hidden="true" tabindex="-1"></a>    ])</span>
+<span id="cb13-196"><a href="#cb13-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-197"><a href="#cb13-197" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-198"><a href="#cb13-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-199"><a href="#cb13-199" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Linear Discriminant Analysis (no CVX)</span></span>
+<span id="cb13-200"><a href="#cb13-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-201"><a href="#cb13-201" aria-hidden="true" tabindex="-1"></a>This implementation assumes Gaussian class-conditional distributions with a shared covariance matrix. LDA serves as a linear classifier that projects data to maximize class separability under these assumptions. The model performs the following:</span>
+<span id="cb13-202"><a href="#cb13-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-203"><a href="#cb13-203" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Calculates class-wise means (<span class="sc">\(</span> \mu_0, \mu_1 <span class="sc">\)</span>)</span>
+<span id="cb13-204"><a href="#cb13-204" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Computes the shared covariance matrix <span class="sc">\(</span> \Sigma <span class="sc">\)</span> across both classes</span>
+<span id="cb13-205"><a href="#cb13-205" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Solves the linear discriminant function (delta) for each class</span>
+<span id="cb13-206"><a href="#cb13-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-207"><a href="#cb13-207" aria-hidden="true" tabindex="-1"></a>Each data point is assigned to the class with the higher discriminant score. LDA offers a more flexible alternative to Naive Bayes by relaxing the independence assumption while still providing a computationally efficient, interpretable classifier.</span>
+<span id="cb13-208"><a href="#cb13-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-211"><a href="#cb13-211" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb13-212"><a href="#cb13-212" aria-hidden="true" tabindex="-1"></a><span class="co"># --- MANUAL LDA ---</span></span>
+<span id="cb13-213"><a href="#cb13-213" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> manual_lda(X_train, y_train, X_test):</span>
+<span id="cb13-214"><a href="#cb13-214" aria-hidden="true" tabindex="-1"></a>    X_0 <span class="op">=</span> X_train[y_train <span class="op">==</span> <span class="dv">0</span>]</span>
+<span id="cb13-215"><a href="#cb13-215" aria-hidden="true" tabindex="-1"></a>    X_1 <span class="op">=</span> X_train[y_train <span class="op">==</span> <span class="dv">1</span>]</span>
+<span id="cb13-216"><a href="#cb13-216" aria-hidden="true" tabindex="-1"></a>    mu_0, mu_1 <span class="op">=</span> np.mean(X_0, axis<span class="op">=</span><span class="dv">0</span>), np.mean(X_1, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb13-217"><a href="#cb13-217" aria-hidden="true" tabindex="-1"></a>    pi_0, pi_1 <span class="op">=</span> X_0.shape[<span class="dv">0</span>] <span class="op">/</span> <span class="bu">len</span>(X_train), X_1.shape[<span class="dv">0</span>] <span class="op">/</span> <span class="bu">len</span>(X_train)</span>
+<span id="cb13-218"><a href="#cb13-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-219"><a href="#cb13-219" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Regularized shared covariance matrix</span></span>
+<span id="cb13-220"><a href="#cb13-220" aria-hidden="true" tabindex="-1"></a>    Sigma <span class="op">=</span> ((X_0 <span class="op">-</span> mu_0).T <span class="op">@</span> (X_0 <span class="op">-</span> mu_0) <span class="op">+</span> (X_1 <span class="op">-</span> mu_1).T <span class="op">@</span> (X_1 <span class="op">-</span> mu_1)) <span class="op">/</span> (<span class="bu">len</span>(X_train) <span class="op">-</span> <span class="dv">2</span>)</span>
+<span id="cb13-221"><a href="#cb13-221" aria-hidden="true" tabindex="-1"></a>    Sigma <span class="op">+=</span> <span class="fl">1e-6</span> <span class="op">*</span> np.eye(Sigma.shape[<span class="dv">0</span>])  <span class="co"># small regularization to ensure invertibility</span></span>
+<span id="cb13-222"><a href="#cb13-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-223"><a href="#cb13-223" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> delta(x, mu, pi):</span>
+<span id="cb13-224"><a href="#cb13-224" aria-hidden="true" tabindex="-1"></a>        a <span class="op">=</span> np.linalg.solve(Sigma, mu)</span>
+<span id="cb13-225"><a href="#cb13-225" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> x <span class="op">@</span> a <span class="op">-</span> <span class="fl">0.5</span> <span class="op">*</span> mu.T <span class="op">@</span> a <span class="op">+</span> np.log(pi)</span>
+<span id="cb13-226"><a href="#cb13-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-227"><a href="#cb13-227" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array([</span>
+<span id="cb13-228"><a href="#cb13-228" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span> <span class="cf">if</span> delta(x, mu_1, pi_1) <span class="op">&gt;</span> delta(x, mu_0, pi_0) <span class="cf">else</span> <span class="dv">0</span></span>
+<span id="cb13-229"><a href="#cb13-229" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> x <span class="kw">in</span> X_test</span>
+<span id="cb13-230"><a href="#cb13-230" aria-hidden="true" tabindex="-1"></a>    ])</span>
+<span id="cb13-231"><a href="#cb13-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-232"><a href="#cb13-232" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-233"><a href="#cb13-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-234"><a href="#cb13-234" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Logistic Regression (use CVX)</span></span>
+<span id="cb13-235"><a href="#cb13-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-236"><a href="#cb13-236" aria-hidden="true" tabindex="-1"></a>To model the probability of being drafted as a logistic function of player statistics, logistic regression was implemented using convex optimization. Three variants were considered: plain logistic regression, ridge-regularization, and lasso-regularization. The model minimizes the average logistic loss, with optional <span class="sc">\(</span> \ell_2 <span class="sc">\)</span> or <span class="sc">\(</span> \ell_1 <span class="sc">\)</span> penalty:</span>
+<span id="cb13-237"><a href="#cb13-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-238"><a href="#cb13-238" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Plain**: Minimizes standard logistic loss  </span>
+<span id="cb13-239"><a href="#cb13-239" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Ridge**: Adds <span class="sc">\(</span> \ell_2 <span class="sc">\)</span> norm penalty to control weight magnitude  </span>
+<span id="cb13-240"><a href="#cb13-240" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Lasso**: Adds <span class="sc">\(</span> \ell_1 <span class="sc">\)</span> norm penalty to encourage sparsity  </span>
+<span id="cb13-241"><a href="#cb13-241" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-242"><a href="#cb13-242" aria-hidden="true" tabindex="-1"></a>Threshold tuning (e.g., using precision-recall curves) was applied to improve model calibration, especially when the dataset is imbalanced. A tuned threshold (e.g., 0.6) helps balance precision and recall based on evaluation metrics.</span>
+<span id="cb13-243"><a href="#cb13-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-244"><a href="#cb13-244" aria-hidden="true" tabindex="-1"></a>A regularization strength of <span class="sc">\(</span> \lambda = 0.1 <span class="sc">\)</span> was selected as a reasonable value to balance overfitting and underfitting. It is strong enough to stabilize the solution but not so aggressive that it suppresses informative features.</span>
+<span id="cb13-245"><a href="#cb13-245" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-248"><a href="#cb13-248" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb13-249"><a href="#cb13-249" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> logistic_cvx_preds_binary(X, y, X_eval, reg_type<span class="op">=</span><span class="va">None</span>, lambda_<span class="op">=</span><span class="fl">0.1</span>, thresh<span class="op">=</span><span class="fl">0.6</span>):</span>
+<span id="cb13-250"><a href="#cb13-250" aria-hidden="true" tabindex="-1"></a>    n, p <span class="op">=</span> X.shape</span>
+<span id="cb13-251"><a href="#cb13-251" aria-hidden="true" tabindex="-1"></a>    beta <span class="op">=</span> cp.Variable((p, <span class="dv">1</span>))</span>
+<span id="cb13-252"><a href="#cb13-252" aria-hidden="true" tabindex="-1"></a>    y_ <span class="op">=</span> y.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb13-253"><a href="#cb13-253" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> cp.<span class="bu">sum</span>(cp.multiply(<span class="op">-</span>y_, X <span class="op">@</span> beta) <span class="op">+</span> cp.logistic(X <span class="op">@</span> beta))<span class="op">/</span>n</span>
+<span id="cb13-254"><a href="#cb13-254" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> reg_type <span class="op">==</span> <span class="st">'ridge'</span>:</span>
+<span id="cb13-255"><a href="#cb13-255" aria-hidden="true" tabindex="-1"></a>        penalty <span class="op">=</span> lambda_ <span class="op">*</span> cp.norm2(beta)<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb13-256"><a href="#cb13-256" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> reg_type <span class="op">==</span> <span class="st">'lasso'</span>:</span>
+<span id="cb13-257"><a href="#cb13-257" aria-hidden="true" tabindex="-1"></a>        penalty <span class="op">=</span> lambda_ <span class="op">*</span> cp.norm1(beta)</span>
+<span id="cb13-258"><a href="#cb13-258" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb13-259"><a href="#cb13-259" aria-hidden="true" tabindex="-1"></a>        penalty <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb13-260"><a href="#cb13-260" aria-hidden="true" tabindex="-1"></a>    cp.Problem(cp.Minimize(loss <span class="op">+</span> penalty)).solve()</span>
+<span id="cb13-261"><a href="#cb13-261" aria-hidden="true" tabindex="-1"></a>    probs <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>X_eval <span class="op">@</span> beta.value))</span>
+<span id="cb13-262"><a href="#cb13-262" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (probs <span class="op">&gt;=</span> thresh).astype(<span class="bu">int</span>).flatten()</span>
+<span id="cb13-263"><a href="#cb13-263" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-264"><a href="#cb13-264" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/ROC_Logistic_Reg.png)</span>{width=100%}</span>
+<span id="cb13-265"><a href="#cb13-265" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;ROC and Precision-Recall Curves for Plain, Ridge, and Lasso Logistic Regression (Best Threshold = 0.60)&lt;/center&gt;</span>
+<span id="cb13-266"><a href="#cb13-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-267"><a href="#cb13-267" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Support Vector Machine (SVM)</span></span>
+<span id="cb13-268"><a href="#cb13-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-269"><a href="#cb13-269" aria-hidden="true" tabindex="-1"></a>This implementation was developed using convex optimization with hinge loss and <span class="sc">\(</span> \ell_2 <span class="sc">\)</span> regularization. This approach seeks to maximize the margin between classes while penalizing misclassifications near the decision boundary. The model performs the following:</span>
+<span id="cb13-270"><a href="#cb13-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-271"><a href="#cb13-271" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Computes hinge loss <span class="sc">\(</span> \max(0, 1 - y_i x_i^\top \beta) <span class="sc">\)</span> for each point  </span>
+<span id="cb13-272"><a href="#cb13-272" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Adds <span class="sc">\(</span> \ell_2 <span class="sc">\)</span> regularization to prevent overfitting  </span>
+<span id="cb13-273"><a href="#cb13-273" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Converts predictions from raw margin scores to 0/1 labels via thresholding  </span>
+<span id="cb13-274"><a href="#cb13-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-275"><a href="#cb13-275" aria-hidden="true" tabindex="-1"></a>A decision threshold of 1.52 was selected empirically based on precision-recall and ROC curves to optimize performance. This allowed the classifier to maintain conservative positive predictions, especially useful in a fairness-aware pipeline where over-selection of dominant group members must be mitigated. A regularization parameter of <span class="sc">\(</span> \lambda = 0.1 <span class="sc">\)</span> was chosen to softly penalize large weights while preserving flexibility in the decision boundary. This value was found to offer a stable trade-off between underfitting and overfitting in the fairness setting.</span>
+<span id="cb13-276"><a href="#cb13-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-279"><a href="#cb13-279" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb13-280"><a href="#cb13-280" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> manual_svm_hinge(X_train, y_train, X_eval, lambda_<span class="op">=</span><span class="fl">0.1</span>):</span>
+<span id="cb13-281"><a href="#cb13-281" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb13-282"><a href="#cb13-282" aria-hidden="true" tabindex="-1"></a><span class="co">    Train a linear SVM using hinge loss via CVXPY.</span></span>
+<span id="cb13-283"><a href="#cb13-283" aria-hidden="true" tabindex="-1"></a><span class="co">    - y_train should be in {0, 1} → converted internally to {-1, +1}</span></span>
+<span id="cb13-284"><a href="#cb13-284" aria-hidden="true" tabindex="-1"></a><span class="co">    - Returns 0/1 predictions for X_eval</span></span>
+<span id="cb13-285"><a href="#cb13-285" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb13-286"><a href="#cb13-286" aria-hidden="true" tabindex="-1"></a>    y_transformed <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> y_train <span class="op">-</span> <span class="dv">1</span>  <span class="co"># convert {0,1} to {-1,+1}</span></span>
+<span id="cb13-287"><a href="#cb13-287" aria-hidden="true" tabindex="-1"></a>    n, p <span class="op">=</span> X_train.shape</span>
+<span id="cb13-288"><a href="#cb13-288" aria-hidden="true" tabindex="-1"></a>    beta <span class="op">=</span> cp.Variable((p, <span class="dv">1</span>))</span>
+<span id="cb13-289"><a href="#cb13-289" aria-hidden="true" tabindex="-1"></a>    margins <span class="op">=</span> cp.multiply(y_transformed.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>), X_train <span class="op">@</span> beta)</span>
+<span id="cb13-290"><a href="#cb13-290" aria-hidden="true" tabindex="-1"></a>    hinge_loss <span class="op">=</span> cp.<span class="bu">sum</span>(cp.pos(<span class="dv">1</span> <span class="op">-</span> margins)) <span class="op">/</span> n</span>
+<span id="cb13-291"><a href="#cb13-291" aria-hidden="true" tabindex="-1"></a>    reg <span class="op">=</span> lambda_ <span class="op">*</span> cp.norm2(beta)<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb13-292"><a href="#cb13-292" aria-hidden="true" tabindex="-1"></a>    problem <span class="op">=</span> cp.Problem(cp.Minimize(hinge_loss <span class="op">+</span> reg))</span>
+<span id="cb13-293"><a href="#cb13-293" aria-hidden="true" tabindex="-1"></a>    problem.solve()</span>
+<span id="cb13-294"><a href="#cb13-294" aria-hidden="true" tabindex="-1"></a>    raw_preds <span class="op">=</span> X_eval <span class="op">@</span> beta.value</span>
+<span id="cb13-295"><a href="#cb13-295" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (raw_preds <span class="op">&gt;=</span> <span class="fl">1.52</span>).astype(<span class="bu">int</span>).flatten()</span>
+<span id="cb13-296"><a href="#cb13-296" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-297"><a href="#cb13-297" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/ROC_SVM.png)</span>{width=100%}</span>
+<span id="cb13-298"><a href="#cb13-298" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;ROC and Precision-Recall Curves for SVM (Best Threshold = 1.52)&lt;/center&gt;</span>
+<span id="cb13-299"><a href="#cb13-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-300"><a href="#cb13-300" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Decision Tree</span></span>
+<span id="cb13-301"><a href="#cb13-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-302"><a href="#cb13-302" aria-hidden="true" tabindex="-1"></a>A decision tree classifier was included as a base learner using the built-in <span class="in">`DecisionTreeClassifier`</span> from scikit-learn. This model makes hierarchical splits in the feature space to arrive at a decision path for each input. The implementation used the <span class="in">`class_weight="balanced"`</span> argument to address class imbalance, ensuring the tree did not overly favor the majority class.</span>
+<span id="cb13-303"><a href="#cb13-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-306"><a href="#cb13-306" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb13-307"><a href="#cb13-307" aria-hidden="true" tabindex="-1"></a><span class="co"># --- DECISION TREE (BUILT-IN ALLOWED) ---</span></span>
+<span id="cb13-308"><a href="#cb13-308" aria-hidden="true" tabindex="-1"></a>tree_model <span class="op">=</span> DecisionTreeClassifier(class_weight<span class="op">=</span><span class="st">'balanced'</span>, random_state<span class="op">=</span><span class="dv">0</span>).fit(X_train, y_train)</span>
+<span id="cb13-309"><a href="#cb13-309" aria-hidden="true" tabindex="-1"></a>tree_preds <span class="op">=</span> tree_model.predict(X_test)</span>
+<span id="cb13-310"><a href="#cb13-310" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-311"><a href="#cb13-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-312"><a href="#cb13-312" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5 Implementation and Assessment of Fairstacks</span></span>
+<span id="cb13-313"><a href="#cb13-313" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-314"><a href="#cb13-314" aria-hidden="true" tabindex="-1"></a>As we shift toward a fairness-aware ensemble strategy, it becomes critical to structure the data pipeline in a way that supports robust model selection and unbiased performance evaluation. Before learning ensemble weights or assessing bias mitigation, a principled strategy for dividing our dataset into training, validation, and test splits is essential.</span>
+<span id="cb13-315"><a href="#cb13-315" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-316"><a href="#cb13-316" aria-hidden="true" tabindex="-1"></a>This is especially important in the context of our Steph Curry fairness model, where the number of drafted players is relatively small and the fairness metric—True Positive Rate (TPR) gap between players from high-exposure programs (Tier 1) and lesser-known schools (Tier 3)—requires meaningful group-level comparisons. A careful partitioning ensures that the evaluation of how fairly we treat underdog players is accurate and unbiased.</span>
+<span id="cb13-317"><a href="#cb13-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-318"><a href="#cb13-318" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb13-319"><a href="#cb13-319" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> [<span class="st">'pts'</span>, <span class="st">'ast'</span>, <span class="st">'stl'</span>, <span class="st">'blk'</span>, <span class="st">'treb'</span>, <span class="st">'height_in'</span>, <span class="st">'TS_per'</span>, <span class="st">'eFG'</span>, <span class="st">'player_name'</span>, <span class="st">'Drafted'</span>,<span class="st">'school_tier'</span>]</span>
+<span id="cb13-320"><a href="#cb13-320" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> college_df[features].dropna()</span>
+<span id="cb13-321"><a href="#cb13-321" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-322"><a href="#cb13-322" aria-hidden="true" tabindex="-1"></a><span class="co"># --- SPLIT ---</span></span>
+<span id="cb13-323"><a href="#cb13-323" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df.drop(columns<span class="op">=</span>[<span class="st">'Drafted'</span>, <span class="st">'player_name'</span>])</span>
+<span id="cb13-324"><a href="#cb13-324" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[<span class="st">'Drafted'</span>]</span>
+<span id="cb13-325"><a href="#cb13-325" aria-hidden="true" tabindex="-1"></a>X_trainval, X_test, y_trainval, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.2</span>, stratify<span class="op">=</span>y, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb13-326"><a href="#cb13-326" aria-hidden="true" tabindex="-1"></a>X_train, X_val, y_train, y_val <span class="op">=</span> train_test_split(X_trainval, y_trainval, test_size<span class="op">=</span><span class="fl">0.25</span>, stratify<span class="op">=</span>y_trainval, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb13-327"><a href="#cb13-327" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-328"><a href="#cb13-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-329"><a href="#cb13-329" aria-hidden="true" tabindex="-1"></a>To build a model that balances predictive power with fairness, we selected a combination of performance-based and context-aware features. Traditional box score statistics such as points per game, assists, steals, blocks, total rebounds, and shooting efficiency (eFG, TS per) were included to capture a player’s tangible on-court contributions. Additionally, height was included as a proxy for physical attributes that are often overvalued in the draft process.</span>
+<span id="cb13-330"><a href="#cb13-330" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-331"><a href="#cb13-331" aria-hidden="true" tabindex="-1"></a>Most importantly, we incorporated school tier—a categorical variable based on draft success rates of a player’s college program. This feature serves as the foundation for our fairness assessment, as we aim to detect and mitigate biases that favor players from elite programs (e.g., Duke, Kentucky) over similarly talented players from lesser-known schools (e.g., Davidson). Since our fairness metric is based on TPR disparities across school tiers, this feature is critical for evaluating whether players like Steph Curry, who came from a mid-major program, are systematically undervalued.</span>
+<span id="cb13-332"><a href="#cb13-332" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-333"><a href="#cb13-333" aria-hidden="true" tabindex="-1"></a>Base Learner Outputs and Stacking Matrix: Each of the seven base learners—Naive Bayes, Linear Discriminant Analysis (LDA), Decision Tree, three logistic regression variants (plain, ridge, lasso), and Support Vector Machine (SVM)—was trained on the training set and evaluated on the validation set. The binary predictions (0/1) of each learner on the validation set were vertically stacked to construct the matrix  </span>
+<span id="cb13-334"><a href="#cb13-334" aria-hidden="true" tabindex="-1"></a><span class="sc">\(</span> H_{\text{val}} \in \mathbb{R}^{n \times m} <span class="sc">\)</span>,  </span>
+<span id="cb13-335"><a href="#cb13-335" aria-hidden="true" tabindex="-1"></a>where <span class="sc">\(</span> n <span class="sc">\)</span> is the number of validation examples and <span class="sc">\(</span> m = 7 <span class="sc">\)</span> is the number of base models. This matrix serves as input to the FairStacks optimization routine, allowing us to compute an ensemble prediction as a weighted combination of individual model decisions.</span>
+<span id="cb13-336"><a href="#cb13-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-339"><a href="#cb13-339" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb13-340"><a href="#cb13-340" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply your functions</span></span>
+<span id="cb13-341"><a href="#cb13-341" aria-hidden="true" tabindex="-1"></a>nb_val <span class="op">=</span> manual_gaussian_nb_binary(X_train_raw, y_train.values, X_val_scaled)</span>
+<span id="cb13-342"><a href="#cb13-342" aria-hidden="true" tabindex="-1"></a>lda_val <span class="op">=</span> manual_lda_binary(X_train_scaled, y_train.values, X_val_scaled)</span>
+<span id="cb13-343"><a href="#cb13-343" aria-hidden="true" tabindex="-1"></a>tree_val <span class="op">=</span> DecisionTreeClassifier(max_depth<span class="op">=</span><span class="dv">5</span>, class_weight<span class="op">=</span><span class="st">"balanced"</span>, random_state<span class="op">=</span><span class="dv">0</span>).fit(X_train_scaled, y_train).predict(X_val_scaled)</span>
+<span id="cb13-344"><a href="#cb13-344" aria-hidden="true" tabindex="-1"></a>log_plain_val <span class="op">=</span> logistic_cvx_preds_binary(X_train_scaled, y_train.values, X_val_scaled)</span>
+<span id="cb13-345"><a href="#cb13-345" aria-hidden="true" tabindex="-1"></a>log_ridge_val <span class="op">=</span> logistic_cvx_preds_binary(X_train_scaled, y_train.values, X_val_scaled, reg_type<span class="op">=</span><span class="st">'ridge'</span>)</span>
+<span id="cb13-346"><a href="#cb13-346" aria-hidden="true" tabindex="-1"></a>log_lasso_val <span class="op">=</span> logistic_cvx_preds_binary(X_train_scaled, y_train.values, X_val_scaled, reg_type<span class="op">=</span><span class="st">'lasso'</span>)</span>
+<span id="cb13-347"><a href="#cb13-347" aria-hidden="true" tabindex="-1"></a>svm_val <span class="op">=</span> manual_svm_hinge(X_train_scaled, y_train.values, X_val_scaled)</span>
+<span id="cb13-348"><a href="#cb13-348" aria-hidden="true" tabindex="-1"></a><span class="co"># Build your H matrix using 0/1 predictions</span></span>
+<span id="cb13-349"><a href="#cb13-349" aria-hidden="true" tabindex="-1"></a>H_val <span class="op">=</span> np.vstack([nb_val, lda_val, tree_val, log_plain_val, log_ridge_val, log_lasso_val,svm_val]).T</span>
+<span id="cb13-350"><a href="#cb13-350" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-351"><a href="#cb13-351" aria-hidden="true" tabindex="-1"></a>Fairness Vector Calculation: To estimate the bias of each base learner, we compute the True Positive Rate (TPR) separately for players from Tier 1 schools and those from lower-tier programs. The difference between these TPRs defines the bias for each learner:</span>
+<span id="cb13-352"><a href="#cb13-352" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-353"><a href="#cb13-353" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb13-354"><a href="#cb13-354" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Fairness Vector ---</span></span>
+<span id="cb13-355"><a href="#cb13-355" aria-hidden="true" tabindex="-1"></a>tier_group <span class="op">=</span> (X_val[<span class="st">'school_tier'</span>] <span class="op">==</span> <span class="st">'Tier 1'</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb13-356"><a href="#cb13-356" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_tpr_gap(y_true, y_scores, group, threshold<span class="op">=</span><span class="fl">0.5</span>):</span>
+<span id="cb13-357"><a href="#cb13-357" aria-hidden="true" tabindex="-1"></a>    preds <span class="op">=</span> (y_scores <span class="op">&gt;=</span> threshold).astype(<span class="bu">int</span>)</span>
+<span id="cb13-358"><a href="#cb13-358" aria-hidden="true" tabindex="-1"></a>    mask_1 <span class="op">=</span> group <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb13-359"><a href="#cb13-359" aria-hidden="true" tabindex="-1"></a>    mask_0 <span class="op">=</span> group <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb13-360"><a href="#cb13-360" aria-hidden="true" tabindex="-1"></a>    tpr_1 <span class="op">=</span> np.<span class="bu">sum</span>((preds[mask_1] <span class="op">==</span> <span class="dv">1</span>) <span class="op">&amp;</span> (y_true[mask_1] <span class="op">==</span> <span class="dv">1</span>)) <span class="op">/</span> np.<span class="bu">sum</span>(y_true[mask_1] <span class="op">==</span> <span class="dv">1</span>)</span>
+<span id="cb13-361"><a href="#cb13-361" aria-hidden="true" tabindex="-1"></a>    tpr_0 <span class="op">=</span> np.<span class="bu">sum</span>((preds[mask_0] <span class="op">==</span> <span class="dv">1</span>) <span class="op">&amp;</span> (y_true[mask_0] <span class="op">==</span> <span class="dv">1</span>)) <span class="op">/</span> np.<span class="bu">sum</span>(y_true[mask_0] <span class="op">==</span> <span class="dv">1</span>)</span>
+<span id="cb13-362"><a href="#cb13-362" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> tpr_1 <span class="op">-</span> tpr_0</span>
+<span id="cb13-363"><a href="#cb13-363" aria-hidden="true" tabindex="-1"></a>b_hat <span class="op">=</span> np.array([</span>
+<span id="cb13-364"><a href="#cb13-364" aria-hidden="true" tabindex="-1"></a>    compute_tpr_gap(y_val.values, nb_val, tier_group),</span>
+<span id="cb13-365"><a href="#cb13-365" aria-hidden="true" tabindex="-1"></a>    compute_tpr_gap(y_val.values, lda_val, tier_group),</span>
+<span id="cb13-366"><a href="#cb13-366" aria-hidden="true" tabindex="-1"></a>    compute_tpr_gap(y_val.values, tree_val, tier_group),</span>
+<span id="cb13-367"><a href="#cb13-367" aria-hidden="true" tabindex="-1"></a>    compute_tpr_gap(y_val.values, log_plain_val, tier_group),</span>
+<span id="cb13-368"><a href="#cb13-368" aria-hidden="true" tabindex="-1"></a>    compute_tpr_gap(y_val.values, log_ridge_val, tier_group),</span>
+<span id="cb13-369"><a href="#cb13-369" aria-hidden="true" tabindex="-1"></a>    compute_tpr_gap(y_val.values, log_lasso_val, tier_group),</span>
+<span id="cb13-370"><a href="#cb13-370" aria-hidden="true" tabindex="-1"></a>    compute_tpr_gap(y_val.values, svm_val, tier_group)</span>
+<span id="cb13-371"><a href="#cb13-371" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb13-372"><a href="#cb13-372" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-373"><a href="#cb13-373" aria-hidden="true" tabindex="-1"></a>Binary predictions from each model on the validation set are compared against ground truth labels, and group masks are applied to measure how fairly each learner treats players based on their school’s prestige. The resulting vector <span class="sc">\(</span> \hat{b}_j <span class="sc">\)</span> quantifies these group-level disparities and is used in the fairness penalty of the FairStacks objective.</span>
+<span id="cb13-374"><a href="#cb13-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-375"><a href="#cb13-375" aria-hidden="true" tabindex="-1"></a>**Ensemble Weight Optimization via FairStacks:**  </span>
+<span id="cb13-376"><a href="#cb13-376" aria-hidden="true" tabindex="-1"></a>With predictions and corresponding bias scores for each base learner in hand, the FairStacks optimization problem is solved to determine optimal ensemble weights. CVXPY is used to minimize a regularized logistic loss objective, where the penalty term is the absolute weighted sum of TPR gaps across base learners. The constraints ensure that all weights are non-negative and sum to one.</span>
+<span id="cb13-377"><a href="#cb13-377" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-378"><a href="#cb13-378" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb13-379"><a href="#cb13-379" aria-hidden="true" tabindex="-1"></a>\min_{\mathbf{w} \geq 0} \ \frac{1}{n} \sum_{i=1}^{n} \log \left( 1 + \exp(-y_i \cdot \hat{y}_i) \right) + \lambda \left| \sum_j w_j \hat{b}_j \right|, </span>
+<span id="cb13-380"><a href="#cb13-380" aria-hidden="true" tabindex="-1"></a>\quad \text{subject to} \quad \sum_j w_j = 1</span>
+<span id="cb13-381"><a href="#cb13-381" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb13-382"><a href="#cb13-382" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-383"><a href="#cb13-383" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Logistic Loss Term:**</span>
+<span id="cb13-384"><a href="#cb13-384" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-385"><a href="#cb13-385" aria-hidden="true" tabindex="-1"></a>  $$</span>
+<span id="cb13-386"><a href="#cb13-386" aria-hidden="true" tabindex="-1"></a>  \frac{1}{n} \sum_{i=1}^{n} \log \left( 1 + \exp(-y_i \cdot \hat{y}_i) \right)</span>
+<span id="cb13-387"><a href="#cb13-387" aria-hidden="true" tabindex="-1"></a>  $$</span>
+<span id="cb13-388"><a href="#cb13-388" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-389"><a href="#cb13-389" aria-hidden="true" tabindex="-1"></a>  measures how well the ensemble predicts the true outcome <span class="sc">\(</span> y_i <span class="sc">\)</span> (drafted or not). Here,  </span>
+<span id="cb13-390"><a href="#cb13-390" aria-hidden="true" tabindex="-1"></a>  <span class="sc">\(</span> \hat{y}_i = \sum_j w_j \hat{f}_j(x_i) <span class="sc">\)</span> is the prediction from a weighted combination of base learners. The logistic loss is smooth and convex, making it ideal for binary classification tasks like draft prediction.</span>
+<span id="cb13-391"><a href="#cb13-391" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-392"><a href="#cb13-392" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Fairness Penalty:**</span>
+<span id="cb13-393"><a href="#cb13-393" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-394"><a href="#cb13-394" aria-hidden="true" tabindex="-1"></a>  $$</span>
+<span id="cb13-395"><a href="#cb13-395" aria-hidden="true" tabindex="-1"></a>  \lambda \left| \sum_j w_j \hat{b}_j \right|</span>
+<span id="cb13-396"><a href="#cb13-396" aria-hidden="true" tabindex="-1"></a>  $$</span>
+<span id="cb13-397"><a href="#cb13-397" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-398"><a href="#cb13-398" aria-hidden="true" tabindex="-1"></a>  penalizes disparity in treatment between groups—specifically, the absolute ensemble-weighted true positive rate (TPR) gap. Each <span class="sc">\(</span> \hat{b}_j <span class="sc">\)</span> represents the TPR gap of base learner <span class="sc">\(</span> j <span class="sc">\)</span>, and minimizing this term encourages fairness across school tiers.</span>
+<span id="cb13-399"><a href="#cb13-399" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-400"><a href="#cb13-400" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Constraints:**  </span>
+<span id="cb13-401"><a href="#cb13-401" aria-hidden="true" tabindex="-1"></a>  The weights <span class="sc">\(</span> \mathbf{w} <span class="sc">\)</span> form a convex combination  </span>
+<span id="cb13-402"><a href="#cb13-402" aria-hidden="true" tabindex="-1"></a>  <span class="sc">\(</span> (w_j \geq 0, \sum_j w_j = 1) <span class="sc">\)</span>, ensuring interpretability and stability.</span>
+<span id="cb13-403"><a href="#cb13-403" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-404"><a href="#cb13-404" aria-hidden="true" tabindex="-1"></a>Here, <span class="sc">\(</span> \lambda = 10 <span class="sc">\)</span> emphasizes fairness by reducing group disparities between players from high-exposure and lower-tier programs. This balance is crucial in the Steph Curry fairness model, where the goal is to counteract systemic undervaluation of talented players from less visible schools.</span>
+<span id="cb13-405"><a href="#cb13-405" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-408"><a href="#cb13-408" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb13-409"><a href="#cb13-409" aria-hidden="true" tabindex="-1"></a><span class="co"># --- FairStacks Optimization ---</span></span>
+<span id="cb13-410"><a href="#cb13-410" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> cp.Variable(H_val.shape[<span class="dv">1</span>])</span>
+<span id="cb13-411"><a href="#cb13-411" aria-hidden="true" tabindex="-1"></a>y_val_bin <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> y_val.values <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb13-412"><a href="#cb13-412" aria-hidden="true" tabindex="-1"></a>log_loss <span class="op">=</span> cp.<span class="bu">sum</span>(cp.logistic(<span class="op">-</span>cp.multiply(y_val_bin, H_val <span class="op">@</span> w))) <span class="op">/</span> <span class="bu">len</span>(y_val)</span>
+<span id="cb13-413"><a href="#cb13-413" aria-hidden="true" tabindex="-1"></a>fairness_penalty <span class="op">=</span> cp.<span class="bu">abs</span>(cp.<span class="bu">sum</span>(cp.multiply(w, b_hat)))</span>
+<span id="cb13-414"><a href="#cb13-414" aria-hidden="true" tabindex="-1"></a>lambda_ <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb13-415"><a href="#cb13-415" aria-hidden="true" tabindex="-1"></a>objective <span class="op">=</span> cp.Minimize(log_loss <span class="op">+</span> lambda_ <span class="op">*</span> fairness_penalty)</span>
+<span id="cb13-416"><a href="#cb13-416" aria-hidden="true" tabindex="-1"></a>constraints <span class="op">=</span> [w <span class="op">&gt;=</span> <span class="dv">0</span>, cp.<span class="bu">sum</span>(w) <span class="op">==</span> <span class="dv">1</span>]</span>
+<span id="cb13-417"><a href="#cb13-417" aria-hidden="true" tabindex="-1"></a>prob <span class="op">=</span> cp.Problem(objective, constraints)</span>
+<span id="cb13-418"><a href="#cb13-418" aria-hidden="true" tabindex="-1"></a>prob.solve()</span>
+<span id="cb13-419"><a href="#cb13-419" aria-hidden="true" tabindex="-1"></a>final_weights <span class="op">=</span> w.value</span>
+<span id="cb13-420"><a href="#cb13-420" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Final FairStacks Weights:"</span>, final_weights)</span>
+<span id="cb13-421"><a href="#cb13-421" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-422"><a href="#cb13-422" aria-hidden="true" tabindex="-1"></a><span class="co">#--- Ensemble TPR Gap ---</span></span>
+<span id="cb13-423"><a href="#cb13-423" aria-hidden="true" tabindex="-1"></a>tier_group_test <span class="op">=</span> (X_test[<span class="st">'school_tier'</span>] <span class="op">==</span> <span class="st">'Tier 1'</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb13-424"><a href="#cb13-424" aria-hidden="true" tabindex="-1"></a>ensemble_tpr_gap <span class="op">=</span> compute_tpr_gap(y_test.values, ensemble_test_preds, tier_group_test)</span>
+<span id="cb13-425"><a href="#cb13-425" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Ensemble Test TPR Gap (Tier 1 vs Others):"</span>, ensemble_tpr_gap)</span>
+<span id="cb13-426"><a href="#cb13-426" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-427"><a href="#cb13-427" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Accuracy ---</span></span>
+<span id="cb13-428"><a href="#cb13-428" aria-hidden="true" tabindex="-1"></a>ensemble_accuracy <span class="op">=</span> accuracy_score(y_test, ensemble_test_preds)</span>
+<span id="cb13-429"><a href="#cb13-429" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ensemble_accuracy)</span>
+<span id="cb13-430"><a href="#cb13-430" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-431"><a href="#cb13-431" aria-hidden="true" tabindex="-1"></a>    Final FairStacks Weights: [1.15064014e-10 1.02497679e-11 3.06854668e-13 5.65404680e-12</span>
+<span id="cb13-432"><a href="#cb13-432" aria-hidden="true" tabindex="-1"></a>     6.72544450e-11 1.00000000e+00 8.35876761e-12]</span>
+<span id="cb13-433"><a href="#cb13-433" aria-hidden="true" tabindex="-1"></a>    Ensemble Test TPR Gap (Tier 1 vs Others): 0.0</span>
+<span id="cb13-434"><a href="#cb13-434" aria-hidden="true" tabindex="-1"></a>    0.9756941583587377</span>
+<span id="cb13-435"><a href="#cb13-435" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-436"><a href="#cb13-436" aria-hidden="true" tabindex="-1"></a>The final ensemble placed nearly all its weight on the Lasso-regularized logistic regression model. This outcome reflects the model’s ability to balance strong individual accuracy with fairness across school tiers. Despite the availability of other learners, including Decision Trees and SVMs, FairStacks effectively zeroed out their contributions to reduce potential TPR gaps.</span>
+<span id="cb13-437"><a href="#cb13-437" aria-hidden="true" tabindex="-1"></a>In terms of performance, the FairStacks ensemble matched the highest observed accuracy of 97.57% and achieved a TPR gap of 0.000. This is on par with Lasso regression alone, but with the added assurance that the model was selected through a fairness-aware optimization pipeline. Meanwhile, base learners such as Naive Bayes and LDA, despite respectable accuracy, exhibited substantial TPR gaps (e.g., -0.0256 and -0.0171), suggesting bias toward non-Tier 1 players. FairStacks thus succeeds in its dual objective: it preserves predictive performance while correcting for institutional bias, a key goal in fairness modeling for the NBA draft.</span>
+<span id="cb13-438"><a href="#cb13-438" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-439"><a href="#cb13-439" aria-hidden="true" tabindex="-1"></a>::: {.columns}</span>
+<span id="cb13-440"><a href="#cb13-440" aria-hidden="true" tabindex="-1"></a>::: {.column width="33%"}</span>
+<span id="cb13-441"><a href="#cb13-441" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/TPR_Gap_Barplot.png)</span>{width=100%}</span>
+<span id="cb13-442"><a href="#cb13-442" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;TPR Gap of Base Learners and FairStacks (Tier 1 vs Others)&lt;/center&gt;</span>
+<span id="cb13-443"><a href="#cb13-443" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb13-444"><a href="#cb13-444" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-445"><a href="#cb13-445" aria-hidden="true" tabindex="-1"></a>::: {.column width="33%"}</span>
+<span id="cb13-446"><a href="#cb13-446" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/Accuracy_Barplot.png)</span>{width=100%}</span>
+<span id="cb13-447"><a href="#cb13-447" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;Accuracy of Base Learners and FairStacks (Higher is Better)&lt;/center&gt;</span>
+<span id="cb13-448"><a href="#cb13-448" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb13-449"><a href="#cb13-449" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-450"><a href="#cb13-450" aria-hidden="true" tabindex="-1"></a>::: {.column width="33%"}</span>
+<span id="cb13-451"><a href="#cb13-451" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/Ensemble_Weights_Barplot.png)</span>{width=100%}</span>
+<span id="cb13-452"><a href="#cb13-452" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;FairStacks Ensemble Weights&lt;/center&gt;</span>
+<span id="cb13-453"><a href="#cb13-453" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb13-454"><a href="#cb13-454" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb13-455"><a href="#cb13-455" aria-hidden="true" tabindex="-1"></a></span>
+</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
