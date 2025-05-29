@@ -195,7 +195,10 @@ window.Quarto = {
   <li><a href="#empirical-demonstration-of-the-equivalence-of-olsweight-decay-with-ridge-regression" id="toc-empirical-demonstration-of-the-equivalence-of-olsweight-decay-with-ridge-regression" class="nav-link" data-scroll-target="#empirical-demonstration-of-the-equivalence-of-olsweight-decay-with-ridge-regression">2.5 Empirical Demonstration of the equivalence of (OLS+Weight Decay) with Ridge Regression</a></li>
   </ul></li>
   <li><a href="#bias-and-variance-under-linear-dgp" id="toc-bias-and-variance-under-linear-dgp" class="nav-link" data-scroll-target="#bias-and-variance-under-linear-dgp">3. Bias and Variance under Linear DGP</a></li>
-  <li><a href="#bias-and-variance-under-non-linear-dgp" id="toc-bias-and-variance-under-non-linear-dgp" class="nav-link" data-scroll-target="#bias-and-variance-under-non-linear-dgp">4. Bias and Variance under Non-Linear DGP</a></li>
+  <li><a href="#bias-and-variance-under-non-linear-dgp" id="toc-bias-and-variance-under-non-linear-dgp" class="nav-link" data-scroll-target="#bias-and-variance-under-non-linear-dgp">4. Bias and Variance under Non-Linear DGP</a>
+  <ul class="collapse">
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -702,7 +705,7 @@ Comparison of Ridge Regression and OLS with Weight Decay
 <section id="bias-and-variance-under-linear-dgp" class="level1">
 <h1>3. Bias and Variance under Linear DGP</h1>
 <p>Linear DGP: y=Xβ+ϵ We assume no multicollinearity among predictors in a linear DGP. However, with real data there will be correlation between predictors, violating the assumption of independent features. I wanted to introduce controlled correlation using an AR(2) model, which models each predictor as a function of its two preceding values. I was really interested to explore how OLS and Ridge Regression behave when predictors are not independent.</p>
-<div id="a24398a6" class="cell" data-execution_count="1">
+<div id="a9dfc793" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to generate AR(2) covariance matrix</span></span>
@@ -721,7 +724,7 @@ Comparison of Ridge Regression and OLS with Weight Decay
 <span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Sigma</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="130a6775" class="cell" data-execution_count="2">
+<div id="ba9fcbdd" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to compute OLS</span></span>
@@ -741,7 +744,7 @@ Comparison of Ridge Regression and OLS with Weight Decay
 <p>I performed the Montecarlo simulations separately for OLS and Ridge Regression. In the OLS simulation, we compute the regression coefficients using the closed-form least squares estimator. For each repetition, the training set is used to fit the model, and predictions are made on both training and held-out test sets. The mean squared error (MSE), bias, and variance of the OLS estimates are computed and averaged over multiple repetitions to reduce randomness. The bias is approximated as the mean deviation of the estimated coefficients from the true coefficients, while the variance is measured as the variability of the estimated coefficients.</p>
 <p>In contrast, the Ridge regression simulation includes an additional loop over a grid of regularization parameters (lambda values). For each lambda, the Ridge estimator is used to compute the regression coefficients, and similar metrics—MSE, bias, variance, and out-of-sample error—are calculated. These values are averaged over repetitions for each lambda and then averaged again across all lambdas to obtain a summary measure for each sample size. While this approach provides a general picture of Ridge performance, a more refined strategy might involve selecting the lambda that minimizes out-of-sample error for each repetition.</p>
 <p>Both simulations aim to capture how the MSE decomposes into bias and variance components and how these change with increasing sample size. By comparing OLS and Ridge regression, the code highlights how regularization reduces variance at the cost of increased bias, often leading to better generalization on unseen data, especially when the sample size is small or when multicollinearity is present in the predictors.</p>
-<div id="dac95e9e" class="cell" data-execution_count="3">
+<div id="a008e3e3" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Storage for OLS</span></span>
@@ -783,7 +786,7 @@ Comparison of Ridge Regression and OLS with Weight Decay
 <span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>    ols_out_sample_mse[idx] <span class="op">=</span> out_sample_mse <span class="op">/</span> n_reps</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="21687618" class="cell" data-execution_count="4">
+<div id="b9e5f67c" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Storage for Ridge Regression</span></span>
@@ -844,17 +847,17 @@ Comparison of Ridge Regression and OLS with Weight Decay
 <p>In the MSE comparison plot, we observe that Ridge regression has a higher in-sample MSE than OLS across all sample sizes, which is expected due to its bias penalty. However, Ridge achieves a consistently lower out-of-sample MSE than OLS for small to moderate sample sizes. This highlights the bias-variance tradeoff in action: while Ridge sacrifices some in-sample accuracy by introducing bias, it benefits from reduced variance, leading to better generalization on unseen data. As the sample size increases to 500, both models converge in their out-of-sample performance, with OLS catching up due to its decreasing variance and absence of bias.</p>
 <div class="columns">
 <div class="column" style="width:33%;">
-<img src="images/Bias_Comparison.png" class="img-fluid" style="width:100.0%">
+<img src="images/Bias Comparison.png" class="img-fluid" style="width:100.0%">
 <center>
 Bias Comparison: OLS vs Ridge
 </center>
 </div><div class="column" style="width:33%;">
-<img src="images/Variance_Comparison.png" class="img-fluid" style="width:100.0%">
+<img src="images/Variance Comparison.png" class="img-fluid" style="width:100.0%">
 <center>
 Variance Comparison: OLS vs Ridge
 </center>
 </div><div class="column" style="width:33%;">
-<img src="images/MSE_Comparison.png" class="img-fluid" style="width:100.0%">
+<img src="images/MSE Comparison.png" class="img-fluid" style="width:100.0%">
 <center>
 MSE Comparison: OLS vs Ridge
 </center>
@@ -887,7 +890,7 @@ MSE Comparison: OLS vs Ridge
 <pre><code>             Method  Optimal Lambda (Out-of-Sample)  Out-of-Sample MSE
 0               OLS                             NaN           0.750544
 1  Ridge Regression                        0.196304           0.726801</code></pre>
-The MSE existence theorem essentially states that for some optimal λ, Ridge Regression achieves a lower expected MSE than OLS. This graph shows how the out-of-sample mean squared error (MSE) for Ridge regression varies with different values of the regularization parameter lambda, plotted on a logarithmic scale. The blue curve represents Ridge’s MSE across a wide range of lambda values. As lambda increases from very small to very large values, the model transitions from low bias–high variance to high bias–low variance behavior. When lambda is too small, the model risks overfitting, while large lambdas overly shrink the coefficients, hurting predictive accuracy. The curve dips at a lambda value around 0.1963, where the MSE is minimized. This value represents the optimal balance between bias and variance for this dataset. Beyond this point, the MSE rises rapidly as excessive regularization starts to dominate. The red dashed line indicates the out-of-sample MSE for OLS, which remains constant since OLS does not involve any regularization. The fact that the Ridge curve falls below this line around the optimal lambda shows that Ridge, when properly tuned, can outperform OLS in terms of generalization. <img src="images/Out_of_Sample_MSE.png" class="img-fluid" style="width:80.0%">
+The MSE existence theorem essentially states that for some optimal λ, Ridge Regression achieves a lower expected MSE than OLS. This graph shows how the out-of-sample mean squared error (MSE) for Ridge regression varies with different values of the regularization parameter lambda, plotted on a logarithmic scale. The blue curve represents Ridge’s MSE across a wide range of lambda values. As lambda increases from very small to very large values, the model transitions from low bias–high variance to high bias–low variance behavior. When lambda is too small, the model risks overfitting, while large lambdas overly shrink the coefficients, hurting predictive accuracy. The curve dips at a lambda value around 0.1963, where the MSE is minimized. This value represents the optimal balance between bias and variance for this dataset. Beyond this point, the MSE rises rapidly as excessive regularization starts to dominate. The red dashed line indicates the out-of-sample MSE for OLS, which remains constant since OLS does not involve any regularization. The fact that the Ridge curve falls below this line around the optimal lambda shows that Ridge, when properly tuned, can outperform OLS in terms of generalization. <img src="images/Out of Sample MSE.png" class="img-fluid" style="width:80.0%">
 <center>
 Out-of-Sample MSE vs.&nbsp;Lambda (log scale) for Ridge Regression
 </center>
@@ -901,16 +904,16 @@ Out-of-Sample MSE vs.&nbsp;Lambda (log scale) for Ridge Regression
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    y_raw <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span><span class="dv">1</span> <span class="op">+</span> X[:, <span class="dv">0</span>]))  <span class="co"># Compute logistic function using only the first predictor</span></span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> y_raw <span class="op">+</span> np.random.randn(n) <span class="op">*</span> <span class="fl">0.1</span></span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> X, y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-Aside from introducing the non-linear transformation through the sigmoid function in the data-generating process, the overall experimental setup remained consistent with the procedures described in Section 3. The same Monte Carlo simulation framework was applied to evaluate the performance of both OLS and Ridge regression under this non-linear setting. For each simulation run, synthetic datasets were generated, models were trained on a subset of the data, and evaluated on held-out test sets to compute key metrics such as bias, variance, and out-of-sample MSE. This allowed for a direct comparison between the linear and non-linear DGPs, highlighting how model assumptions interact with the underlying structure of the data. The plot compares the mean squared error of OLS and Ridge regression across increasing sample sizes under the same non-linear setting. At all sample sizes, Ridge maintains a slight advantage over OLS, consistently producing lower MSE. This suggests that even in the presence of model misspecification due to non-linearity, regularization provides a stabilizing effect by reducing variance without dramatically increasing bias. Both models show increasing MSE with larger sample sizes, which is expected in this case, since the sigmoid-transformed targets are bounded and harder to approximate well with a linear model as more data exposes more of the non-linearity. <img src="images/Non_Linear_MSE_Comparison.png" class="img-fluid" style="width:80.0%">
+Aside from introducing the non-linear transformation through the sigmoid function in the data-generating process, the overall experimental setup remained consistent with the procedures described in Section 3. The same Monte Carlo simulation framework was applied to evaluate the performance of both OLS and Ridge regression under this non-linear setting. For each simulation run, synthetic datasets were generated, models were trained on a subset of the data, and evaluated on held-out test sets to compute key metrics such as bias, variance, and out-of-sample MSE. This allowed for a direct comparison between the linear and non-linear DGPs, highlighting how model assumptions interact with the underlying structure of the data. The plot compares the mean squared error of OLS and Ridge regression across increasing sample sizes under the same non-linear setting. At all sample sizes, Ridge maintains a slight advantage over OLS, consistently producing lower MSE. This suggests that even in the presence of model misspecification due to non-linearity, regularization provides a stabilizing effect by reducing variance without dramatically increasing bias. Both models show increasing MSE with larger sample sizes, which is expected in this case, since the sigmoid-transformed targets are bounded and harder to approximate well with a linear model as more data exposes more of the non-linearity. <img src="images/Non Linear MSE Comparison.png" class="img-fluid" style="width:80.0%">
 <center>
 Comparison of OLS and Ridge MSE vs Sample Size (Non-Linear DGP)
 </center>
-The plot shows how Ridge regression performs under a non-linear data-generating process where the response is a sigmoid transformation of a linear combination of predictors. The curve captures out-of-sample MSE across a wide range of lambda values on a logarithmic scale. A noticeable dip occurs around lambda = 0.0069, indicating the optimal regularization strength that minimizes prediction error. Outside this region, the MSE fluctuates more sharply, especially at higher lambda values, where the model likely overshrinks the coefficients. The overall noise in the curve reflects the added complexity of fitting a linear model to a non-linear signal, where small changes in lambda can lead to more volatile performance. <img src="images/Ridge_Out_of_Sample_MSE.png" class="img-fluid" style="width:80.0%">
+The plot shows how Ridge regression performs under a non-linear data-generating process where the response is a sigmoid transformation of a linear combination of predictors. The curve captures out-of-sample MSE across a wide range of lambda values on a logarithmic scale. A noticeable dip occurs around lambda = 0.0069, indicating the optimal regularization strength that minimizes prediction error. Outside this region, the MSE fluctuates more sharply, especially at higher lambda values, where the model likely overshrinks the coefficients. The overall noise in the curve reflects the added complexity of fitting a linear model to a non-linear signal, where small changes in lambda can lead to more volatile performance. <img src="images/Ridge Out of Sample MSE.png" class="img-fluid" style="width:80.0%">
 <center>
 Out-of-Sample MSE vs Lambda (Log Scale) under Non-Linear DGP
 </center>
 <p><strong>B-spline Regression</strong>: I used B-spline regression to get the “best approximate” linear regression coefficients. This cubic B-spline regression with 5 degrees of freedom allows the model to smoothly fit approximate the non-linear DGP, avoiding issues of high-degree polynomials. B-spline regression is considered an OLS model because it follows the same fundamental principles of linear regression, however with a transformed feature space.</p>
-<div id="7a7b084c" class="cell" data-execution_count="5">
+<div id="71537009" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply splines to approximate the function and estimate coefficients</span></span>
@@ -924,7 +927,7 @@ Out-of-Sample MSE vs Lambda (Log Scale) under Non-Linear DGP
 <p>The goal here is to test how well spline regression can model non-linear relationships in data. For each sample size, a synthetic dataset is generated where the relationship between the features and the response is curved or non-linear. Instead of fitting a model to all predictors, the simulation focuses on just the first predictor and tries to capture its non-linear effect using spline basis functions.</p>
 <p>In each repetition, the data is split into training and test sets. A spline regression model is fit on the training set by expressing the first predictor using a set of cubic spline basis functions. These basis functions break the input into smooth polynomial pieces connected at specific points called knots. Once the model is fit, it’s used to predict outcomes on the test set, and the accuracy of these predictions is measured using mean squared error (MSE).</p>
 <p>This process is repeated many times to reduce the effect of randomness from data splits. The final MSE for each sample size is the average over all repetitions. Additionally, the spline coefficients — which determine the shape of the fitted curve — are also averaged across repetitions. This gives a sense of the typical function shape learned by the spline model and helps assess how the fitted relationship evolves as more data becomes available.</p>
-<div id="45771233" class="cell" data-execution_count="6">
+<div id="3dc21770" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Monte Carlo Simulation</span></span>
@@ -954,27 +957,34 @@ Out-of-Sample MSE vs Lambda (Log Scale) under Non-Linear DGP
 <p>The third plot presents the mean squared error of the spline predictions across different sample sizes. There is a clear downward trend: as the sample size increases, the MSE decreases steadily. This confirms that the spline model generalizes better with more data and is able to capture the non-linear structure more accurately. Unlike linear models, which can suffer from persistent bias under non-linear DGPs, spline regression benefits directly from sample size by refining its fit to the curved underlying function.</p>
 <div class="columns">
 <div class="column" style="width:33%;">
-<img src="images/Spline_approximation_to_Non_Linear_Function.png" class="img-fluid" style="width:100.0%">
+<img src="images/Spline approximation to Non Linear Function.png" class="img-fluid" style="width:100.0%">
 <center>
 Spline Approximation to Non-Linear Function
 </center>
 </div><div class="column" style="width:33%;">
-<img src="images/Convergence_of_spline_coeff.png" class="img-fluid" style="width:100.0%">
+<img src="images/Convergence of spline coeff.png" class="img-fluid" style="width:100.0%">
 <center>
 Convergence of Best Approximate Spline Coefficients
 </center>
 </div><div class="column" style="width:33%;">
-<img src="images/MSE_of_Splines_approx.png" class="img-fluid" style="width:100.0%">
+<img src="images/MSE of Splines approx.png" class="img-fluid" style="width:100.0%">
 <center>
 MSE of Spline Approximation vs Sample Size
 </center>
 </div>
 </div>
-<p>References: SNU AI. (n.d.). The bias-variance trade-off: A mathematical view. Medium. Retrieved from https://medium.com/snu-ai/the-bias-variance-trade-off-a-mathematical-view-14ff9dfe5a3c Shubham, S. (n.d.). All about Gauss-Markov theorem for ordinary least squares regression (OLS) &amp; BLUE properties of OLS estimators. Medium. Retrieved from https://medium.com/<span class="citation" data-cites="shubhamsd100/all-about-gauss">@shubhamsd100/all-about-gauss</span>- markov-theorem-for-ordinary-least-squares-regression-ols-blue-properties-of-e1e1864fe087 Weylandt, M. (n.d.). STA9890 notes. Retrieved from https://michael-weylandt.com/STA9890/notes.html</p>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<ul>
+<li><p>SNU AI. (n.d.). <em>The bias-variance trade-off: A mathematical view</em>. Medium. <a href="https://medium.com/snu-ai/the-bias-variance-trade-off-a-mathematical-view-14ff9dfe5a3c">https://medium.com/snu-ai/the-bias-variance-trade-off-a-mathematical-view-14ff9dfe5a3c</a></p></li>
+<li><p>Shubham, S. (n.d.). <em>All about Gauss-Markov theorem for ordinary least squares regression (OLS) &amp; BLUE properties of OLS estimators</em>. Medium. <a href="https://medium.com/@shubhamsd100/all-about-gauss-markov-theorem-for-ordinary-least-squares-regression-ols-blue-properties-of-e1e1864fe087">https://medium.com/<span class="citation" data-cites="shubhamsd100/all-about-gauss-markov-theorem-for-ordinary-least-squares-regression-ols-blue-properties-of-e1e1864fe087">@shubhamsd100/all-about-gauss-markov-theorem-for-ordinary-least-squares-regression-ols-blue-properties-of-e1e1864fe087</span></a></p></li>
+<li><p>Weylandt, M. (n.d.). <em>STA9890 Notes</em>. Retrieved from <a href="https://michael-weylandt.com/STA9890/notes.html">https://michael-weylandt.com/STA9890/notes.html</a></p></li>
+</ul>
 
 
 <!-- -->
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -2327,17 +2337,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb20-887"><a href="#cb20-887" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-888"><a href="#cb20-888" aria-hidden="true" tabindex="-1"></a>::: {.columns}</span>
 <span id="cb20-889"><a href="#cb20-889" aria-hidden="true" tabindex="-1"></a>::: {.column width="33%"}</span>
-<span id="cb20-890"><a href="#cb20-890" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/Bias_Comparison.png)</span>{width=100%}</span>
+<span id="cb20-890"><a href="#cb20-890" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/Bias Comparison.png)</span>{width=100%}</span>
 <span id="cb20-891"><a href="#cb20-891" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;Bias Comparison: OLS vs Ridge&lt;/center&gt;</span>
 <span id="cb20-892"><a href="#cb20-892" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb20-893"><a href="#cb20-893" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-894"><a href="#cb20-894" aria-hidden="true" tabindex="-1"></a>::: {.column width="33%"}</span>
-<span id="cb20-895"><a href="#cb20-895" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/Variance_Comparison.png)</span>{width=100%}</span>
+<span id="cb20-895"><a href="#cb20-895" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/Variance Comparison.png)</span>{width=100%}</span>
 <span id="cb20-896"><a href="#cb20-896" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;Variance Comparison: OLS vs Ridge&lt;/center&gt;</span>
 <span id="cb20-897"><a href="#cb20-897" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb20-898"><a href="#cb20-898" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-899"><a href="#cb20-899" aria-hidden="true" tabindex="-1"></a>::: {.column width="33%"}</span>
-<span id="cb20-900"><a href="#cb20-900" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/MSE_Comparison.png)</span>{width=100%}</span>
+<span id="cb20-900"><a href="#cb20-900" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/MSE Comparison.png)</span>{width=100%}</span>
 <span id="cb20-901"><a href="#cb20-901" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;MSE Comparison: OLS vs Ridge&lt;/center&gt;</span>
 <span id="cb20-902"><a href="#cb20-902" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb20-903"><a href="#cb20-903" aria-hidden="true" tabindex="-1"></a>:::</span>
@@ -2377,7 +2387,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb20-937"><a href="#cb20-937" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-938"><a href="#cb20-938" aria-hidden="true" tabindex="-1"></a>The MSE existence theorem essentially states that for some optimal λ, Ridge Regression achieves a lower expected MSE than OLS. This graph shows how the out-of-sample mean squared error (MSE) for Ridge regression varies with different values of the regularization parameter lambda, plotted on a logarithmic scale. The blue curve represents Ridge’s MSE across a wide range of lambda values. As lambda increases from very small to very large values, the model transitions from low bias–high variance to high bias–low variance behavior. When lambda is too small, the model risks overfitting, while large lambdas overly shrink the coefficients, hurting predictive accuracy.</span>
 <span id="cb20-939"><a href="#cb20-939" aria-hidden="true" tabindex="-1"></a>The curve dips at a lambda value around 0.1963, where the MSE is minimized. This value represents the optimal balance between bias and variance for this dataset. Beyond this point, the MSE rises rapidly as excessive regularization starts to dominate. The red dashed line indicates the out-of-sample MSE for OLS, which remains constant since OLS does not involve any regularization. The fact that the Ridge curve falls below this line around the optimal lambda shows that Ridge, when properly tuned, can outperform OLS in terms of generalization.</span>
-<span id="cb20-940"><a href="#cb20-940" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/Out_of_Sample_MSE.png)</span>{width=80%}</span>
+<span id="cb20-940"><a href="#cb20-940" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/Out of Sample MSE.png)</span>{width=80%}</span>
 <span id="cb20-941"><a href="#cb20-941" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;Out-of-Sample MSE vs. Lambda (log scale) for Ridge Regression&lt;/center&gt;</span>
 <span id="cb20-942"><a href="#cb20-942" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb20-943"><a href="#cb20-943" aria-hidden="true" tabindex="-1"></a><span class="fu"># 4. Bias and Variance under Non-Linear DGP</span></span>
@@ -2394,11 +2404,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb20-954"><a href="#cb20-954" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb20-955"><a href="#cb20-955" aria-hidden="true" tabindex="-1"></a>Aside from introducing the non-linear transformation through the sigmoid function in the data-generating process, the overall experimental setup remained consistent with the procedures described in Section 3. The same Monte Carlo simulation framework was applied to evaluate the performance of both OLS and Ridge regression under this non-linear setting. For each simulation run, synthetic datasets were generated, models were trained on a subset of the data, and evaluated on held-out test sets to compute key metrics such as bias, variance, and out-of-sample MSE. This allowed for a direct comparison between the linear and non-linear DGPs, highlighting how model assumptions interact with the underlying structure of the data.</span>
 <span id="cb20-956"><a href="#cb20-956" aria-hidden="true" tabindex="-1"></a>The plot compares the mean squared error of OLS and Ridge regression across increasing sample sizes under the same non-linear setting. At all sample sizes, Ridge maintains a slight advantage over OLS, consistently producing lower MSE. This suggests that even in the presence of model misspecification due to non-linearity, regularization provides a stabilizing effect by reducing variance without dramatically increasing bias. Both models show increasing MSE with larger sample sizes, which is expected in this case, since the sigmoid-transformed targets are bounded and harder to approximate well with a linear model as more data exposes more of the non-linearity.</span>
-<span id="cb20-957"><a href="#cb20-957" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/Non_Linear_MSE_Comparison.png)</span>{width=80%}</span>
+<span id="cb20-957"><a href="#cb20-957" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/Non Linear MSE Comparison.png)</span>{width=80%}</span>
 <span id="cb20-958"><a href="#cb20-958" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;Comparison of OLS and Ridge MSE vs Sample Size (Non-Linear DGP)&lt;/center&gt;</span>
 <span id="cb20-959"><a href="#cb20-959" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-960"><a href="#cb20-960" aria-hidden="true" tabindex="-1"></a>The plot shows how Ridge regression performs under a non-linear data-generating process where the response is a sigmoid transformation of a linear combination of predictors. The curve captures out-of-sample MSE across a wide range of lambda values on a logarithmic scale. A noticeable dip occurs around lambda = 0.0069, indicating the optimal regularization strength that minimizes prediction error. Outside this region, the MSE fluctuates more sharply, especially at higher lambda values, where the model likely overshrinks the coefficients. The overall noise in the curve reflects the added complexity of fitting a linear model to a non-linear signal, where small changes in lambda can lead to more volatile performance.</span>
-<span id="cb20-961"><a href="#cb20-961" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/Ridge_Out_of_Sample_MSE.png)</span>{width=80%}</span>
+<span id="cb20-961"><a href="#cb20-961" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/Ridge Out of Sample MSE.png)</span>{width=80%}</span>
 <span id="cb20-962"><a href="#cb20-962" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;Out-of-Sample MSE vs Lambda (Log Scale) under Non-Linear DGP&lt;/center&gt;</span>
 <span id="cb20-963"><a href="#cb20-963" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-964"><a href="#cb20-964" aria-hidden="true" tabindex="-1"></a>**B-spline Regression**: I used B-spline regression to get the “best approximate” linear regression coefficients. This cubic B-spline regression with 5 degrees of freedom allows the model to smoothly fit approximate the non-linear DGP, avoiding issues of high-degree polynomials. B-spline regression is considered an OLS model because it follows the same fundamental principles of linear regression, however with a transformed feature space.</span>
@@ -2446,26 +2456,28 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb20-1010"><a href="#cb20-1010" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-1011"><a href="#cb20-1011" aria-hidden="true" tabindex="-1"></a>::: {.columns}</span>
 <span id="cb20-1012"><a href="#cb20-1012" aria-hidden="true" tabindex="-1"></a>::: {.column width="33%"}</span>
-<span id="cb20-1013"><a href="#cb20-1013" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/Spline_approximation_to_Non_Linear_Function.png)</span>{width=100%}</span>
+<span id="cb20-1013"><a href="#cb20-1013" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/Spline approximation to Non Linear Function.png)</span>{width=100%}</span>
 <span id="cb20-1014"><a href="#cb20-1014" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;Spline Approximation to Non-Linear Function&lt;/center&gt;</span>
 <span id="cb20-1015"><a href="#cb20-1015" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb20-1016"><a href="#cb20-1016" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-1017"><a href="#cb20-1017" aria-hidden="true" tabindex="-1"></a>::: {.column width="33%"}</span>
-<span id="cb20-1018"><a href="#cb20-1018" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/Convergence_of_spline_coeff.png)</span>{width=100%}</span>
+<span id="cb20-1018"><a href="#cb20-1018" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/Convergence of spline coeff.png)</span>{width=100%}</span>
 <span id="cb20-1019"><a href="#cb20-1019" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;Convergence of Best Approximate Spline Coefficients&lt;/center&gt;</span>
 <span id="cb20-1020"><a href="#cb20-1020" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb20-1021"><a href="#cb20-1021" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-1022"><a href="#cb20-1022" aria-hidden="true" tabindex="-1"></a>::: {.column width="33%"}</span>
-<span id="cb20-1023"><a href="#cb20-1023" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/MSE_of_Splines_approx.png)</span>{width=100%}</span>
+<span id="cb20-1023"><a href="#cb20-1023" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/MSE of Splines approx.png)</span>{width=100%}</span>
 <span id="cb20-1024"><a href="#cb20-1024" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;MSE of Spline Approximation vs Sample Size&lt;/center&gt;</span>
 <span id="cb20-1025"><a href="#cb20-1025" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb20-1026"><a href="#cb20-1026" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb20-1027"><a href="#cb20-1027" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-1028"><a href="#cb20-1028" aria-hidden="true" tabindex="-1"></a>References:</span>
-<span id="cb20-1029"><a href="#cb20-1029" aria-hidden="true" tabindex="-1"></a>SNU AI. (n.d.). The bias-variance trade-off: A mathematical view. Medium. Retrieved from</span>
-<span id="cb20-1030"><a href="#cb20-1030" aria-hidden="true" tabindex="-1"></a>https://medium.com/snu-ai/the-bias-variance-trade-off-a-mathematical-view-14ff9dfe5a3c</span>
-<span id="cb20-1031"><a href="#cb20-1031" aria-hidden="true" tabindex="-1"></a>Shubham, S. (n.d.). All about Gauss-Markov theorem for ordinary least squares regression (OLS) &amp; BLUE properties of OLS estimators. Medium. Retrieved from https://medium.com/@shubhamsd100/all-about-gauss- markov-theorem-for-ordinary-least-squares-regression-ols-blue-properties-of-e1e1864fe087</span>
-<span id="cb20-1032"><a href="#cb20-1032" aria-hidden="true" tabindex="-1"></a>Weylandt, M. (n.d.). STA9890 notes. Retrieved from https://michael-weylandt.com/STA9890/notes.html</span>
+<span id="cb20-1028"><a href="#cb20-1028" aria-hidden="true" tabindex="-1"></a><span class="fu">##  References</span></span>
+<span id="cb20-1029"><a href="#cb20-1029" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-1030"><a href="#cb20-1030" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>SNU AI. (n.d.). *The bias-variance trade-off: A mathematical view*. Medium. <span class="co">[</span><span class="ot">https://medium.com/snu-ai/the-bias-variance-trade-off-a-mathematical-view-14ff9dfe5a3c</span><span class="co">](https://medium.com/snu-ai/the-bias-variance-trade-off-a-mathematical-view-14ff9dfe5a3c)</span></span>
+<span id="cb20-1031"><a href="#cb20-1031" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-1032"><a href="#cb20-1032" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Shubham, S. (n.d.). *All about Gauss-Markov theorem for ordinary least squares regression (OLS) &amp; BLUE properties of OLS estimators*. Medium. <span class="co">[</span><span class="ot">https://medium.com/@shubhamsd100/all-about-gauss-markov-theorem-for-ordinary-least-squares-regression-ols-blue-properties-of-e1e1864fe087</span><span class="co">](https://medium.com/@shubhamsd100/all-about-gauss-markov-theorem-for-ordinary-least-squares-regression-ols-blue-properties-of-e1e1864fe087)</span></span>
+<span id="cb20-1033"><a href="#cb20-1033" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-1034"><a href="#cb20-1034" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Weylandt, M. (n.d.). *STA9890 Notes*. Retrieved from <span class="co">[</span><span class="ot">https://michael-weylandt.com/STA9890/notes.html</span><span class="co">](https://michael-weylandt.com/STA9890/notes.html)</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
