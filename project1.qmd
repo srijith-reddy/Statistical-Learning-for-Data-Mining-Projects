@@ -160,146 +160,184 @@ x:independent variable
 
 7-No Multicollinearity:The explanatory variables are uncorrelated.
 
-**Unbiased Property**
+## Unbiased Property
 
 The OLS estimator is given by:
 
-$$ \hat{\beta}_{OLS} = (X^T X)^{-1} X^T Y $$
+$$
+\hat{\beta}_{\text{OLS}} = (X^T X)^{-1} X^T Y
+$$
 
 Taking expectations:
 
-$$ E[\hat{\beta}_{OLS}] = E[(X^T X)^{-1} X^T Y] $$
+$$
+\mathbb{E}[\hat{\beta}_{\text{OLS}}] = \mathbb{E}[(X^T X)^{-1} X^T Y]
+$$
 
-Substituting $ Y = X \beta + \epsilon $:
+Substituting $Y = X \beta + \epsilon$:
 
-$$ E[\hat{\beta}_{OLS}] = (X^T X)^{-1} X^T E[X \beta + \epsilon] $$
+$$
+\mathbb{E}[\hat{\beta}_{\text{OLS}}] = (X^T X)^{-1} X^T \mathbb{E}[X \beta + \epsilon]
+$$
 
-By OLS $ E[\epsilon] = 0 $:
+Using $\mathbb{E}[\epsilon] = 0$:
 
-$$ E[\hat{\beta}_{OLS}] = (X^T X)^{-1} X^T (X \beta) $$
+$$
+\mathbb{E}[\hat{\beta}_{\text{OLS}}] = (X^T X)^{-1} X^T X \beta = \beta
+$$
 
-$$ = (X^T X)^{-1} X^T X \beta $$
+Thus, $\hat{\beta}_{\text{OLS}}$ is an unbiased estimator of $\beta$.
 
-$$ = \beta $$
+---
 
-Thus, $ \hat{\beta}_{OLS} $ is an unbiased estimator of $ \beta $.
+## Best Property
 
+The variance of $\hat{\beta}_{\text{OLS}}$ is:
 
-**Best Property**
+$$
+\text{Var}[\hat{\beta}_{\text{OLS}}] = \text{Var}[(X^T X)^{-1} X^T Y]
+$$
 
-The variance of $ \hat{\beta}_{OLS} $ is:
+Using $Y = X \beta + \epsilon$:
 
-$$ V[\hat{\beta}_{OLS}] = V[(X^T X)^{-1} X^T Y] $$
+$$
+\text{Var}[\hat{\beta}_{\text{OLS}}] = \text{Var}[(X^T X)^{-1} X^T (X \beta + \epsilon)]
+$$
 
-Using $ Y = X\beta + \epsilon $:
+Since $\beta$ is a constant:
 
-$$ V[\hat{\beta}_{OLS}] = V[(X^T X)^{-1} X^T (X\beta + \epsilon)] $$
+$$
+\text{Var}[\hat{\beta}_{\text{OLS}}] = (X^T X)^{-1} X^T \text{Var}[\epsilon] X (X^T X)^{-1}
+$$
 
-Since $ \beta $ is a constant:
+Assuming $\epsilon \sim \mathcal{N}(0, \sigma^2 I)$, we substitute $\text{Var}[\epsilon] = \sigma^2 I$:
 
-$$ V[\hat{\beta}_{OLS}] = (X^T X)^{-1} X^T V[\epsilon] X (X^T X)^{-1} $$
+$$
+\text{Var}[\hat{\beta}_{\text{OLS}}] = (X^T X)^{-1} X^T (\sigma^2 I) X (X^T X)^{-1} = \sigma^2 (X^T X)^{-1}
+$$
 
-Assuming $ \epsilon \sim N(0, \sigma^2 I) $, we substitute $ V[\epsilon] = \sigma^2 I $:
+---
 
-$$ V[\hat{\beta}_{OLS}] = (X^T X)^{-1} X^T (\sigma^2 I) X (X^T X)^{-1} $$
-
-$$ = \sigma^2 (X^T X)^{-1} $$
-
-Thus, the variance of the OLS estimator is:
-
-$$ V[\hat{\beta}_{OLS}] = \sigma^2 (X^T X)^{-1} $$
-
-
-**Minimum Variance Property**
+## Minimum Variance Property
 
 For any other unbiased linear estimator:
 
-$$ \hat{\beta}_{other} = C Y $$
+$$
+\hat{\beta}_{\text{other}} = C Y
+$$
 
-where $ C $ is a matrix satisfying $ E[\hat{\beta}_{other}] = \beta $.
+where $C$ is a matrix such that $\mathbb{E}[\hat{\beta}_{\text{other}}] = \beta$.
 
 Expanding:
 
-$$ \hat{\beta}_{other} = C(X \beta + \epsilon) $$
+$$
+\hat{\beta}_{\text{other}} = C (X \beta + \epsilon) = C X \beta + C \epsilon
+$$
 
-$$ = C X \beta + C \epsilon $$
+For unbiasedness, we require:
 
-For unbiasedness:
+$$
+C X = I
+$$
 
-$$ C X = I $$
+So, $C$ can be written as:
 
-Thus, $ C $ can be written as:
+$$
+C = (X^T X)^{-1} X^T + D
+$$
 
-$$ C = (X^T X)^{-1} X^T + D $$
+where $D$ is a matrix such that $D X = 0$.
 
-where $ D $ is an arbitrary matrix satisfying $ D X = 0 $.
+Now compute the variance:
 
-Computing variance:
+$$
+\text{Var}[\hat{\beta}_{\text{other}}] = \text{Var}[(X^T X)^{-1} X^T Y + D Y]
+$$
 
-$$ V[\hat{\beta}_{other}] = V[(X^T X)^{-1} X^T Y + D Y] $$
+Substituting $Y = X \beta + \epsilon$ and using $\text{Var}[\epsilon] = \sigma^2 I$:
 
-Using $ V[\epsilon] = \sigma^2 I $:
+$$
+\text{Var}[\hat{\beta}_{\text{other}}] = \sigma^2 (X^T X)^{-1} + \sigma^2 D D^T
+$$
 
-$$ V[\hat{\beta}_{other}] = \sigma^2 (X^T X)^{-1} + \sigma^2 D D^T $$
+Since $D D^T$ is positive semi-definite:
 
-Since $ D D^T $ is a positive semi-definite matrix, we conclude:
+$$
+\text{Var}[\hat{\beta}_{\text{other}}] \geq \text{Var}[\hat{\beta}_{\text{OLS}}]
+$$
 
-$$ V[\hat{\beta}_{other}] \geq V[\hat{\beta}_{OLS}] $$
+Which implies:
 
-which implies:
+$$
+\mathbb{E}[(\hat{\beta}_{\text{other}} - \beta)^2] \geq \mathbb{E}[(\hat{\beta}_{\text{OLS}} - \beta)^2]
+$$
 
-$$ E[(\hat{\beta}_{other} - \beta)^2] \geq E[(\hat{\beta}_{OLS} - \beta)^2] $$
+---
 
+## Conclusion: Gauss-Markov Theorem
 
 Since OLS is:
-1. Unbiased: $ E[\hat{\beta}_{OLS}] = \beta $.
-2. Efficient: $ V[\hat{\beta}_{OLS}] $ is the lowest possible variance among unbiased estimators.
+1. Unbiased: $\mathbb{E}[\hat{\beta}_{\text{OLS}}] = \beta$  
+2. Efficient: $\text{Var}[\hat{\beta}_{\text{OLS}}]$ is the lowest among all unbiased linear estimators
 
-By the Gauss-Markov theorem:
+By the **Gauss-Markov Theorem**:
 
-$$ \Rightarrow \text{OLS is the Best Linear Unbiased Estimator.} $$
+$$
+\Rightarrow \text{OLS is the Best Linear Unbiased Estimator (BLUE).}
+$$
 
 
 # 2. Computation
 
-## 2.1 Derivation of the OLS Closed-Form Solution**
+### 2.1 Derivation of the OLS Closed-Form Solution
 
 Ordinary Least Squares (OLS) aims to minimize the sum of squared errors between the predicted and actual values in a linear regression model. The problem is formulated as:
 
-$$\hat{\beta} = \arg\min_{\beta \in \mathbb{R}^p} \frac{1}{n} \| y - X\beta \|_2^2.$$
+$$
+\hat{\beta} = \arg\min_{\beta \in \mathbb{R}^p} \frac{1}{n} \| y - X\beta \|_2^2
+$$
 
 where:
 
-- $ y $ is the $ n \times 1 $ vector of observed dependent variable values,  
-- $ X $ is the $ n \times p $ feature matrix (with $ n $ observations and $ p $ features),  
-- $ \beta $ is the $ p \times 1 $ vector of regression coefficients.  
+- $y$ is the $n \times 1$ vector of observed dependent variable values,  
+- $X$ is the $n \times p$ feature matrix (with $n$ observations and $p$ features),  
+- $\beta$ is the $p \times 1$ vector of regression coefficients.  
 
 For convenience, we modify this slightly:
 
-$$\hat{\beta} = \arg\min_{\beta \in \mathbb{R}^p} \frac{1}{2} \| y - X\beta \|_2^2.$$
+$$
+\hat{\beta} = \arg\min_{\beta \in \mathbb{R}^p} \frac{1}{2} \| y - X\beta \|_2^2
+$$
 
-Expanding the squared norm,
+Expanding the squared norm:
 
-$$\| y - X\beta \|_2^2 = (y - X\beta)^T (y - X\beta).$$
+$$
+\| y - X\beta \|_2^2 = (y - X\beta)^T (y - X\beta)
+$$
 
 Thus, the objective function becomes:
 
-$$S(\beta) = \frac{1}{2} (y - X\beta)^T (y - X\beta).$$
+$$
+S(\beta) = \frac{1}{2} (y - X\beta)^T (y - X\beta)
+$$
 
-Taking the derivative,
+Taking the derivative:
 
-$$\frac{d}{d\beta} S(\beta) = \frac{1}{2} \cdot 2 X^T (X\beta - y) = X^T (X\beta - y).$$
+$$
+\frac{d}{d\beta} S(\beta) = \frac{1}{2} \cdot 2 X^T (X\beta - y) = X^T (X\beta - y)
+$$
 
 Setting the gradient to zero for minimization:
 
-$$X^T X \beta = X^T y.$$
+$$
+X^T X \beta = X^T y
+$$
 
-Assuming $X^T X$ is invertible(not singular or det($X^T X$)=0):
+Assuming $X^T X$ is invertible (i.e., $\det(X^T X) \neq 0$):
 
-$$\hat{\beta} = (X^T X)^{-1} X^T y.$$
-
-
-
+$$
+\hat{\beta} = (X^T X)^{-1} X^T y
+$$
 
 ```{python}
 import numpy as np
@@ -320,24 +358,22 @@ determinant = np.linalg.det(XTX)
 if determinant == 0:
     print("Singular matrix, choosing a different dataset.")
 else:
-    # Solve for weight vector w using the closed-form OLS solution
+    # Solve for beta using the closed-form OLS solution
     beta = np.linalg.inv(XTX) @ X.T @ y
     print("\nBeta:\n", beta)
-
-
 ```
 
     
     Beta:
      [-55.  90. -40.]
 
-
-## 2.2 Derivation of the Ridge Regression Closed form Solution**
+### 2.2 Derivation of the Ridge Regression Closed form Solution**
 
 Ridge Regression extends Ordinary Least Squares (OLS) by adding a regularization term to prevent overfitting and handle singular matrices. The optimization problem is:
 
-$$\hat{\beta} = \arg\min_{\beta \in \mathbb{R}^p} \frac{1}{2} \| y - X\beta \|_2^2 + \frac{\lambda}{2} \| \beta \|_2^2.$$
-
+$$
+\hat{\beta} = \arg\min_{\beta \in \mathbb{R}^p} \frac{1}{2} \| y - X\beta \|_2^2 + \frac{\lambda}{2} \| \beta \|_2^2
+$$
 
 - $\lambda$ is the regularization parameter, controlling the penalty on large coefficients.
 
@@ -345,51 +381,50 @@ The Ridge Regression objective function consists of two terms:
 1. Residual Sum of Squares (RSS): Measures the error in predictions.
 2. L2 Regularization Term: Penalizes large values of $\beta$.
 
-$$\
-S(\beta) = \frac{1}{2} (y - X\beta)^T (y - X\beta) + \frac{\lambda}{2} \beta^T \beta.
-\$$
+$$
+S(\beta) = \frac{1}{2} (y - X\beta)^T (y - X\beta) + \frac{\lambda}{2} \beta^T \beta
+$$
 
 Expanding the first term:
 
-$$\
-(y - X\beta)^T (y - X\beta) = y^T y - 2\beta^T X^T y + \beta^T X^T X \beta.
-\$$
+$$
+(y - X\beta)^T (y - X\beta) = y^T y - 2\beta^T X^T y + \beta^T X^T X \beta
+$$
 
 Thus, the objective function becomes:
 
 $$
-S(\beta) = \frac{1}{2} \left( y^T y - 2\beta^T X^T y + \beta^T X^T X \beta \right) + \frac{\lambda}{2} \beta^T \beta.
+S(\beta) = \frac{1}{2} \left( y^T y - 2\beta^T X^T y + \beta^T X^T X \beta \right) + \frac{\lambda}{2} \beta^T \beta
 $$
 
 Taking the derivative:
 
-$$\
-\frac{d}{d\beta} S(\beta) = \frac{1}{2} \left( -2X^T y + 2X^T X \beta \right) + \frac{1}{2} \left( 2\lambda \beta \right).
-\$$
+$$
+\frac{d}{d\beta} S(\beta) = \frac{1}{2} \left( -2X^T y + 2X^T X \beta \right) + \frac{1}{2} \left( 2\lambda \beta \right)
+$$
 
 Simplifying:
 
-$$\
-X^T X \beta - X^T y + \lambda \beta = 0.
-\$$
+$$
+X^T X \beta - X^T y + \lambda \beta = 0
+$$
 
 Rearrange to solve for $\beta$:
 
-$$\
-(X^T X + \lambda I) \beta = X^T y.
-\$$
+$$
+(X^T X + \lambda I) \beta = X^T y
+$$
 
-$$\
-\hat{\beta} = (X^T X + \lambda I)^{-1} X^T y.
-\$$
+$$
+\hat{\beta} = (X^T X + \lambda I)^{-1} X^T y
+$$
 
 Key Insights:  
-Regularization Ensures Invertibility
-   - Unlike OLS, where $X^T X$ might be singular, Ridge Regression adds $\lambda I$, making $(X^T X + \lambda I)$ always invertible for $\lambda > 0$.
-   
-Prevents Overfitting
-   - Large values of $\beta$ are penalized, reducing variance and improving generalization.
+**Regularization Ensures Invertibility**  
+- Unlike OLS, where $X^T X$ might be singular, Ridge Regression adds $\lambda I$, making $(X^T X + \lambda I)$ always invertible for $\lambda > 0$.  
 
+**Prevents Overfitting**  
+- Large values of $\beta$ are penalized, reducing variance and improving generalization.
 
 ```{python}
 import numpy as np
@@ -414,8 +449,8 @@ ridge_matrix = XTX + lambda_ * I
 beta_ridge = np.linalg.inv(ridge_matrix) @ X.T @ y
 
 print("\nRidge Regression Beta:\n", beta_ridge)
-
 ```
+
 
     
     Ridge Regression Beta:
@@ -423,50 +458,59 @@ print("\nRidge Regression Beta:\n", beta_ridge)
 
 
 
-## 2.3 Derivation of Gradient Descent for OLS
+### 2.3 Derivation of Gradient Descent for OLS
 
-Instead of solving $ \beta = (X^T X)^{-1} X^T y $ directly, we use Gradient Descent.
+Instead of solving $\beta = (X^T X)^{-1} X^T y$ directly, we use Gradient Descent.
 
 The Mean Squared Error (MSE) is used as the loss function:
 
-$$ S(\beta) = \frac{1}{2n} \sum_{i=1}^{n} (y_i - X_i\beta)^2. $$
+$$
+S(\beta) = \frac{1}{2n} \sum_{i=1}^{n} (y_i - X_i\beta)^2
+$$
 
 This can be rewritten in matrix form:
 
-$$ S(\beta) = \frac{1}{2n} (y - X\beta)^T (y - X\beta). $$
+$$
+S(\beta) = \frac{1}{2n} (y - X\beta)^T (y - X\beta)
+$$
 
+To minimize $S(\beta)$, we compute its gradient:
 
-To minimize $ S(\beta) $, we compute its gradient:
+$$
+\frac{d}{d\beta} S(\beta) = -\frac{1}{n} X^T (y - X\beta)
+$$
 
-$$ \frac{d}{d\beta} S(\beta) = -\frac{1}{n} X^T (y - X\beta). $$
+This gradient tells us the direction in which we should move $\beta$ to reduce the error.
 
-This gradient tells us the direction in which we should move $ \beta $ to reduce the error.
+Using Gradient Descent, we iteratively update $\beta$ as:
 
-Using Gradient Descent, we iteratively update $ \beta $ as:
-
-$$ \beta^{(t+1)} = \beta^{(t)} - \alpha \cdot \left(-\frac{1}{n} X^T (y - X\beta^{(t)})\right). $$
+$$
+\beta^{(t+1)} = \beta^{(t)} - \alpha \cdot \left(-\frac{1}{n} X^T (y - X\beta^{(t)})\right)
+$$
 
 where:
 - $\alpha$ is the learning rate (step size),
 - $t$ represents the iteration number.
 
-Simplifying,
+Simplifying:
 
-$$ \beta^{(t+1)} = \beta^{(t)} + \frac{\alpha}{n} X^T (y - X\beta^{(t)}). $$
+$$
+\beta^{(t+1)} = \beta^{(t)} + \frac{\alpha}{n} X^T (y - X\beta^{(t)})
+$$
 
 This process is repeated until convergence.
 
-Important things to remember:
+**Important things to remember:**
 
-- Learning Rate $ \alpha $:  
-  - If too large, the updates may overshoot and diverge.
-  - If too small, the process may take too long.
-  
-- Stopping Criteria:  
-  - If the change in $ \beta $ is very small, we stop early to save computation.
+- **Learning Rate $\alpha$**:  
+  - If too large, the updates may overshoot and diverge.  
+  - If too small, the process may take too long.  
 
-- Feature Scaling:  
-  - Gradient Descent works better if features are scaled(like using standardization).
+- **Stopping Criteria**:  
+  - If the change in $\beta$ is very small, we stop early to save computation.  
+
+- **Feature Scaling**:  
+  - Gradient Descent works better if features are scaled (like using standardization).
 
 ```{python}
 import numpy as np
@@ -513,7 +557,7 @@ print("\nOLS Beta (Gradient Descent):\n", beta)
      [ 1.56502404]]
 
 
-## 2.4 OLS Gradient Descent with Weight Decay
+### 2.4 OLS Gradient Descent with Weight Decay
 
 Weight Decay is a regularization technique that discourages large weights by adding a penalty term to the loss function. It is equivalent to L2 regularization(used in Ridge Regression) and helps prevent overfitting.
 
@@ -523,9 +567,9 @@ $$
 S(\beta) = \frac{1}{2n} \sum_{i=1}^{n} (y_i - X\beta)^2 + \frac{\lambda}{2} \|\beta\|_2^2
 $$
 
-where:
-- The first term is the standard Mean Squared Error (MSE) loss.
-- The second term is the L2 regularization (weight decay), where $\lambda$ is the weight decay parameter.
+- where:
+   - The first term is the standard Mean Squared Error (MSE) loss.
+   - The second term is the L2 regularization (weight decay), where $\lambda$ is the weight decay parameter.
 
 
 To minimize $S(\beta)$, we compute its gradient.
@@ -554,10 +598,10 @@ $$
 \beta^{(t+1)} = \beta^{(t)} + \alpha \left( \frac{1}{n} X^T (y - X\beta^{(t)}) - \lambda \beta^{(t)} \right)
 $$
 
-where:
-- $\alpha$ is the learning rate.
-- $\lambda$ is the weight decay parameter.
-- The second term shrinks the weights, preventing them from growing too large.
+- where:
+    - $\alpha$ is the learning rate.
+    - $\lambda$ is the weight decay parameter.
+    - The second term shrinks the weights, preventing them from growing too large.
 
 
 ```{python}
@@ -605,39 +649,37 @@ print("\nRidge Regression Beta (Gradient Descent):\n", beta)
      [ 1.64430062]]
 
 
-**Justification for Low $ \lambda $ (Weight Decay) and $ \alpha $ (Learning Rate)**
+**Justification for Low $\lambda$ (Weight Decay) and $\alpha$ (Learning Rate)**
 
-1.Why Use a Low $ \lambda $?
+**1. Why Use a Low $\lambda$?**
 
-The regularization term $ \frac{\lambda}{2} \|\beta\|_2^2 $ discourages large weights, improving generalization.
+The regularization term $\frac{\lambda}{2} \|\beta\|_2^2$ discourages large weights, improving generalization.
 
-A high $ \lambda $ can:
-- Over-penalize large coefficients, causing underfitting.
-- Slow down convergence in Gradient Descent.
-- Shrink weights excessively, distorting data relationships.
+- A high $\lambda$ can:
+  - Over-penalize large coefficients, causing underfitting.
+  - Slow down convergence in Gradient Descent.
+  - Shrink weights excessively, distorting data relationships.
 
-A low $ \lambda $:
-- Preserves meaningful information.
-- Balances regularization and model complexity.
-- Ensures smooth weight decay without over-shrinking.
+- A low $\lambda$:
+  - Preserves meaningful information.
+  - Balances regularization and model complexity.
+   - Ensures smooth weight decay without over-shrinking.
 
+**2. Why Use a Low $\alpha$?**
 
-2.Why Use a Low $ \alpha $?
+The learning rate $\alpha$ controls the step size in Gradient Descent:
 
-The learning rate $ \alpha $ controls the step size in Gradient Descent:
+- A high $\alpha$:
+  - Causes instability, leading to divergence.
+  - Interferes with weight decay, making updates too aggressive.
 
-A high $ \alpha $:
-- Causes instability, leading to divergence.
-- Interferes with weight decay, making updates too aggressive.
-
-A low $ \alpha $:
-- Ensures stable convergence.
-- Prevents oscillations in parameter updates.
-- Works well with regularization for smooth training.
-
+- A low $\alpha$:
+  - Ensures stable convergence.
+  - Prevents oscillations in parameter updates.
+  - Works well with regularization for smooth training.
 
 
-## 2.5 Empirical Demonstration of the equivalence of (OLS+Weight Decay) with Ridge Regression
+### 2.5 Empirical Demonstration of the equivalence of (OLS+Weight Decay) with Ridge Regression
 
 
 Ridge Regression optimizes:
@@ -878,22 +920,24 @@ The variance comparison plot shows that Ridge regression consistently achieves s
 
 In the MSE comparison plot, we observe that Ridge regression has a higher in-sample MSE than OLS across all sample sizes, which is expected due to its bias penalty. However, Ridge achieves a consistently lower out-of-sample MSE than OLS for small to moderate sample sizes. This highlights the bias-variance tradeoff in action: while Ridge sacrifices some in-sample accuracy by introducing bias, it benefits from reduced variance, leading to better generalization on unseen data. As the sample size increases to 500, both models converge in their out-of-sample performance, with OLS catching up due to its decreasing variance and absence of bias.
 
-::: {.columns}
-::: {.column width="33%"}
-![](images/Bias Comparison.png){width=100%}
-<center>Bias Comparison: OLS vs Ridge</center>
-:::
+<div style="text-align: center;">
+![](images/Bias Comparison.png){width=70%}
+</div>
 
-::: {.column width="33%"}
-![](images/Variance Comparison.png){width=100%}
-<center>Variance Comparison: OLS vs Ridge</center>
-:::
+<br>
 
-::: {.column width="33%"}
-![](images/MSE Comparison.png){width=100%}
-<center>MSE Comparison: OLS vs Ridge</center>
-:::
-:::
+<div style="text-align: center;">
+![](images/Variance Comparison.png){width=70%}
+</div>
+
+<br>
+
+<div style="text-align: center;">
+![](images/MSE Comparison.png){width=70%}
+</div>
+
+
+
 
 
 Ridge regression was evaluated across a grid of regularization parameters using k-fold cross-validation with repeated sampling. For each lambda value, the data was split into training and validation sets multiple times to compute stable estimates of out-of-sample mean squared error. The mean MSE across all folds and repetitions was recorded for each lambda, allowing for the identification of the value that yielded the lowest average validation error.
@@ -931,8 +975,15 @@ optimal_lambda = lambda_grid[np.argmin(ridge_mse_values)]
 
 The MSE existence theorem essentially states that for some optimal λ, Ridge Regression achieves a lower expected MSE than OLS. This graph shows how the out-of-sample mean squared error (MSE) for Ridge regression varies with different values of the regularization parameter lambda, plotted on a logarithmic scale. The blue curve represents Ridge’s MSE across a wide range of lambda values. As lambda increases from very small to very large values, the model transitions from low bias–high variance to high bias–low variance behavior. When lambda is too small, the model risks overfitting, while large lambdas overly shrink the coefficients, hurting predictive accuracy.
 The curve dips at a lambda value around 0.1963, where the MSE is minimized. This value represents the optimal balance between bias and variance for this dataset. Beyond this point, the MSE rises rapidly as excessive regularization starts to dominate. The red dashed line indicates the out-of-sample MSE for OLS, which remains constant since OLS does not involve any regularization. The fact that the Ridge curve falls below this line around the optimal lambda shows that Ridge, when properly tuned, can outperform OLS in terms of generalization.
+
+<div style="text-align: center;">
+
 ![](images/Out of Sample MSE.png){width=80%}
-<center>Out-of-Sample MSE vs. Lambda (log scale) for Ridge Regression</center>
+
+**Out-of-Sample MSE vs. Lambda (log scale) for Ridge Regression**
+
+</div>
+
     
 # 4. Bias and Variance under Non-Linear DGP
 Non-Linear DGP:$$y = \frac{1}{1 + \exp(-X\beta)} + \varepsilon$$
@@ -949,12 +1000,25 @@ def generate_nonlinear_data(n, p):
 Aside from introducing the non-linear transformation through the sigmoid function in the data-generating process, the overall experimental setup remained consistent with the procedures described in Section 3. The same Monte Carlo simulation framework was applied to evaluate the performance of both OLS and Ridge regression under this non-linear setting. For each simulation run, synthetic datasets were generated, models were trained on a subset of the data, and evaluated on held-out test sets to compute key metrics such as bias, variance, and out-of-sample MSE. This allowed for a direct comparison between the linear and non-linear DGPs, highlighting how model assumptions interact with the underlying structure of the data.
 The plot compares the mean squared error of OLS and Ridge regression across increasing sample sizes under the same non-linear setting. At all sample sizes, Ridge maintains a slight advantage over OLS, consistently producing lower MSE. This suggests that even in the presence of model misspecification due to non-linearity, regularization provides a stabilizing effect by reducing variance without dramatically increasing bias. Both models show increasing MSE with larger sample sizes, which is expected in this case, since the sigmoid-transformed targets are bounded and harder to approximate well with a linear model as more data exposes more of the non-linearity.
 
-![](images/Non-Linear MSE Comparison.png){width=50%}
-<center>Comparison of OLS and Ridge MSE vs Sample Size (Non-Linear DGP)</center>
+<div style="text-align: center;">
+
+![](images/Non-Linear MSE Comparison.png){width=60%}
+
+**Comparison of OLS and Ridge MSE vs Sample Size (Non-Linear DGP)**
+
+</div>
+
 
 The plot shows how Ridge regression performs under a non-linear data-generating process where the response is a sigmoid transformation of a linear combination of predictors. The curve captures out-of-sample MSE across a wide range of lambda values on a logarithmic scale. A noticeable dip occurs around lambda = 0.0069, indicating the optimal regularization strength that minimizes prediction error. Outside this region, the MSE fluctuates more sharply, especially at higher lambda values, where the model likely overshrinks the coefficients. The overall noise in the curve reflects the added complexity of fitting a linear model to a non-linear signal, where small changes in lambda can lead to more volatile performance.
+
+<div style="text-align: center;">
+
 ![](images/Ridge Out of Sample MSE.png){width=50%}
-<center>Out-of-Sample MSE vs Lambda (Log Scale) under Non-Linear DGP</center>
+
+**Out-of-Sample MSE vs Lambda (Log Scale) under Non-Linear DGP**
+
+</div>
+
 
 **B-spline Regression**: I used B-spline regression to get the “best approximate” linear regression coefficients. This cubic B-spline regression with 5 degrees of freedom allows the model to smoothly fit approximate the non-linear DGP, avoiding issues of high-degree polynomials. B-spline regression is considered an OLS model because it follows the same fundamental principles of linear regression, however with a transformed feature space.
 

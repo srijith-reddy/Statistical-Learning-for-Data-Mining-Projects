@@ -1,12 +1,38 @@
 ---
-title: "Welcome"
-format: html
+title: "Srijith Reddy | Portfolio"
+format:
+  html:
+    toc: false
+    code-fold: false
+    page-layout: full
+    smooth-scroll: true
 ---
 
-# My Portfolio
+# Welcome to My Portfolio
 
-Explore my projects in statistical learning and data mining.
+Hi, I’m **Srijith Reddy**, a data science enthusiast currently exploring the intersection of statistics, optimization, and machine learning. This portfolio showcases three major projects from my *Statistical Learning for Data Mining* course—each grounded in rigorous modeling, evaluation, and interpretation. These projects reflect not just applied techniques, but a careful balance between theory and performance.
 
-- [Project 1](project1.qmd)
-- [Project 2](project2.qmd)
-- [Project 3](project3.qmd)
+You can also check out my resume at: [srijith-reddy.github.io/resume](https://srijith-reddy.github.io/resume/)
+
+---
+
+##  Featured Projects
+
+### [Property Valuation Modeling](project3.qmd)
+Used Ridge Regression, LightGBM, and XGBoost to predict 2019 assessed property values from structured historical real estate data. Extensive feature engineering (including SHAP-based selection) and ensemble stacking yielded an RMSE of ~36K on the test set.
+
+### [Fair NBA Draft Predictor](project2.qmd)
+Developed a fairness-aware ensemble model (FairStacks) to predict NBA draft selection probabilities. Trained base models like Naive Bayes, LDA, SVM, and penalized logistic regressions, while optimizing a fairness-constrained loss to reduce TPR gap across school tiers.
+
+### [Bias-Variance Tradeoff in Ridge Regression](project1.qmd)
+Simulated performance of Ridge vs OLS across linear and nonlinear data-generating processes. Illustrated the bias-variance decomposition with clean visualizations to explain when and why Ridge outperforms OLS under regularization.
+
+---
+
+## About the Course
+
+These projects were completed as part of *STA 9890: Statistical Learning for Data Mining*—a graduate-level course emphasizing predictive modeling, generalization error, model interpretability, and hands-on experimentation. The coursework combined theoretical insights with real-world data challenges.
+
+---
+
+Thanks for visiting!

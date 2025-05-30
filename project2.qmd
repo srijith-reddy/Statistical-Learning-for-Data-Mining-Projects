@@ -20,17 +20,20 @@ As machine learning (ML) systems become more integrated into our daily lives—f
 ## 1.1 Why Fairness Matters?
 
 ML systems learn from historical data, and history is not free of bias. If we are not careful, these models can magnify societal inequalities embedded in that data. Fairness in ML is about trying to prevent that. However, fairness is not a one-size-fits-all concept.
-Different fields define fairness in different ways:
-• Law: Fairness means protecting people from discrimination (e.g., based on race or gender).
-• Social sciences: Focus on systems of power and inequality—who gets advantages and who does not.
-• Computer science and statistics: Treat fairness as a math problem—something we can define and
-measure.
-• Philosophy and political theory: See fairness as a question of justice and moral reasoning.
+ Different fields define fairness in different ways:
+
+- **Law**: Fairness means protecting people from discrimination (e.g., based on race or gender).
+- **Social sciences**: Focus on systems of power and inequality—who gets advantages and who does not.
+- **Computer science and statistics**: Treat fairness as a math problem—something we can define and
+    measure.
+- **Philosophy and political theory**: See fairness as a question of justice and moral reasoning.
 
 ## 1.2 Real-World Examples of Biased Algorithms
 
 **The COMPAS Algorithm** Used in the US to predict which defendants are likely to reoffend, the COMPAS algorithm was designed to support bail and sentencing decisions. On the surface, it appeared fair—it was equally accurate for black and white defendants. However, an analysis by ProPublica revealed the following:
-• Black defendants who would not reoffend were twice as likely to be labeled “high risk.” • White defendants who did reoffend were often mislabeled “low risk.”
+
+- Black defendants who would not reoffend were twice as likely to be labeled “high risk.” 
+- White defendants who did reoffend were often mislabeled “low risk.”
 Although the developers claimed that the model was fair (based on accuracy), it violated fairness in terms of racial bias, reinforcing systemic disparities.
 
 **Biased Healthcare Predictions** In U.S. hospitals, an algorithm used to prioritize patients for preventative care relied on healthcare spending as a proxy for health needs. However, due to systemic disparities, black patients historically incurred lower medical costs—not due to better health, but due to under-treatment. As a result, the algorithm underestimated their needs, leading to biased care allocation.
@@ -47,13 +50,14 @@ Fairness in machine learning is typically categorized into two main types:
 Group fairness ensures that different demographic groups (e.g., races or genders) are treated similarly by the model. A common metric used to quantify this is **Demographic Parity**, which aims for equal rates of positive outcomes across groups.
 
 **Demographic Parity Formula**  
-Given two groups \( G_1 \) and \( G_2 \), and a binary classifier \( f : \mathbb{R}^p \to \{0, 1\} \), the deviation from demographic parity (DDP) is defined as:
+Given two groups $G_1$ and $G_2$, and a binary classifier $f : \mathbb{R}^p \to \{0, 1\}$, the deviation from demographic parity (DDP) is defined as:
 
 $$
 \text{DDP}(f) = \left| \mathbb{E}_{x \sim G_1}[f(x)] - \mathbb{E}_{x \sim G_2}[f(x)] \right|
 $$
 
-A DDP of 0 indicates perfect demographic parity, meaning both groups receive positive outcomes at equal rates.
+A DDP of $0$ indicates perfect demographic parity, meaning both groups receive positive outcomes at equal rates.
+
 
 ### 2.2 Individual Fairness
 
@@ -169,8 +173,8 @@ Although Lasso regression is theoretically designed to drive some coefficients e
 
 This implementation assumes conditional independence of features and fits Gaussian distributions separately for each class. The model computes:
 
-- Class-wise means (\( \mu_0, \mu_1 \)) and pooled variance \( \sigma^2 \)
-- Prior class probabilities (\( \pi_0, \pi_1 \))
+- Class-wise means ($\mu_0$, $\mu_1$) and pooled variance $\sigma^2$
+- Prior class probabilities ($\pi_0$, $\pi_1$)
 - Log-likelihoods using the Gaussian log-density function
 
 For each input vector, the model compares log-posterior probabilities and assigns a label of 1 if the class 1 posterior is greater, and 0 otherwise. This lightweight model is not only computationally simple but also provides useful diversity in the ensemble. Because Naive Bayes is so simple, it acts as a benchmark. If your complex models (like SVM or Lasso) don’t clearly outperform it, you might need to reassess their added complexity or feature use.
@@ -195,10 +199,10 @@ def manual_gaussian_nb(X_train, y_train, X_test):
 
 #### Linear Discriminant Analysis (no CVX)
 
-This implementation assumes Gaussian class-conditional distributions with a shared covariance matrix. LDA serves as a linear classifier that projects data to maximize class separability under these assumptions. The model performs the following:
+This implementation assumes Gaussian class-conditional distributions with a shared covariance matrix. **LDA** serves as a linear classifier that projects data to maximize class separability under these assumptions. The model performs the following:
 
-- Calculates class-wise means (\( \mu_0, \mu_1 \))
-- Computes the shared covariance matrix \( \Sigma \) across both classes
+- Calculates class-wise means ($\mu_0$, $\mu_1$)
+- Computes the shared covariance matrix $\Sigma$ across both classes
 - Solves the linear discriminant function (delta) for each class
 
 Each data point is assigned to the class with the higher discriminant score. LDA offers a more flexible alternative to Naive Bayes by relaxing the independence assumption while still providing a computationally efficient, interpretable classifier.
@@ -228,16 +232,17 @@ def manual_lda(X_train, y_train, X_test):
 
 #### Logistic Regression (use CVX)
 
-To model the probability of being drafted as a logistic function of player statistics, logistic regression was implemented using convex optimization. Three variants were considered: plain logistic regression, ridge-regularization, and lasso-regularization. The model minimizes the average logistic loss, with optional \( \ell_2 \) or \( \ell_1 \) penalty:
+To model the probability of being drafted as a logistic function of player statistics, logistic regression was implemented using convex optimization. Three variants were considered: plain logistic regression, ridge-regularization, and lasso-regularization. The model minimizes the average logistic loss, with optional $\ell_2$ or $\ell_1$ penalty:
 
-- **Plain**: Minimizes standard logistic loss  
-- **Ridge**: Adds \( \ell_2 \) norm penalty to control weight magnitude  
-- **Lasso**: Adds \( \ell_1 \) norm penalty to encourage sparsity  
+Plain: Minimizes standard logistic loss
+
+Ridge: Adds $\ell_2$ norm penalty to control weight magnitude
+
+Lasso: Adds $\ell_1$ norm penalty to encourage sparsity
 
 Threshold tuning (e.g., using precision-recall curves) was applied to improve model calibration, especially when the dataset is imbalanced. A tuned threshold (e.g., 0.6) helps balance precision and recall based on evaluation metrics.
 
-A regularization strength of \( \lambda = 0.1 \) was selected as a reasonable value to balance overfitting and underfitting. It is strong enough to stabilize the solution but not so aggressive that it suppresses informative features.
-
+A regularization strength of $\lambda = 0.1$ was selected as a reasonable value to balance overfitting and underfitting. It is strong enough to stabilize the solution but not so aggressive that it suppresses informative features.
 ```{python}
 def logistic_cvx_preds_binary(X, y, X_eval, reg_type=None, lambda_=0.1, thresh=0.6):
     n, p = X.shape
@@ -254,19 +259,22 @@ def logistic_cvx_preds_binary(X, y, X_eval, reg_type=None, lambda_=0.1, thresh=0
     probs = 1 / (1 + np.exp(-X_eval @ beta.value))
     return (probs >= thresh).astype(int).flatten()
 ```
-![](images/ROC_Logistic_Reg.png){width=100%}
-<center>ROC and Precision-Recall Curves for Plain, Ridge, and Lasso Logistic Regression (Best Threshold = 0.60)</center>
+<div style="text-align: center;">
+  <img src="images/ROC Logistic Reg.png" alt="ROC Curves" width="100%">
+  <p><strong>ROC and Precision-Recall Curves for Plain, Ridge, and Lasso Logistic Regression</strong><br>(Best Threshold = 0.60)</p>
+</div>
 
 #### Support Vector Machine (SVM)
 
-This implementation was developed using convex optimization with hinge loss and \( \ell_2 \) regularization. This approach seeks to maximize the margin between classes while penalizing misclassifications near the decision boundary. The model performs the following:
+This implementation was developed using convex optimization with hinge loss and $\ell_2$ regularization. This approach seeks to maximize the margin between classes while penalizing misclassifications near the decision boundary. The model performs the following:
 
-- Computes hinge loss \( \max(0, 1 - y_i x_i^\top \beta) \) for each point  
-- Adds \( \ell_2 \) regularization to prevent overfitting  
-- Converts predictions from raw margin scores to 0/1 labels via thresholding  
+- Computes hinge loss $\max(0, 1 - y_i x_i^\top \beta)$ for each point
 
-A decision threshold of 1.52 was selected empirically based on precision-recall and ROC curves to optimize performance. This allowed the classifier to maintain conservative positive predictions, especially useful in a fairness-aware pipeline where over-selection of dominant group members must be mitigated. A regularization parameter of \( \lambda = 0.1 \) was chosen to softly penalize large weights while preserving flexibility in the decision boundary. This value was found to offer a stable trade-off between underfitting and overfitting in the fairness setting.
+- Adds $\ell_2$ regularization to prevent overfitting
 
+- Converts predictions from raw margin scores to 0/1 labels via thresholding
+
+A decision threshold of 1.52 was selected empirically based on precision-recall and ROC curves to optimize performance. This allowed the classifier to maintain conservative positive predictions, especially useful in a fairness-aware pipeline where over-selection of dominant group members must be mitigated. A regularization parameter of $\lambda = 0.1$ was chosen to softly penalize large weights while preserving flexibility in the decision boundary. This value was found to offer a stable trade-off between underfitting and overfitting in the fairness setting.
 ```{python}
 def manual_svm_hinge(X_train, y_train, X_eval, lambda_=0.1):
     """
@@ -285,8 +293,10 @@ def manual_svm_hinge(X_train, y_train, X_eval, lambda_=0.1):
     raw_preds = X_eval @ beta.value
     return (raw_preds >= 1.52).astype(int).flatten()
 ```
-![](images/ROC_SVM.png){width=100%}
-<center>ROC and Precision-Recall Curves for SVM (Best Threshold = 1.52)</center>
+<div style="text-align: center;">
+  <img src="images/ROC SVM.png" alt="ROC and PR Curves for SVM" width="100%">
+  <p><strong>ROC and Precision-Recall Curves for SVM</strong><br>(Best Threshold = 1.52)</p>
+</div>
 
 #### Decision Tree
 
@@ -304,7 +314,7 @@ As we shift toward a fairness-aware ensemble strategy, it becomes critical to st
 
 This is especially important in the context of our Steph Curry fairness model, where the number of drafted players is relatively small and the fairness metric—True Positive Rate (TPR) gap between players from high-exposure programs (Tier 1) and lesser-known schools (Tier 3)—requires meaningful group-level comparisons. A careful partitioning ensures that the evaluation of how fairly we treat underdog players is accurate and unbiased.
 
-```python
+```{python}
 features = ['pts', 'ast', 'stl', 'blk', 'treb', 'height_in', 'TS_per', 'eFG', 'player_name', 'Drafted','school_tier']
 df = college_df[features].dropna()
 
@@ -313,15 +323,16 @@ X = df.drop(columns=['Drafted', 'player_name'])
 y = df['Drafted']
 X_trainval, X_test, y_trainval, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
 X_train, X_val, y_train, y_val = train_test_split(X_trainval, y_trainval, test_size=0.25, stratify=y_trainval, random_state=42)
+
 ```
 
 To build a model that balances predictive power with fairness, we selected a combination of performance-based and context-aware features. Traditional box score statistics such as points per game, assists, steals, blocks, total rebounds, and shooting efficiency (eFG, TS per) were included to capture a player’s tangible on-court contributions. Additionally, height was included as a proxy for physical attributes that are often overvalued in the draft process.
 
 Most importantly, we incorporated school tier—a categorical variable based on draft success rates of a player’s college program. This feature serves as the foundation for our fairness assessment, as we aim to detect and mitigate biases that favor players from elite programs (e.g., Duke, Kentucky) over similarly talented players from lesser-known schools (e.g., Davidson). Since our fairness metric is based on TPR disparities across school tiers, this feature is critical for evaluating whether players like Steph Curry, who came from a mid-major program, are systematically undervalued.
 
-Base Learner Outputs and Stacking Matrix: Each of the seven base learners—Naive Bayes, Linear Discriminant Analysis (LDA), Decision Tree, three logistic regression variants (plain, ridge, lasso), and Support Vector Machine (SVM)—was trained on the training set and evaluated on the validation set. The binary predictions (0/1) of each learner on the validation set were vertically stacked to construct the matrix  
-\( H_{\text{val}} \in \mathbb{R}^{n \times m} \),  
-where \( n \) is the number of validation examples and \( m = 7 \) is the number of base models. This matrix serves as input to the FairStacks optimization routine, allowing us to compute an ensemble prediction as a weighted combination of individual model decisions.
+Base Learner Outputs and Stacking Matrix: Each of the seven base learners—Naive Bayes, Linear Discriminant Analysis (LDA), Decision Tree, three logistic regression variants (plain, ridge, lasso), and Support Vector Machine (SVM)—was trained on the training set and evaluated on the validation set. The binary predictions (0/1) of each learner on the validation set were vertically stacked to construct the matrix
+$H_{\text{val}} \in \mathbb{R}^{n \times m}$,
+where $n$ is the number of validation examples and $m = 7$ is the number of base models. This matrix serves as input to the FairStacks optimization routine, allowing us to compute an ensemble prediction as a weighted combination of individual model decisions.
 
 ```{python}
 # Apply your functions
@@ -357,7 +368,7 @@ b_hat = np.array([
     compute_tpr_gap(y_val.values, svm_val, tier_group)
 ])
 ```
-Binary predictions from each model on the validation set are compared against ground truth labels, and group masks are applied to measure how fairly each learner treats players based on their school’s prestige. The resulting vector \( \hat{b}_j \) quantifies these group-level disparities and is used in the fairness penalty of the FairStacks objective.
+Binary predictions from each model on the validation set are compared against ground truth labels, and group masks are applied to measure how fairly each learner treats players based on their school’s prestige. The resulting vector $\hat{b}_j$ quantifies these group-level disparities and is used in the fairness penalty of the FairStacks objective.
 
 **Ensemble Weight Optimization via FairStacks:**  
 With predictions and corresponding bias scores for each base learner in hand, the FairStacks optimization problem is solved to determine optimal ensemble weights. CVXPY is used to minimize a regularized logistic loss objective, where the penalty term is the absolute weighted sum of TPR gaps across base learners. The constraints ensure that all weights are non-negative and sum to one.
@@ -373,8 +384,7 @@ $$
   \frac{1}{n} \sum_{i=1}^{n} \log \left( 1 + \exp(-y_i \cdot \hat{y}_i) \right)
   $$
 
-  measures how well the ensemble predicts the true outcome \( y_i \) (drafted or not). Here,  
-  \( \hat{y}_i = \sum_j w_j \hat{f}_j(x_i) \) is the prediction from a weighted combination of base learners. The logistic loss is smooth and convex, making it ideal for binary classification tasks like draft prediction.
+  measures how well the ensemble predicts the true outcome $y_i$ (drafted or not). Here, $\hat{y}_i = \sum_j w_j \hat{f}_j(x_i)$ is the prediction from a weighted combination of base learners. The logistic loss is smooth and convex, making it ideal for binary classification tasks like draft prediction.
 
 - **Fairness Penalty:**
 
@@ -382,14 +392,13 @@ $$
   \lambda \left| \sum_j w_j \hat{b}_j \right|
   $$
 
-  penalizes disparity in treatment between groups—specifically, the absolute ensemble-weighted true positive rate (TPR) gap. Each \( \hat{b}_j \) represents the TPR gap of base learner \( j \), and minimizing this term encourages fairness across school tiers.
+  penalizes disparity in treatment between groups—specifically, the absolute ensemble-weighted true positive rate (TPR) gap. Each $\hat{b}_j$ represents the TPR gap of base learner $j$, and minimizing this term encourages fairness across school tiers.
 
 - **Constraints:**  
-  The weights \( \mathbf{w} \) form a convex combination  
-  \( (w_j \geq 0, \sum_j w_j = 1) \), ensuring interpretability and stability.
+  The weights $\mathbf{w}$ form a convex combination
+$(w_j \geq 0, \sum_j w_j = 1)$, ensuring interpretability and stability.
 
-Here, \( \lambda = 10 \) emphasizes fairness by reducing group disparities between players from high-exposure and lower-tier programs. This balance is crucial in the Steph Curry fairness model, where the goal is to counteract systemic undervaluation of talented players from less visible schools.
-
+  Here, $\lambda = 10$ emphasizes fairness by reducing group disparities between players from high-exposure and lower-tier programs. This balance is crucial in the Steph Curry fairness model, where the goal is to counteract systemic undervaluation of talented players from less visible schools.
 ```{python}
 # --- FairStacks Optimization ---
 w = cp.Variable(H_val.shape[1])
@@ -421,21 +430,31 @@ print(ensemble_accuracy)
 The final ensemble placed nearly all its weight on the Lasso-regularized logistic regression model. This outcome reflects the model’s ability to balance strong individual accuracy with fairness across school tiers. Despite the availability of other learners, including Decision Trees and SVMs, FairStacks effectively zeroed out their contributions to reduce potential TPR gaps.
 In terms of performance, the FairStacks ensemble matched the highest observed accuracy of 97.57% and achieved a TPR gap of 0.000. This is on par with Lasso regression alone, but with the added assurance that the model was selected through a fairness-aware optimization pipeline. Meanwhile, base learners such as Naive Bayes and LDA, despite respectable accuracy, exhibited substantial TPR gaps (e.g., -0.0256 and -0.0171), suggesting bias toward non-Tier 1 players. FairStacks thus succeeds in its dual objective: it preserves predictive performance while correcting for institutional bias, a key goal in fairness modeling for the NBA draft.
 
-::: {.columns}
-::: {.column width="33%"}
-![](images/TPR_Gap_Barplot.png){width=100%}
-<center>TPR Gap of Base Learners and FairStacks (Tier 1 vs Others)</center>
-:::
+<div style="text-align: center;">
+  <img src="images/TPR Gap Barplot.png" width="60%">
+  <p><strong>TPR Gap of Base Learners and FairStacks (Tier 1 vs Others)</strong></p>
+</div>
 
-::: {.column width="33%"}
-![](images/Accuracy_Barplot.png){width=100%}
-<center>Accuracy of Base Learners and FairStacks (Higher is Better)</center>
-:::
+<br>
 
-::: {.column width="33%"}
-![](images/Ensemble_Weights_Barplot.png){width=100%}
-<center>FairStacks Ensemble Weights</center>
-:::
-:::
+<div style="text-align: center;">
+  <img src="images/Accuracy Barplot.png" width="60%">
+  <p><strong>Accuracy of Base Learners and FairStacks (Higher is Better)</strong></p>
+</div>
+
+<br>
+
+<div style="text-align: center;">
+  <img src="images/Ensemble Weights Barplot.png" width="60%">
+  <p><strong>FairStacks Ensemble Weights</strong></p>
+</div>
+
+## References
+
+1. Haas School of Business. *What is Fairness?*. University of California, Berkeley. Available at: [https://haas.berkeley.edu/wp-content/uploads/What-is-fairness_-EGAL2.pdf](https://haas.berkeley.edu/wp-content/uploads/What-is-fairness_-EGAL2.pdf) (Accessed April 2025).
+
+2. Michael Weylandt. *STA9890 Course Notes*. Available at: [https://michael-weylandt.com/STA9890/notes.html](https://michael-weylandt.com/STA9890/notes.html) (Accessed April 2025).
+
+3. Aditya K. *College Basketball Players 2009–2021*. Kaggle. Available at: [https://www.kaggle.com/datasets/adityak2003/college-basketball-players-20092021](https://www.kaggle.com/datasets/adityak2003/college-basketball-players-20092021) (Accessed April 2025).
 
 
