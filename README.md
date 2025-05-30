@@ -12,20 +12,20 @@ Each project reflects a thoughtful blend of statistical theory and practical mod
 
 ## 🔍 Featured Projects
 
-### 🏠 [Property Valuation Modeling](https://srijith-reddy.github.io/Statistical-Learning-for-Data-Mining-Projects/project3.qmd)
+### 🏠 [Property Valuation Modeling](https://srijith-reddy.github.io/Statistical-Learning-for-Data-Mining-Projects/project3.html)
 - **Goal**: Predict 2019 assessed property values using historical real estate and protest data.
 - **Techniques**: Ridge Regression, LightGBM, XGBoost.
 - **Highlights**:
   - Extensive feature engineering with SHAP-based selection.
   - Ensemble stacking yielded **RMSE ≈ 36K** on test set.
 
-### 🏀 [Fair NBA Draft Predictor](https://srijith-reddy.github.io/Statistical-Learning-for-Data-Mining-Projects/project2.qmd)
+### 🏀 [Fair NBA Draft Predictor](https://srijith-reddy.github.io/Statistical-Learning-for-Data-Mining-Projects/project2.html)
 - **Goal**: Build a fairness-aware model for NBA draft predictions.
 - **Approach**: Ensemble of Naive Bayes, LDA, SVM, and penalized logistic regressions.
 - **Innovation**:
   - Introduced **FairStacks** to minimize TPR gap across school tiers.
 
-### 📈 [Bias-Variance Tradeoff in Ridge Regression](https://srijith-reddy.github.io/Statistical-Learning-for-Data-Mining-Projects/project1.qmd)
+### 📈 [Bias-Variance Tradeoff in Ridge Regression](https://srijith-reddy.github.io/Statistical-Learning-for-Data-Mining-Projects/project1.html)
 - **Goal**: Compare Ridge vs. OLS under linear and nonlinear settings.
 - **Method**: Simulation-based analysis of bias and variance.
 - **Outcome**:
