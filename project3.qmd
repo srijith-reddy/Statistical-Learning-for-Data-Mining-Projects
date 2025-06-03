@@ -1386,3 +1386,7 @@ Our modeling pipeline blended SHAP-driven interpretability with ensemble-based p
 - Geographical variation was only partially captured using frequency encoding. Future work could explore residual stacking or blended stacking techniques with subgroup-aware features (e.g., neighborhood frequency, protest history) to correct localized error patterns more explicitly.
 
 Overall, the final ElasticNet ensemble—integrating Ridge, SHAP-informed LGBM, and Optuna-tuned XGBoost—delivered a strong performance on the private leaderboard. Future extensions may benefit from incorporating time-aware modeling, subgroup-specific residual correction, or spatially informed representations to further improve accuracy and fairness in municipal assessment systems.
+
+# References
+
+[1] Weylandt, M. (2025). *STA 9890: Housing Price Prediction Competition Guidelines*. Retrieved from [https://michael-weylandt.com/STA9890/competition.html#final-report-50-points](https://michael-weylandt.com/STA9890/competition.html#final-report-50-points)

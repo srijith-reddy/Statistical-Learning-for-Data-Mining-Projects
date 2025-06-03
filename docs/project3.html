@@ -192,6 +192,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#what-worked-well" id="toc-what-worked-well" class="nav-link" data-scroll-target="#what-worked-well">What Worked Well</a></li>
   <li><a href="#what-could-improve" id="toc-what-could-improve" class="nav-link" data-scroll-target="#what-could-improve">What Could Improve</a></li>
   </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
     </div>
@@ -244,7 +245,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Valuation features: building value, land value, assessed</li>
 <li>Categorical building attributes: foundation type, grade, building condition, quality, quality description, physical condition, exterior walls, has cooling, has heat</li>
 </ul>
-<div id="c1e820f1" class="cell" data-collapse="true" data-execution_count="1">
+<div id="85377fc1" class="cell" data-collapse="true" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> backfill_categorical_year_features(df, features, years):</span>
@@ -273,7 +274,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>We also zeroed out all building area variables and the corresponding building value variables to reflect the absence of a residential structure.</li>
 </ul>
 <p>These records were retained in the dataset rather than dropped, as they likely represent a distinct class of properties where valuation is driven primarily by land characteristics. Explicitly identifying and treating these properties allowed the model to better separate residential and non-residential valuation patterns.</p>
-<div id="ed711d5a" class="cell" data-collapse="true" data-execution_count="2">
+<div id="18b066bf" class="cell" data-collapse="true" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># === STEP 0: Define base feature names ===</span></span>
@@ -327,7 +328,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 </div>
 <p><strong>Feature Drop Based on Sparse Signals:</strong> For features that appeared largely irrelevant or unused across the dataset, we calculated the percentage of zero values in columns such as mobile home area, deck area, and porch area. If a column contained over 90% zeros, it was considered non-informative and dropped from the modeling pipeline to reduce dimensionality and noise.</p>
-<div id="f1777cb3" class="cell" data-collapse="true" data-execution_count="3">
+<div id="eb8a0c8d" class="cell" data-collapse="true" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cols_to_drop <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> train_merged.columns <span class="cf">if</span> col.startswith(<span class="st">"mobile_home_area"</span>)]</span>
@@ -345,7 +346,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Level 2: region-level median</li>
 <li>Level 3: global median (fallback)</li>
 </ul>
-<div id="d78f9e94" class="cell" data-collapse="true" data-execution_count="4">
+<div id="3098a8bf" class="cell" data-collapse="true" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># List of all assessed columns to impute</span></span>
@@ -401,7 +402,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Corresponding region-level counterparts: assess minus region mean, assess ratio region mean, and z score assess region</li>
 </ul>
 <p>These features helped contextualize each property’s assessed value relative to other properties within the same neighborhood or region. They proved useful in capturing outliers and potentially undervalued homes that deviated from local valuation patterns.</p>
-<div id="30139c40" class="cell" data-collapse="true" data-execution_count="5">
+<div id="028d27c0" class="cell" data-collapse="true" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># === Step 1: Compute neighborhood-level stats ===</span></span>
@@ -476,7 +477,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Areas with more properties are also likely to have more consistent and well-understood assessment patterns—the government has “seen” more properties there, which may reduce valuation volatility. These areas are more visible or prioritized in municipal processes.</li>
 </ol>
 <p>Finally, frequency encoding avoids the dimensional explosion caused by one-hot encoding, which is especially problematic for variables with high cardinality like neighborhood or subneighborhood.</p>
-<div id="62dec80e" class="cell" data-collapse="true" data-execution_count="6">
+<div id="3b41d52a" class="cell" data-collapse="true" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> [<span class="st">'neighborhood'</span>, <span class="st">'region'</span>,<span class="st">'zone'</span>,<span class="st">'subneighborhood'</span>]:</span>
@@ -498,7 +499,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="boolean-and-ordinal-encoding">3.4 Boolean and Ordinal Encoding</h2>
 <p><strong>Boolean Encoding:</strong> We focused on three boolean variables: has cooling, has heat, and protested. These features were encoded across all five years using binary values (0/1).</p>
 <p><strong>Ordinal Encoding:</strong> For ordinal features such as quality, quality description, grade, building condition, and physical condition, we performed domain-informed cleaning and then applied ordinal encoding based on defined category hierarchies. Prior to encoding, raw values were standardized through column-specific replacements. For instance, extreme or ambiguous values like X, None, or overly granular subgrades (e.g., X-, E+) were either mapped to more interpretable categories or treated as missing. Some detailed conditions like Unsound and Very Poor were collapsed into broader categories such as Poor. Unknown values were handled gracefully by assigning an encoded fallback of -1. This process ensured that ordinal information was preserved in a numerically meaningful way, allowing models to leverage the ordered nature of these features without exploding dimensionality as one-hot encoding would.</p>
-<div id="05a1f0bd" class="cell" data-collapse="true" data-execution_count="7">
+<div id="93b2ffd6" class="cell" data-collapse="true" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -571,7 +572,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>For certain nominal features that lacked ordinal structure but exhibited high cardinality, such as foundation type and exterior walls, we applied target encoding across all years from 2015 to 2019. This encoding replaces each category with a smoothed version of the mean target value (assessed 2018) observed for that category.</p>
 <p>To avoid overfitting and data leakage, we implemented a 5-fold cross-validated target encoding procedure. For each fold, the mean target value was computed from the training portion and mapped to the validation fold. We used a smoothing parameter of 10 to balance the influence of the global mean versus the category-specific mean, especially for infrequent categories.</p>
 <p>This method enabled us to capture predictive signal from nominal features without creating high-dimensional one-hot encodings or imposing artificial ordinal structure.</p>
-<div id="7dc43912" class="cell" data-collapse="true" data-execution_count="8">
+<div id="821b878b" class="cell" data-collapse="true" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># === STEP 3: Target Encoding (2015–2019 only) ===</span></span>
@@ -622,7 +623,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="quantile-binning-of-features">3.6 Quantile Binning of Features</h2>
 <p>To enhance robustness and reduce sensitivity to outliers, we converted few continuous features into categorical bins using quantile-based binning. Growth metrics such as land value growth, building value growth, and assessed growth were binned into four quantiles, with thresholds computed only on the training data to prevent information leakage. If quantile binning failed due to low cardinality (e.g., repeated values), we defaulted to equal-width binning. All binned variables were explicitly cast as categorical to ensure compatibility with tree-based models.</p>
 <p>Additionally, we binned year built final into five quantiles to capture generational differences in construction periods. This replaced raw year values with interpretable ordinal categories. Original continuous features were removed after binning to avoid redundancy and reduce multicollinearity.</p>
-<div id="ec104a5d" class="cell" data-collapse="true" data-execution_count="9">
+<div id="9b1e4799" class="cell" data-collapse="true" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># === Step 1: List your growth features ===</span></span>
@@ -676,7 +677,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="rare-frequency-suppression-in-spatial-encodings">3.7 Rare Frequency Suppression in Spatial Encodings</h2>
 <p>Following frequency encoding of high-cardinality spatial variables (region, neighborhood, zone, subneighborhood), we applied a rare-value suppression step to mitigate the noise introduced by sparsely represented categories. For each frequency-encoded column, we identified values that occurred in less than 0.1% of the training data and replaced them with a neutral value of zero in both the training and test sets. This was done using thresholds derived solely from the training distribution to prevent data leakage.</p>
 <p>The intuition behind this strategy is that extremely rare spatial groupings may not provide reliable or generalizable signals to the model. Treating them as a common fallback class (i.e., assigning them a frequency of zero) improves model stability and reduces overfitting to idiosyncratic, low-support locations. This transformation preserves the informativeness of frequent categories while smoothing out sparse tail behavior in the feature space.</p>
-<div id="1daad18f" class="cell" data-collapse="true" data-execution_count="10">
+<div id="4a4a1f3e" class="cell" data-collapse="true" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define frequency columns and threshold</span></span>
@@ -699,7 +700,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="log-transformation-and-distribution-smoothing-for-ridge-regression">3.8 Log Transformation and Distribution Smoothing for Ridge Regression</h2>
 <p>To satisfy linear model assumptions and reduce skew-related distortion in Ridge regression, we applied a targeted log transformation to select continuous features. Specifically, we identified variables related to building size, land area, and valuation (e.g., building value 2019, land area 2018, neigh assess mean) whose skewness exceeded a threshold of 2.0 in the training set. For these features, we applied a log1p transformation, which effectively stabilized variance, compressed long-tailed distributions, and improved linear fit potential.</p>
 <p>This transformation was particularly useful for the Ridge regression model, which benefits from normally distributed inputs and is sensitive to extreme values. By selectively applying log1p only to features with high skew, we preserved model interpretability while enhancing numerical stability and predictive performance.</p>
-<div id="c831f9ac" class="cell" data-collapse="true" data-execution_count="11">
+<div id="2f122989" class="cell" data-collapse="true" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -736,7 +737,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>To further control the influence of extreme values in tree-based models, we implemented an adaptive quantile clipping strategy informed by skewness severity. Using a precomputed skewness report, we categorized numeric features (excluding binary and target-encoded variables) into two groups: ultra-skewed (skewness &gt; 100) and moderately-skewed (2 &lt; skewness ≤ 100). Features were considered only if they had more than ten unique values and were not binary.</p>
 <p>For ultra-skewed features, we applied clipping at the 0.5th and 99.5th percentiles. For moderately skewed features, we clipped at the 0.1st and 99.9th percentiles. All thresholds were derived solely from the training data and applied to both training and test sets to ensure leakage-free transformations. This clipping procedure helped suppress extreme values that might otherwise dominate decision paths or split criteria in tree-based learners.</p>
 <p>These transformations were specifically designed for use with XGBoost and LightGBM, where reducing the influence of outliers improves model generalization and enhances interpretability in leaf-based decision structures.</p>
-<div id="a2aa390b" class="cell" data-collapse="true" data-execution_count="12">
+<div id="c863e7b7" class="cell" data-collapse="true" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -794,7 +795,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="interaction-features-for-linear-and-nonlinear-models">3.10 Interaction Features for Linear and Nonlinear Models</h2>
 <p>To enrich model expressiveness, we engineered a comprehensive set of interaction features used across both Ridge regression and tree-based models (XGBoost and LightGBM). These included multiplicative and ratio-based terms such as grade quality index, value per age, area x quality, and assess to neigh mean, capturing relationships between physical dimensions, valuation, quality, and neighborhood context. For Ridge regression, these features acted as implicit basis expansions—effectively enabling the linear model to capture non-additive effects by introducing new combinations of input features.</p>
 <p>Additionally, we created a specialized set of log-transformed interaction terms—such as log area x grade, log assess x age, and log value diff—used exclusively in the Ridge pipeline. These features helped linearize multiplicative relationships and reduce skew, improving fit under Ridge’s sensitivity to input distribution. Log-based interactions were excluded from tree models, which are inherently robust to skew and insensitive to monotonic transformations like log, as they rely only on the relative ordering of feature values when making splits.</p>
-<div id="ebddbb79" class="cell" data-collapse="true" data-execution_count="13">
+<div id="9da3f592" class="cell" data-collapse="true" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># === Interaction Features for Ridge Regression ===</span></span>
@@ -837,7 +838,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>test_merged <span class="op">=</span> add_features(test_merged)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="118adf82" class="cell" data-collapse="true" data-execution_count="14">
+<div id="53cca299" class="cell" data-collapse="true" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># === Interaction Features for Tree models ===</span></span>
@@ -897,7 +898,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>The final out-of-fold RMSE across all folds was 41,239.79, with an average best α of approximately 10.1932. This indicates that moderate regularization consistently improved generalization across different training splits.</p>
 <p>We saved both OOF predictions and test forecasts as NumPy arrays—<code>ridgecv_oof_preds.npy</code> and <code>ridgecv_test_preds.npy</code>—for later use in model ensembling. These stored outputs served as reliable building blocks for downstream blending and stacking strategies.</p>
-<div id="59814206" class="cell" data-collapse="true" data-execution_count="15">
+<div id="70ba110a" class="cell" data-collapse="true" data-execution_count="15">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -967,7 +968,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="tree-based-models-with-optuna-and-shap-gain-feature-selection">4.2 Tree-Based Models with Optuna and SHAP-Gain Feature Selection</h2>
 <p>To capture nonlinear interactions and leverage automatic handling of missing values and categorical splits, we trained two gradient boosting models: LightGBM and XGBoost. Both models followed a structured pipeline consisting of hyperparameter optimization using Optuna, followed by SHAP- and gain-based feature selection, and a final retraining on the selected features.</p>
 <p><strong>Step 1: Hyperparameter Tuning with Optuna.</strong> For each model, we defined an Optuna objective that trained 3-fold cross-validated models using early stopping. We explored hyperparameter ranges tailored to each algorithm, with LightGBM using a native pruning callback and XGBoost leveraging <code>XGBoostPruningCallback</code>. During tuning, we stored the best out-of-fold (OOF) predictions across all trials to later use in ensembling.</p>
-<div id="188a6563" class="cell" data-collapse="true" data-execution_count="16">
+<div id="7af3dfdf" class="cell" data-collapse="true" data-execution_count="16">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -1069,7 +1070,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb16-97"><a href="#cb16-97" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">" Saved: oof_preds_lgbm.npy"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="b2ffaf86" class="cell" data-collapse="true" data-execution_count="17">
+<div id="5d32e519" class="cell" data-collapse="true" data-execution_count="17">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -1170,7 +1171,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 </div>
 <p><strong>Step 2: SHAP and Gain-Based Feature Selection.</strong> After tuning, we trained new LightGBM and XGBoost models using the best parameters on each fold of the training data. For each fold, we computed SHAP importance values and LightGBM/XGBoost gain importances. We retained features that collectively accounted for 95% of total importance in either SHAP or gain, and constructed a union of these high-signal features across all folds. This union was used to define the final reduced feature space for retraining.</p>
-<div id="bfe6e96c" class="cell" data-collapse="true" data-execution_count="18">
+<div id="be115a3f" class="cell" data-collapse="true" data-execution_count="18">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># === STEP 3: SHAP + GAIN Feature Selection for LGBM ===</span></span>
@@ -1214,7 +1215,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>filtered_cat_cols <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> cat_cols <span class="cf">if</span> col <span class="kw">in</span> final_union_features]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="3a3c4c96" class="cell" data-collapse="true" data-execution_count="19">
+<div id="b96e9782" class="cell" data-collapse="true" data-execution_count="19">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># === STEP 3: Post-Optuna SHAP + Gain Feature Selection for XGBoost ===</span></span>
@@ -1250,7 +1251,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 </div>
 <p><strong>Step 3: Final Model Training and Inference.</strong> Each final model was retrained on the full training set using only the selected features, with early stopping enabled to prevent overfitting. Predictions on the test set were generated using the best iteration count. All model outputs—including OOF predictions and test forecasts—were saved for submission and later use in ensemble blending.</p>
-<div id="4a2b6b30" class="cell" data-collapse="true" data-execution_count="20">
+<div id="64fa0944" class="cell" data-collapse="true" data-execution_count="20">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># === STEP 5: Final Model on Selected Features for LGBM ===</span></span>
@@ -1282,7 +1283,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">" Submission saved: submission_lgbm_shap.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="44859da5" class="cell" data-collapse="true" data-execution_count="21">
+<div id="7b7242ac" class="cell" data-collapse="true" data-execution_count="21">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># === STEP 5: Final Model on Selected Features for XGBoost ===</span></span>
@@ -1324,7 +1325,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>LightGBM: w₂ = 40.49%</li>
 </ul>
 <p>These weights were then used to produce a final blended prediction for the test set. The resulting predictions achieved an RMSE of 36,239.91 on the holdout set—outperforming all individual base models and demonstrating the value of combining linear and tree-based perspectives.</p>
-<div id="8a6ae59e" class="cell" data-collapse="true" data-execution_count="22">
+<div id="b38d4367" class="cell" data-collapse="true" data-execution_count="22">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -1399,7 +1400,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Holdout Evaluation.</strong> For evaluation, we trained the meta-learner on an 80% split and evaluated on a 20% holdout. The resulting RMSE was 36,344.64, closely aligned with the Optuna-weighted blend. The selected <code>alpha</code> was 0.01, indicating strong regularization and robust coefficient shrinkage.</p>
 <p><strong>Final Test Predictions.</strong> The final model was retrained on the full meta-feature set and used to predict the test set. This stacked approach provided a robust and regularized alternative to linear averaging, automatically downweighting weaker models while maintaining interpretability and reproducibility.</p>
 <p>On the competition leaderboard, the ElasticNetCV ensemble—combining Ridge, XGBoost, and LightGBM predictions—secured the top rank with a private leaderboard RMSE of 36,021, just 2 points above the public leaderboard score of 36,019. Interestingly, while an Optuna-weighted linear blend achieved a lower public RMSE, it ranked below the ElasticNet ensemble on the final evaluation, underscoring the latter’s generalization strength.</p>
-<div id="e789cc67" class="cell" data-collapse="true" data-execution_count="23">
+<div id="6645ba0b" class="cell" data-collapse="true" data-execution_count="23">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -1538,11 +1539,15 @@ Top 30 SHAP Features
 <li>Geographical variation was only partially captured using frequency encoding. Future work could explore residual stacking or blended stacking techniques with subgroup-aware features (e.g., neighborhood frequency, protest history) to correct localized error patterns more explicitly.</li>
 </ul>
 <p>Overall, the final ElasticNet ensemble—integrating Ridge, SHAP-informed LGBM, and Optuna-tuned XGBoost—delivered a strong performance on the private leaderboard. Future extensions may benefit from incorporating time-aware modeling, subgroup-specific residual correction, or spatially informed representations to further improve accuracy and fairness in municipal assessment systems.</p>
+</section>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+<p>[1] Weylandt, M. (2025). <em>STA 9890: Housing Price Prediction Competition Guidelines</em>. Retrieved from <a href="https://michael-weylandt.com/STA9890/competition.html#final-report-50-points">https://michael-weylandt.com/STA9890/competition.html#final-report-50-points</a></p>
 
 
 <!-- -->
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -3401,6 +3406,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb24-1431"><a href="#cb24-1431" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Geographical variation was only partially captured using frequency encoding. Future work could explore residual stacking or blended stacking techniques with subgroup-aware features (e.g., neighborhood frequency, protest history) to correct localized error patterns more explicitly.</span>
 <span id="cb24-1432"><a href="#cb24-1432" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-1433"><a href="#cb24-1433" aria-hidden="true" tabindex="-1"></a>Overall, the final ElasticNet ensemble—integrating Ridge, SHAP-informed LGBM, and Optuna-tuned XGBoost—delivered a strong performance on the private leaderboard. Future extensions may benefit from incorporating time-aware modeling, subgroup-specific residual correction, or spatially informed representations to further improve accuracy and fairness in municipal assessment systems.</span>
+<span id="cb24-1434"><a href="#cb24-1434" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-1435"><a href="#cb24-1435" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
+<span id="cb24-1436"><a href="#cb24-1436" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-1437"><a href="#cb24-1437" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">1</span><span class="co">]</span> Weylandt, M. (2025). *STA 9890: Housing Price Prediction Competition Guidelines*. Retrieved from <span class="co">[</span><span class="ot">https://michael-weylandt.com/STA9890/competition.html#final-report-50-points</span><span class="co">](https://michael-weylandt.com/STA9890/competition.html#final-report-50-points)</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

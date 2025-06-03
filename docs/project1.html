@@ -443,7 +443,7 @@ X^T X \beta = X^T y
 <p><span class="math display">\[
 \hat{\beta} = (X^T X)^{-1} X^T y
 \]</span></p>
-<div id="b7884e4f" class="cell" data-execution_count="1">
+<div id="7629f6db" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -513,7 +513,7 @@ X^T X \beta - X^T y + \lambda \beta = 0
 - Unlike OLS, where <span class="math inline">\(X^T X\)</span> might be singular, Ridge Regression adds <span class="math inline">\(\lambda I\)</span>, making <span class="math inline">\((X^T X + \lambda I)\)</span> always invertible for <span class="math inline">\(\lambda &gt; 0\)</span>.</p>
 <p><strong>Prevents Overfitting</strong><br>
 - Large values of <span class="math inline">\(\beta\)</span> are penalized, reducing variance and improving generalization.</p>
-<div id="574b77d4" class="cell" data-execution_count="2">
+<div id="30c8b9ce" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -586,7 +586,7 @@ S(\beta) = \frac{1}{2n} (y - X\beta)^T (y - X\beta)
 <li>Gradient Descent works better if features are scaled (like using standardization).</li>
 </ul></li>
 </ul>
-<div id="5352e6d1" class="cell" data-execution_count="3">
+<div id="ab25504f" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -668,7 +668,7 @@ S(\beta) = \frac{1}{2n} \sum_{i=1}^{n} (y_i - X\beta)^2 + \frac{\lambda}{2} \|\b
 <li>The second term shrinks the weights, preventing them from growing too large.</li>
 </ul></li>
 </ul>
-<div id="cda01942" class="cell" data-execution_count="4">
+<div id="a6bc886a" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -753,7 +753,7 @@ S(\beta) = \frac{1}{2n} \sum_{i=1}^{n} (y_i - X\beta)^2 + \frac{\lambda}{2} \|\b
     \beta^{(t+1)} = \beta^{(t)} + \alpha \left( \frac{1}{n} X^T(y - X\beta^{(t)}) - \lambda \beta^{(t)} \right)
 \]</span></p>
 <p>As iterations <span class="math inline">\(\to \infty\)</span>, the Gradient Descent solution should converge to Ridge Regression.</p>
-<div id="bef5f308" class="cell" data-execution_count="5">
+<div id="0d086aef" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -838,7 +838,7 @@ Comparison of Ridge Regression and OLS with Weight Decay
 <section id="bias-and-variance-under-linear-dgp" class="level1">
 <h1>3. Bias and Variance under Linear DGP</h1>
 <p>Linear DGP: y=Xβ+ϵ We assume no multicollinearity among predictors in a linear DGP. However, with real data there will be correlation between predictors, violating the assumption of independent features. I wanted to introduce controlled correlation using an AR(2) model, which models each predictor as a function of its two preceding values. I was really interested to explore how OLS and Ridge Regression behave when predictors are not independent.</p>
-<div id="31a77920" class="cell" data-execution_count="6">
+<div id="c7687f41" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to generate AR(2) covariance matrix</span></span>
@@ -857,7 +857,7 @@ Comparison of Ridge Regression and OLS with Weight Decay
 <span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Sigma</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="9808b00f" class="cell" data-execution_count="7">
+<div id="68dc20d7" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to compute OLS</span></span>
@@ -877,7 +877,7 @@ Comparison of Ridge Regression and OLS with Weight Decay
 <p>I performed the Montecarlo simulations separately for OLS and Ridge Regression. In the OLS simulation, we compute the regression coefficients using the closed-form least squares estimator. For each repetition, the training set is used to fit the model, and predictions are made on both training and held-out test sets. The mean squared error (MSE), bias, and variance of the OLS estimates are computed and averaged over multiple repetitions to reduce randomness. The bias is approximated as the mean deviation of the estimated coefficients from the true coefficients, while the variance is measured as the variability of the estimated coefficients.</p>
 <p>In contrast, the Ridge regression simulation includes an additional loop over a grid of regularization parameters (lambda values). For each lambda, the Ridge estimator is used to compute the regression coefficients, and similar metrics—MSE, bias, variance, and out-of-sample error—are calculated. These values are averaged over repetitions for each lambda and then averaged again across all lambdas to obtain a summary measure for each sample size. While this approach provides a general picture of Ridge performance, a more refined strategy might involve selecting the lambda that minimizes out-of-sample error for each repetition.</p>
 <p>Both simulations aim to capture how the MSE decomposes into bias and variance components and how these change with increasing sample size. By comparing OLS and Ridge regression, the code highlights how regularization reduces variance at the cost of increased bias, often leading to better generalization on unseen data, especially when the sample size is small or when multicollinearity is present in the predictors.</p>
-<div id="5eff6801" class="cell" data-execution_count="8">
+<div id="50159c18" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Storage for OLS</span></span>
@@ -919,7 +919,7 @@ Comparison of Ridge Regression and OLS with Weight Decay
 <span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>    ols_out_sample_mse[idx] <span class="op">=</span> out_sample_mse <span class="op">/</span> n_reps</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="848edeef" class="cell" data-execution_count="9">
+<div id="022d5410" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Storage for Ridge Regression</span></span>
@@ -991,7 +991,7 @@ Comparison of Ridge Regression and OLS with Weight Decay
 </div>
 <p>Ridge regression was evaluated across a grid of regularization parameters using k-fold cross-validation with repeated sampling. For each lambda value, the data was split into training and validation sets multiple times to compute stable estimates of out-of-sample mean squared error. The mean MSE across all folds and repetitions was recorded for each lambda, allowing for the identification of the value that yielded the lowest average validation error.</p>
 <p>This process resulted in an optimal lambda of approximately 0.1963, which minimized the out-of-sample MSE to 0.7268. In comparison, the corresponding out-of-sample MSE for ordinary least squares, which does not include any regularization, was slightly higher at 0.7505. This demonstrates that a modest amount of regularization can improve generalization performance by balancing bias and variance, especially in settings where noise or multicollinearity is present in the predictors.</p>
-<div id="a6e9046d" class="cell" data-execution_count="10">
+<div id="d56f6a0b" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Storage for Ridge Regression results</span></span>
@@ -1030,7 +1030,7 @@ Comparison of Ridge Regression and OLS with Weight Decay
 <section id="bias-and-variance-under-non-linear-dgp" class="level1">
 <h1>4. Bias and Variance under Non-Linear DGP</h1>
 <p>Non-Linear DGP:<span class="math display">\[y = \frac{1}{1 + \exp(-X\beta)} + \varepsilon\]</span> This is a logistic transformation applied only to the first predictor(X0), meaning only X0 affects y. I’ve decided to only use the first predictor because if other predictors are included linearly, the function would become partially nonlinear and partially linear. This will make it harder to isolate the effects of nonlinearity when comparing OLS and Ridge Regression, essentially making it harder to understand when and why linear models fail. Additionally, the remaining predictors will act as noise, making it a good case for Ridge Regression to shrink irrelevant features.</p>
-<div id="be1394f0" class="cell" data-execution_count="11">
+<div id="f599f724" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the Non-Linear Data Generating Process (DGP)</span></span>
@@ -1052,7 +1052,7 @@ Comparison of Ridge Regression and OLS with Weight Decay
 <p><strong>Out-of-Sample MSE vs Lambda (Log Scale) under Non-Linear DGP</strong></p>
 </div>
 <p><strong>B-spline Regression</strong>: I used B-spline regression to get the “best approximate” linear regression coefficients. This cubic B-spline regression with 5 degrees of freedom allows the model to smoothly fit approximate the non-linear DGP, avoiding issues of high-degree polynomials. B-spline regression is considered an OLS model because it follows the same fundamental principles of linear regression, however with a transformed feature space.</p>
-<div id="2d47f195" class="cell" data-execution_count="12">
+<div id="3717a89a" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply splines to approximate the function and estimate coefficients</span></span>
@@ -1066,7 +1066,7 @@ Comparison of Ridge Regression and OLS with Weight Decay
 <p>The goal here is to test how well spline regression can model non-linear relationships in data. For each sample size, a synthetic dataset is generated where the relationship between the features and the response is curved or non-linear. Instead of fitting a model to all predictors, the simulation focuses on just the first predictor and tries to capture its non-linear effect using spline basis functions.</p>
 <p>In each repetition, the data is split into training and test sets. A spline regression model is fit on the training set by expressing the first predictor using a set of cubic spline basis functions. These basis functions break the input into smooth polynomial pieces connected at specific points called knots. Once the model is fit, it’s used to predict outcomes on the test set, and the accuracy of these predictions is measured using mean squared error (MSE).</p>
 <p>This process is repeated many times to reduce the effect of randomness from data splits. The final MSE for each sample size is the average over all repetitions. Additionally, the spline coefficients — which determine the shape of the fitted curve — are also averaged across repetitions. This gives a sense of the typical function shape learned by the spline model and helps assess how the fitted relationship evolves as more data becomes available.</p>
-<div id="a25b5f72" class="cell" data-execution_count="13">
+<div id="0b6642b6" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Monte Carlo Simulation</span></span>
