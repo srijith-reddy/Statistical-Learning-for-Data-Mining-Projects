@@ -38,10 +38,11 @@ Feature engineering plays a critical role in unlocking predictive signals from r
 To handle missing values in temporally structured features (e.g., building area, quality, full bath), we designed a consistent backfilling approach that uses older data to impute more recent years. Specifically, columns were ordered from newest to oldest (i.e., 2019, 2018, ..., 2015), and we applied `bfill(axis=1)` across these columns. This setup causes older values (e.g., from 2015 or 2016) to be used to fill in newer year columns (e.g., 2018 or 2019), effectively implementing a forward fill in temporal logic. This approach assumes that older data reflects the property’s original state more accurately and helps prevent later-year anomalies or missing values from distorting long-term trends.
 
 This logic was applied across multiple feature groups:
-- Residential count features: floors, full bath, half bath, bedrooms, total rooms
-- Area-based features: building area, land area
-- Valuation features: building value, land value, assessed
-- Categorical building attributes: foundation type, grade, building condition, quality, quality description, physical condition, exterior walls, has cooling, has heat
+
+ - Residential count features: floors, full bath, half bath, bedrooms, total rooms
+ - Area-based features: building area, land area
+ - Valuation features: building value, land value, assessed
+ - Categorical building attributes: foundation type, grade, building condition, quality, quality description, physical condition, exterior walls, has cooling, has heat
 ```{python}
 #| echo: true
 #| output: false
@@ -68,8 +69,9 @@ test_merged = backfill_categorical_year_features(test_merged, features, years)
 ```
 **Zero-Aware Property Filtering:**
 In cases where `floor_area_total_2019 = 0`, we treated the property as non-residential or commercial and applied domain-specific logic to avoid inappropriate imputations or distortions in the modeling process:
-- All related residential building features—such as full bath, total rooms, garage area, and porch area—were set to zero.
-- We also zeroed out all building area variables and the corresponding building value variables to reflect the absence of a residential structure.
+ 
+ - All related residential building features—such as full bath, total rooms, garage area, and porch area—were set to zero.
+ - We also zeroed out all building area variables and the corresponding building value variables to reflect the absence of a residential structure.
 
 These records were retained in the dataset rather than dropped, as they likely represent a distinct class of properties where valuation is driven primarily by land characteristics. Explicitly identifying and treating these properties allowed the model to better separate residential and non-residential valuation patterns.
 ```{python}
@@ -143,9 +145,10 @@ print(f" Dropped columns from train/test: {cols_to_drop}")
 ```
 **Multi-Level Median and Mode Imputation:**
 After applying logic-based pruning, we used a three-level median imputation strategy for continuous features (e.g., assessed value 2017, building area 2017) based on the following hierarchy:
-- Level 1: neighborhood-level median
-- Level 2: region-level median
-- Level 3: global median (fallback)
+
+ - Level 1: neighborhood-level median
+ - Level 2: region-level median
+ - Level 3: global median (fallback)
 
 ```{python}
 #| echo: true
@@ -194,15 +197,17 @@ for col in assessed_cols:
 
 ```
 For categorical variables such as foundation type or building condition, we applied single-level mode imputation using the most frequent category within the training data. While this approach is less localized, it provided a simple and stable method for handling missing values in features with low cardinality.
+
 ## 3.2 Neighborhood and Region-Level Statistical Features
 
 To capture localized pricing dynamics and identify anomalies in property assessments, we engineered a suite of statistical features using the 2018 assessed values as a proxy for prior valuation context. We first computed neighborhood-level metrics including the mean, median, standard deviation, and interquartile range (IQR) of assessed 2018, grouped by neighborhood. Similarly, region-level statistics were computed using the region variable.
 
 Using the merged and imputed stats, we computed derived features such as:
-- **assess minus neigh mean**: the raw deviation of a property’s 2018 assessed value from its neighborhood mean
-- **assess ratio neigh mean**: a normalized ratio of a property’s value to its local average
-- **z score assess neigh**: a z-score based on neighborhood-level variation
-- **Corresponding region-level counterparts**: assess minus region mean, assess ratio region mean, and z score assess region
+
+- assess minus neigh mean: the raw deviation of a property’s 2018 assessed value from its neighborhood mean
+- assess ratio neigh mean: a normalized ratio of a property’s value to its local average
+- z score assess neigh: a z-score based on neighborhood-level variation
+- Corresponding region-level counterparts: assess minus region mean, assess ratio region mean, and z score assess region
 
 These features helped contextualize each property’s assessed value relative to other properties within the same neighborhood or region. They proved useful in capturing outliers and potentially undervalued homes that deviated from local valuation patterns.
 ```{python}
@@ -277,8 +282,9 @@ print(" Completed: Stats merge + std fallback + z-score computation.")
 To convert high-cardinality categorical variables into numerical features while preserving signal strength, we applied frequency encoding to four key geographic identifiers: neighborhood, region, zone, and subneighborhood.
 
 This encoding strategy served two purposes:
-1. It allowed the model to retain information about how common or rare a spatial unit was. A frequently occurring neighborhood (i.e., one with high frequency) likely has more properties, which implies greater residential or commercial development in that area.
-2. Areas with more properties are also likely to have more consistent and well-understood assessment patterns—the government has “seen” more properties there, which may reduce valuation volatility. These areas are more visible or prioritized in municipal processes.
+ 
+ 1. It allowed the model to retain information about how common or rare a spatial unit was. A frequently occurring neighborhood (i.e., one with high frequency) likely has more properties, which implies greater residential or commercial development in that area.
+ 2. Areas with more properties are also likely to have more consistent and well-understood assessment patterns—the government has “seen” more properties there, which may reduce valuation volatility. These areas are more visible or prioritized in municipal processes.
 
 Finally, frequency encoding avoids the dimensional explosion caused by one-hot encoding, which is especially problematic for variables with high cardinality like neighborhood or subneighborhood.
 ```{python}

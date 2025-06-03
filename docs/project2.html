@@ -319,7 +319,7 @@ Given two groups <span class="math inline">\(G_1\)</span> and <span class="math 
 <li>Tier 3: Bottom 60%</li>
 </ul>
 <p>This tier system enables group fairness evaluation across schools with varying institutional prestige.</p>
-<div id="ce78f9de" class="cell" data-execution_count="1">
+<div id="3e9436eb" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -360,7 +360,7 @@ Given two groups <span class="math inline">\(G_1\)</span> and <span class="math 
 <span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>college_df[<span class="st">'height_in'</span>] <span class="op">=</span> college_df[<span class="st">'ht'</span>].<span class="bu">apply</span>(convert_excel_date_height)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="83b4e777" class="cell" data-execution_count="2">
+<div id="7695d71d" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- TIER ASSIGNMENT BASED ON DRAFT RATE ---</span></span>
@@ -393,7 +393,7 @@ Given two groups <span class="math inline">\(G_1\)</span> and <span class="math 
 <li>Log-likelihoods using the Gaussian log-density function</li>
 </ul>
 <p>For each input vector, the model compares log-posterior probabilities and assigns a label of 1 if the class 1 posterior is greater, and 0 otherwise. This lightweight model is not only computationally simple but also provides useful diversity in the ensemble. Because Naive Bayes is so simple, it acts as a benchmark. If your complex models (like SVM or Lasso) don’t clearly outperform it, you might need to reassess their added complexity or feature use.</p>
-<div id="688aeb24" class="cell" data-execution_count="3">
+<div id="21ee36b9" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- MANUAL NAIVE BAYES ---</span></span>
@@ -422,7 +422,7 @@ Given two groups <span class="math inline">\(G_1\)</span> and <span class="math 
 <li>Solves the linear discriminant function (delta) for each class</li>
 </ul>
 <p>Each data point is assigned to the class with the higher discriminant score. LDA offers a more flexible alternative to Naive Bayes by relaxing the independence assumption while still providing a computationally efficient, interpretable classifier.</p>
-<div id="da019043" class="cell" data-execution_count="4">
+<div id="db01ceee" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- MANUAL LDA ---</span></span>
@@ -455,7 +455,7 @@ Given two groups <span class="math inline">\(G_1\)</span> and <span class="math 
 <p>Lasso: Adds <span class="math inline">\(\ell_1\)</span> norm penalty to encourage sparsity</p>
 <p>Threshold tuning (e.g., using precision-recall curves) was applied to improve model calibration, especially when the dataset is imbalanced. A tuned threshold (e.g., 0.6) helps balance precision and recall based on evaluation metrics.</p>
 <p>A regularization strength of <span class="math inline">\(\lambda = 0.1\)</span> was selected as a reasonable value to balance overfitting and underfitting. It is strong enough to stabilize the solution but not so aggressive that it suppresses informative features.</p>
-<div id="c53a8c91" class="cell" data-execution_count="5">
+<div id="f2c204d7" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> logistic_cvx_preds_binary(X, y, X_eval, reg_type<span class="op">=</span><span class="va">None</span>, lambda_<span class="op">=</span><span class="fl">0.1</span>, thresh<span class="op">=</span><span class="fl">0.6</span>):</span>
@@ -490,7 +490,7 @@ Given two groups <span class="math inline">\(G_1\)</span> and <span class="math 
 <li><p>Converts predictions from raw margin scores to 0/1 labels via thresholding</p></li>
 </ul>
 <p>A decision threshold of 1.52 was selected empirically based on precision-recall and ROC curves to optimize performance. This allowed the classifier to maintain conservative positive predictions, especially useful in a fairness-aware pipeline where over-selection of dominant group members must be mitigated. A regularization parameter of <span class="math inline">\(\lambda = 0.1\)</span> was chosen to softly penalize large weights while preserving flexibility in the decision boundary. This value was found to offer a stable trade-off between underfitting and overfitting in the fairness setting.</p>
-<div id="632326fb" class="cell" data-execution_count="6">
+<div id="bce34969" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> manual_svm_hinge(X_train, y_train, X_eval, lambda_<span class="op">=</span><span class="fl">0.1</span>):</span>
@@ -521,7 +521,7 @@ Given two groups <span class="math inline">\(G_1\)</span> and <span class="math 
 <section id="decision-tree" class="level4">
 <h4 class="anchored" data-anchor-id="decision-tree">Decision Tree</h4>
 <p>A decision tree classifier was included as a base learner using the built-in <code>DecisionTreeClassifier</code> from scikit-learn. This model makes hierarchical splits in the feature space to arrive at a decision path for each input. The implementation used the <code>class_weight="balanced"</code> argument to address class imbalance, ensuring the tree did not overly favor the majority class.</p>
-<div id="20c29423" class="cell" data-execution_count="7">
+<div id="834efc73" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- DECISION TREE (BUILT-IN ALLOWED) ---</span></span>
@@ -536,7 +536,7 @@ Given two groups <span class="math inline">\(G_1\)</span> and <span class="math 
 <h2 class="anchored" data-anchor-id="implementation-and-assessment-of-fairstacks">5 Implementation and Assessment of Fairstacks</h2>
 <p>As we shift toward a fairness-aware ensemble strategy, it becomes critical to structure the data pipeline in a way that supports robust model selection and unbiased performance evaluation. Before learning ensemble weights or assessing bias mitigation, a principled strategy for dividing our dataset into training, validation, and test splits is essential.</p>
 <p>This is especially important in the context of our Steph Curry fairness model, where the number of drafted players is relatively small and the fairness metric—True Positive Rate (TPR) gap between players from high-exposure programs (Tier 1) and lesser-known schools (Tier 3)—requires meaningful group-level comparisons. A careful partitioning ensures that the evaluation of how fairly we treat underdog players is accurate and unbiased.</p>
-<div id="7557bdf8" class="cell" data-execution_count="8">
+<div id="7f7e83cc" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> [<span class="st">'pts'</span>, <span class="st">'ast'</span>, <span class="st">'stl'</span>, <span class="st">'blk'</span>, <span class="st">'treb'</span>, <span class="st">'height_in'</span>, <span class="st">'TS_per'</span>, <span class="st">'eFG'</span>, <span class="st">'player_name'</span>, <span class="st">'Drafted'</span>,<span class="st">'school_tier'</span>]</span>
@@ -552,7 +552,7 @@ Given two groups <span class="math inline">\(G_1\)</span> and <span class="math 
 <p>To build a model that balances predictive power with fairness, we selected a combination of performance-based and context-aware features. Traditional box score statistics such as points per game, assists, steals, blocks, total rebounds, and shooting efficiency (eFG, TS per) were included to capture a player’s tangible on-court contributions. Additionally, height was included as a proxy for physical attributes that are often overvalued in the draft process.</p>
 <p>Most importantly, we incorporated school tier—a categorical variable based on draft success rates of a player’s college program. This feature serves as the foundation for our fairness assessment, as we aim to detect and mitigate biases that favor players from elite programs (e.g., Duke, Kentucky) over similarly talented players from lesser-known schools (e.g., Davidson). Since our fairness metric is based on TPR disparities across school tiers, this feature is critical for evaluating whether players like Steph Curry, who came from a mid-major program, are systematically undervalued.</p>
 <p>Base Learner Outputs and Stacking Matrix: Each of the seven base learners—Naive Bayes, Linear Discriminant Analysis (LDA), Decision Tree, three logistic regression variants (plain, ridge, lasso), and Support Vector Machine (SVM)—was trained on the training set and evaluated on the validation set. The binary predictions (0/1) of each learner on the validation set were vertically stacked to construct the matrix <span class="math inline">\(H_{\text{val}} \in \mathbb{R}^{n \times m}\)</span>, where <span class="math inline">\(n\)</span> is the number of validation examples and <span class="math inline">\(m = 7\)</span> is the number of base models. This matrix serves as input to the FairStacks optimization routine, allowing us to compute an ensemble prediction as a weighted combination of individual model decisions.</p>
-<div id="09daa231" class="cell" data-execution_count="9">
+<div id="ba3a822e" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply your functions</span></span>
@@ -568,7 +568,7 @@ Given two groups <span class="math inline">\(G_1\)</span> and <span class="math 
 </details>
 </div>
 <p>Fairness Vector Calculation: To estimate the bias of each base learner, we compute the True Positive Rate (TPR) separately for players from Tier 1 schools and those from lower-tier programs. The difference between these TPRs defines the bias for each learner:</p>
-<div id="5cad0b2b" class="cell" data-execution_count="10">
+<div id="f77c5b61" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Fairness Vector ---</span></span>
@@ -613,7 +613,7 @@ With predictions and corresponding bias scores for each base learner in hand, th
 The weights <span class="math inline">\(\mathbf{w}\)</span> form a convex combination <span class="math inline">\((w_j \geq 0, \sum_j w_j = 1)\)</span>, ensuring interpretability and stability.</p>
 <p>Here, <span class="math inline">\(\lambda = 10\)</span> emphasizes fairness by reducing group disparities between players from high-exposure and lower-tier programs. This balance is crucial in the Steph Curry fairness model, where the goal is to counteract systemic undervaluation of talented players from less visible schools.</p></li>
 </ul>
-<div id="0601421c" class="cell" data-execution_count="11">
+<div id="a4c701f4" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- FairStacks Optimization ---</span></span>

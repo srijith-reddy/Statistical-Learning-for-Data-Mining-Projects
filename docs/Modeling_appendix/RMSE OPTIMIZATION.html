@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>rmse-optimization – Statisitical Learning for Data Mining Project Portfolio</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Statisitical Learning for Data Mining Project Portfolio</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../project1.html"> 
+<span class="menu-text">Bias and Variance in Linear Regression</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../project2.html"> 
+<span class="menu-text">Ensemble Learning Techniques for Fair Classification</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../project3.html"> 
+<span class="menu-text">Forecasting Property Valuations in a Mid-Sized U.S. City:A SHAP-Gain Feature Selection and ElasticNet-Ensembled Approach with Optuna-Tuned XGBoost</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+
+
+
+
+<div id="5eca8197" class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ===== Load Data =====</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>folder_path <span class="op">=</span> Path(<span class="st">"data"</span>)  <span class="co"># Make sure there's a 'data/' folder next to this script</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>building_years <span class="op">=</span> []</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> year <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2015</span>, <span class="dv">2020</span>):</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.read_csv(folder_path <span class="op">/</span> <span class="ss">f'building_details_</span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">.csv'</span>)  <span class="co"># FIXED</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">'year'</span>] <span class="op">=</span> year</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    building_years.append(df)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>building_all <span class="op">=</span> pd.concat(building_years, ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>building_all <span class="op">=</span> building_all.drop_duplicates(subset<span class="op">=</span>[<span class="st">'acct'</span>, <span class="st">'year'</span>], keep<span class="op">=</span><span class="st">'first'</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>pivoted <span class="op">=</span> building_all.pivot(index<span class="op">=</span><span class="st">'acct'</span>, columns<span class="op">=</span><span class="st">'year'</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>pivoted.columns <span class="op">=</span> [<span class="ss">f'</span><span class="sc">{</span>col<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">'</span> <span class="cf">for</span> col, year <span class="kw">in</span> pivoted.columns]</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>pivoted <span class="op">=</span> pivoted.reset_index()</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> pd.read_csv(folder_path <span class="op">/</span> <span class="st">'assessment_history_train.csv'</span>)  <span class="co"># FIXED</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>test <span class="op">=</span> pd.read_csv(folder_path <span class="op">/</span> <span class="st">'assessment_history_test.csv'</span>)    <span class="co"># FIXED</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>train_merged <span class="op">=</span> train.merge(pivoted, on<span class="op">=</span><span class="st">'acct'</span>, how<span class="op">=</span><span class="st">'left'</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>test_merged <span class="op">=</span> test.merge(pivoted, on<span class="op">=</span><span class="st">'acct'</span>, how<span class="op">=</span><span class="st">'left'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/sl/hc9dmfps60l7lq3bh_fp8ny40000gn/T/ipykernel_32330/2274541461.py:18: DtypeWarning: Columns (14) have mixed types. Specify dtype option on import or set low_memory=False.
+  df = pd.read_csv(folder_path + f'building_details_{year}.csv')
+/var/folders/sl/hc9dmfps60l7lq3bh_fp8ny40000gn/T/ipykernel_32330/2274541461.py:30: DtypeWarning: Columns (21,23,25,27) have mixed types. Specify dtype option on import or set low_memory=False.
+  test = pd.read_csv(folder_path + 'assessment_history_test.csv')</code></pre>
+</div>
+</div>
+<div id="3e12be15" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>acct_test <span class="op">=</span> test_merged[[<span class="st">'acct'</span>]].copy() <span class="cf">if</span> <span class="st">'acct'</span> <span class="kw">in</span> test_merged.columns <span class="cf">else</span> <span class="va">None</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="87f39d7d" class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> optuna</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> root_mean_squared_error</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># === Setup Logging ===</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>logging.basicConfig(level<span class="op">=</span>logging.INFO, <span class="bu">format</span><span class="op">=</span><span class="st">"</span><span class="sc">%(asctime)s</span><span class="st"> [</span><span class="sc">%(levelname)s</span><span class="st">] </span><span class="sc">%(message)s</span><span class="st">"</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>logger <span class="op">=</span> logging.getLogger(<span class="st">"OptunaBlender"</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>optuna.logging.set_verbosity(optuna.logging.INFO)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co"># === Load base model predictions ===</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>oof_xgb <span class="op">=</span> np.load(<span class="st">"oof_preds_xgbreg.npy"</span>)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>ridge_oof <span class="op">=</span> np.load(<span class="st">"ridgecv_oof_preds.npy"</span>)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>oof_lgb<span class="op">=</span>np.load(<span class="st">"oof_preds_lgbm.npy"</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>test_xgb <span class="op">=</span> np.load(<span class="st">"test_preds_xgbreg.npy"</span>)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>ridge_test_preds <span class="op">=</span> np.load(<span class="st">"ridgecv_test_preds.npy"</span>)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>test_lgb<span class="op">=</span>np.load(<span class="st">"test_preds_lgbm_shap.npy"</span>)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="co"># === Targets and prediction stack ===</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>y_meta <span class="op">=</span> train[<span class="st">'TARGET'</span>].values</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>X_base <span class="op">=</span> np.vstack([oof_xgb, ridge_oof,oof_lgb]).T</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>X_test_base <span class="op">=</span> np.vstack([test_xgb, ridge_test_preds,test_lgb]).T</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co"># === Holdout split ===</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>X_train, X_holdout, y_train, y_holdout <span class="op">=</span> train_test_split(X_base, y_meta, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co"># === Objective Function ===</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> objective(trial):</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    weights <span class="op">=</span> [trial.suggest_float(<span class="ss">f"w</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span>, <span class="dv">0</span>, <span class="dv">1</span>) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(X_train.shape[<span class="dv">1</span>])]</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    weights <span class="op">=</span> np.array(weights)</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    weights <span class="op">/=</span> weights.<span class="bu">sum</span>()  <span class="co"># normalize</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    preds <span class="op">=</span> X_holdout <span class="op">@</span> weights</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    rmse <span class="op">=</span> root_mean_squared_error(y_holdout, preds)</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="ss">f"Trial </span><span class="sc">{</span>trial<span class="sc">.</span>number<span class="sc">}</span><span class="ss"> | Weights: </span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">round</span>(weights, <span class="dv">3</span>)<span class="sc">.</span>tolist()<span class="sc">}</span><span class="ss"> | RMSE: </span><span class="sc">{</span>rmse<span class="sc">:,.4f}</span><span class="ss">"</span>)</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> rmse</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a><span class="co"># === Run Study ===</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>logger.info(<span class="st">" Starting Optuna optimization for weighted blending..."</span>)</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>study <span class="op">=</span> optuna.create_study(direction<span class="op">=</span><span class="st">"minimize"</span>)</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>study.optimize(objective, n_trials<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a><span class="co"># === Best weights ===</span></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>best_weights <span class="op">=</span> np.array([study.best_trial.params[<span class="ss">f"w</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(X_base.shape[<span class="dv">1</span>])])</span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>best_weights <span class="op">/=</span> best_weights.<span class="bu">sum</span>()</span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>logger.info(<span class="ss">f" Best weights: </span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">round</span>(best_weights, <span class="dv">4</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>logger.info(<span class="ss">f" Best RMSE: </span><span class="sc">{</span>study<span class="sc">.</span>best_value<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a><span class="co"># === Final test prediction ===</span></span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>meta_preds <span class="op">=</span> X_test_base <span class="op">@</span> best_weights</span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a><span class="co"># === Save predictions ===</span></span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>np.save(<span class="st">"test_preds_optuna_blended.npy"</span>, meta_preds)</span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>account_ids <span class="op">=</span> acct_test.values.ravel()</span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>submission <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ACCOUNT"</span>: account_ids,</span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>    <span class="st">"TARGET"</span>: meta_preds</span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>submission.to_csv(<span class="st">"submission_optuna_blended.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>logger.info(<span class="st">" Saved: test_preds_optuna_blended.npy and submission_optuna_blended.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>2025-05-12 07:39:46,871 [INFO] 🔍 Starting Optuna optimization for weighted blending...
+[I 2025-05-12 07:39:46,874] A new study created in memory with name: no-name-e87df36d-d44d-46e5-8414-1e7bbd57cc50
+2025-05-12 07:39:46,904 [INFO] Trial 0 | Weights: [0.636, 0.327, 0.037] | RMSE: 36,950.4432
+[I 2025-05-12 07:39:46,922] Trial 0 finished with value: 36950.443206137075 and parameters: {'w0': 0.8512974733714285, 'w1': 0.4382062860973963, 'w2': 0.050059893275311795}. Best is trial 0 with value: 36950.443206137075.
+2025-05-12 07:39:46,927 [INFO] Trial 1 | Weights: [0.245, 0.239, 0.517] | RMSE: 36,368.3838
+[I 2025-05-12 07:39:46,929] Trial 1 finished with value: 36368.38375484343 and parameters: {'w0': 0.461510781178444, 'w1': 0.44982409881404184, 'w2': 0.9736670048821278}. Best is trial 1 with value: 36368.38375484343.
+2025-05-12 07:39:46,935 [INFO] Trial 2 | Weights: [0.335, 0.131, 0.535] | RMSE: 36,728.7778
+[I 2025-05-12 07:39:46,936] Trial 2 finished with value: 36728.777840581635 and parameters: {'w0': 0.4627230001490521, 'w1': 0.18049278456594453, 'w2': 0.7389728518192171}. Best is trial 1 with value: 36368.38375484343.
+2025-05-12 07:39:46,940 [INFO] Trial 3 | Weights: [0.442, 0.297, 0.261] | RMSE: 36,388.6566
+[I 2025-05-12 07:39:46,942] Trial 3 finished with value: 36388.65657907775 and parameters: {'w0': 0.37715287698748956, 'w1': 0.2529355394494184, 'w2': 0.22235972902645085}. Best is trial 1 with value: 36368.38375484343.
+2025-05-12 07:39:46,946 [INFO] Trial 4 | Weights: [0.717, 0.137, 0.146] | RMSE: 37,289.5234
+[I 2025-05-12 07:39:46,948] Trial 4 finished with value: 37289.52341502119 and parameters: {'w0': 0.718366331009495, 'w1': 0.13758093758942003, 'w2': 0.14585592734319874}. Best is trial 1 with value: 36368.38375484343.
+2025-05-12 07:39:46,954 [INFO] Trial 5 | Weights: [0.558, 0.048, 0.395] | RMSE: 37,279.3537
+[I 2025-05-12 07:39:46,956] Trial 5 finished with value: 37279.353735605735 and parameters: {'w0': 0.8018977065817213, 'w1': 0.06864057902045295, 'w2': 0.567378942503627}. Best is trial 1 with value: 36368.38375484343.
+2025-05-12 07:39:46,961 [INFO] Trial 6 | Weights: [0.21, 0.689, 0.101] | RMSE: 37,852.6205
+[I 2025-05-12 07:39:46,962] Trial 6 finished with value: 37852.62053436713 and parameters: {'w0': 0.283176440066381, 'w1': 0.9293913670464038, 'w2': 0.13666313368147331}. Best is trial 1 with value: 36368.38375484343.
+2025-05-12 07:39:46,968 [INFO] Trial 7 | Weights: [0.192, 0.508, 0.3] | RMSE: 36,615.6310
+[I 2025-05-12 07:39:46,970] Trial 7 finished with value: 36615.631039068605 and parameters: {'w0': 0.358132635723618, 'w1': 0.9495870380297109, 'w2': 0.5609020928152764}. Best is trial 1 with value: 36368.38375484343.
+2025-05-12 07:39:46,974 [INFO] Trial 8 | Weights: [0.38, 0.272, 0.348] | RMSE: 36,318.4256
+[I 2025-05-12 07:39:46,976] Trial 8 finished with value: 36318.42557230434 and parameters: {'w0': 0.5983077192129119, 'w1': 0.4292025589162083, 'w2': 0.5487295121197108}. Best is trial 8 with value: 36318.42557230434.
+2025-05-12 07:39:46,981 [INFO] Trial 9 | Weights: [0.081, 0.344, 0.576] | RMSE: 36,397.8875
+[I 2025-05-12 07:39:46,983] Trial 9 finished with value: 36397.88751680722 and parameters: {'w0': 0.1160612783585726, 'w1': 0.4950584153944998, 'w2': 0.8286367193016121}. Best is trial 8 with value: 36318.42557230434.
+2025-05-12 07:39:47,013 [INFO] Trial 10 | Weights: [0.498, 0.346, 0.155] | RMSE: 36,553.9230
+[I 2025-05-12 07:39:47,014] Trial 10 finished with value: 36553.92301621708 and parameters: {'w0': 0.9872202793183431, 'w1': 0.6865442888409248, 'w2': 0.3078864370431464}. Best is trial 8 with value: 36318.42557230434.
+2025-05-12 07:39:47,037 [INFO] Trial 11 | Weights: [0.269, 0.297, 0.435] | RMSE: 36,255.3058
+[I 2025-05-12 07:39:47,038] Trial 11 finished with value: 36255.305786092205 and parameters: {'w0': 0.5991308842812957, 'w1': 0.6616208329418627, 'w2': 0.9702060680474949}. Best is trial 11 with value: 36255.305786092205.
+2025-05-12 07:39:47,063 [INFO] Trial 12 | Weights: [0.374, 0.398, 0.228] | RMSE: 36,410.5865
+[I 2025-05-12 07:39:47,064] Trial 12 finished with value: 36410.586475182434 and parameters: {'w0': 0.654522038520817, 'w1': 0.6979614361373142, 'w2': 0.39961116479614806}. Best is trial 11 with value: 36255.305786092205.
+2025-05-12 07:39:47,085 [INFO] Trial 13 | Weights: [0.266, 0.297, 0.437] | RMSE: 36,255.0681
+[I 2025-05-12 07:39:47,086] Trial 13 finished with value: 36255.06814339705 and parameters: {'w0': 0.6021020261235398, 'w1': 0.6727952126212886, 'w2': 0.9886396381242786}. Best is trial 13 with value: 36255.06814339705.
+2025-05-12 07:39:47,105 [INFO] Trial 14 | Weights: [0.25, 0.312, 0.437] | RMSE: 36,246.6455
+[I 2025-05-12 07:39:47,106] Trial 14 finished with value: 36246.64552487201 and parameters: {'w0': 0.5625309159129054, 'w1': 0.7021771016499412, 'w2': 0.9824191817813847}. Best is trial 14 with value: 36246.64552487201.
+2025-05-12 07:39:47,125 [INFO] Trial 15 | Weights: [0.113, 0.427, 0.461] | RMSE: 36,393.6265
+[I 2025-05-12 07:39:47,127] Trial 15 finished with value: 36393.626524524654 and parameters: {'w0': 0.1904772311031564, 'w1': 0.7225124599931606, 'w2': 0.7795459344328162}. Best is trial 14 with value: 36246.64552487201.
+2025-05-12 07:39:47,277 [INFO] Trial 16 | Weights: [0.227, 0.374, 0.398] | RMSE: 36,261.7563
+[I 2025-05-12 07:39:47,280] Trial 16 finished with value: 36261.7562513915 and parameters: {'w0': 0.5040920249586347, 'w1': 0.8289883381788822, 'w2': 0.8828428749297544}. Best is trial 14 with value: 36246.64552487201.
+2025-05-12 07:39:47,368 [INFO] Trial 17 | Weights: [0.372, 0.295, 0.333] | RMSE: 36,297.6387
+[I 2025-05-12 07:39:47,370] Trial 17 finished with value: 36297.63872295668 and parameters: {'w0': 0.7721062430579488, 'w1': 0.6114881446028405, 'w2': 0.6910804981246708}. Best is trial 14 with value: 36246.64552487201.
+2025-05-12 07:39:47,406 [INFO] Trial 18 | Weights: [0.013, 0.437, 0.55] | RMSE: 36,553.4572
+[I 2025-05-12 07:39:47,408] Trial 18 finished with value: 36553.457239225296 and parameters: {'w0': 0.023626529230545534, 'w1': 0.7932713390262327, 'w2': 0.9995892890186674}. Best is trial 14 with value: 36246.64552487201.
+2025-05-12 07:39:47,441 [INFO] Trial 19 | Weights: [0.481, 0.176, 0.343] | RMSE: 36,615.1076
+[I 2025-05-12 07:39:47,444] Trial 19 finished with value: 36615.10758707307 and parameters: {'w0': 0.912855433413196, 'w1': 0.3339597357846983, 'w2': 0.650071058095715}. Best is trial 14 with value: 36246.64552487201.
+2025-05-12 07:39:47,473 [INFO] Trial 20 | Weights: [0.27, 0.283, 0.447] | RMSE: 36,269.7951
+[I 2025-05-12 07:39:47,474] Trial 20 finished with value: 36269.79507603682 and parameters: {'w0': 0.5422565908088236, 'w1': 0.5692108765000661, 'w2': 0.8988280587186462}. Best is trial 14 with value: 36246.64552487201.
+2025-05-12 07:39:47,505 [INFO] Trial 21 | Weights: [0.291, 0.287, 0.422] | RMSE: 36,263.7897
+[I 2025-05-12 07:39:47,506] Trial 21 finished with value: 36263.78969596692 and parameters: {'w0': 0.6307761844602138, 'w1': 0.6212626442073994, 'w2': 0.9138491171539356}. Best is trial 14 with value: 36246.64552487201.
+2025-05-12 07:39:47,535 [INFO] Trial 22 | Weights: [0.297, 0.355, 0.348] | RMSE: 36,258.6930
+[I 2025-05-12 07:39:47,537] Trial 22 finished with value: 36258.69304258916 and parameters: {'w0': 0.7020152744705898, 'w1': 0.8368115833238905, 'w2': 0.8212339105842166}. Best is trial 14 with value: 36246.64552487201.
+2025-05-12 07:39:47,577 [INFO] Trial 23 | Weights: [0.245, 0.323, 0.433] | RMSE: 36,243.1611
+[I 2025-05-12 07:39:47,579] Trial 23 finished with value: 36243.16109253676 and parameters: {'w0': 0.5612496396889873, 'w1': 0.7403467332801422, 'w2': 0.9924728023929719}. Best is trial 23 with value: 36243.16109253676.
+2025-05-12 07:39:47,607 [INFO] Trial 24 | Weights: [0.193, 0.372, 0.435] | RMSE: 36,269.4153
+[I 2025-05-12 07:39:47,610] Trial 24 finished with value: 36269.4153359987 and parameters: {'w0': 0.391272938966284, 'w1': 0.7523873307566165, 'w2': 0.8804262340172249}. Best is trial 23 with value: 36243.16109253676.
+2025-05-12 07:39:47,631 [INFO] Trial 25 | Weights: [0.257, 0.422, 0.321] | RMSE: 36,348.8107
+[I 2025-05-12 07:39:47,632] Trial 25 finished with value: 36348.81074859534 and parameters: {'w0': 0.5387325086380578, 'w1': 0.8839636689633336, 'w2': 0.6725983599717866}. Best is trial 23 with value: 36243.16109253676.
+2025-05-12 07:39:47,655 [INFO] Trial 26 | Weights: [0.413, 0.323, 0.264] | RMSE: 36,352.7612
+[I 2025-05-12 07:39:47,656] Trial 26 finished with value: 36352.761202371876 and parameters: {'w0': 0.6966903754697373, 'w1': 0.5449678726605875, 'w2': 0.44437095202120114}. Best is trial 23 with value: 36243.16109253676.
+2025-05-12 07:39:47,679 [INFO] Trial 27 | Weights: [0.125, 0.408, 0.467] | RMSE: 36,354.1598
+[I 2025-05-12 07:39:47,680] Trial 27 finished with value: 36354.1597956121 and parameters: {'w0': 0.26606469776436215, 'w1': 0.8715061612732702, 'w2': 0.9973402140465389}. Best is trial 23 with value: 36243.16109253676.
+2025-05-12 07:39:47,706 [INFO] Trial 28 | Weights: [0.212, 0.393, 0.395] | RMSE: 36,286.0793
+[I 2025-05-12 07:39:47,707] Trial 28 finished with value: 36286.07932505858 and parameters: {'w0': 0.42016975460853795, 'w1': 0.7802809099754279, 'w2': 0.7838913761550557}. Best is trial 23 with value: 36243.16109253676.
+2025-05-12 07:39:47,730 [INFO] Trial 29 | Weights: [0.314, 0.354, 0.332] | RMSE: 36,268.1538
+[I 2025-05-12 07:39:47,731] Trial 29 finished with value: 36268.153781566696 and parameters: {'w0': 0.8830700179149744, 'w1': 0.9946244532519506, 'w2': 0.9325410809131629}. Best is trial 23 with value: 36243.16109253676.
+2025-05-12 07:39:47,753 [INFO] Trial 30 | Weights: [0.657, 0.333, 0.01] | RMSE: 37,048.2169
+[I 2025-05-12 07:39:47,754] Trial 30 finished with value: 37048.21693418301 and parameters: {'w0': 0.7842172537157553, 'w1': 0.39801279233126396, 'w2': 0.011517753466577352}. Best is trial 23 with value: 36243.16109253676.
+2025-05-12 07:39:47,784 [INFO] Trial 31 | Weights: [0.266, 0.301, 0.433] | RMSE: 36,251.7280
+[I 2025-05-12 07:39:47,785] Trial 31 finished with value: 36251.72796367525 and parameters: {'w0': 0.580291395824575, 'w1': 0.657658922599533, 'w2': 0.9457744687970755}. Best is trial 23 with value: 36243.16109253676.
+2025-05-12 07:39:47,813 [INFO] Trial 32 | Weights: [0.283, 0.305, 0.413] | RMSE: 36,248.5988
+[I 2025-05-12 07:39:47,814] Trial 32 finished with value: 36248.59883358151 and parameters: {'w0': 0.57897880187914, 'w1': 0.6243712055877353, 'w2': 0.8460810696633265}. Best is trial 23 with value: 36243.16109253676.
+2025-05-12 07:39:47,837 [INFO] Trial 33 | Weights: [0.282, 0.27, 0.448] | RMSE: 36,286.0651
+[I 2025-05-12 07:39:47,838] Trial 33 finished with value: 36286.0651439649 and parameters: {'w0': 0.5352852349646179, 'w1': 0.5133915967428462, 'w2': 0.8517506626926439}. Best is trial 23 with value: 36243.16109253676.
+2025-05-12 07:39:47,861 [INFO] Trial 34 | Weights: [0.26, 0.336, 0.404] | RMSE: 36,239.9497
+[I 2025-05-12 07:39:47,862] Trial 34 finished with value: 36239.949685748456 and parameters: {'w0': 0.4772125445863049, 'w1': 0.6159631816730693, 'w2': 0.7416573432557529}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:47,885 [INFO] Trial 35 | Weights: [0.253, 0.325, 0.423] | RMSE: 36,241.1339
+[I 2025-05-12 07:39:47,886] Trial 35 finished with value: 36241.13385328654 and parameters: {'w0': 0.4425396214795362, 'w1': 0.5691572594801266, 'w2': 0.7405277983842038}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:47,907 [INFO] Trial 36 | Weights: [0.312, 0.254, 0.434] | RMSE: 36,311.9842
+[I 2025-05-12 07:39:47,909] Trial 36 finished with value: 36311.98423966083 and parameters: {'w0': 0.4529824121856225, 'w1': 0.3689657340145334, 'w2': 0.631121177028095}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:47,932 [INFO] Trial 37 | Weights: [0.206, 0.347, 0.447] | RMSE: 36,253.8849
+[I 2025-05-12 07:39:47,933] Trial 37 finished with value: 36253.884909442495 and parameters: {'w0': 0.3369350380141854, 'w1': 0.567894019970601, 'w2': 0.7327798626775969}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:47,958 [INFO] Trial 38 | Weights: [0.279, 0.279, 0.443] | RMSE: 36,274.0237
+[I 2025-05-12 07:39:47,959] Trial 38 finished with value: 36274.023736290146 and parameters: {'w0': 0.4651146622190367, 'w1': 0.4652138096122763, 'w2': 0.7385777032941037}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:47,982 [INFO] Trial 39 | Weights: [0.314, 0.18, 0.506] | RMSE: 36,521.2710
+[I 2025-05-12 07:39:47,983] Trial 39 finished with value: 36521.27097193179 and parameters: {'w0': 0.4865727675856673, 'w1': 0.2783322138808303, 'w2': 0.7849879405112314}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,006 [INFO] Trial 40 | Weights: [0.198, 0.444, 0.357] | RMSE: 36,391.4641
+[I 2025-05-12 07:39:48,008] Trial 40 finished with value: 36391.4640849167 and parameters: {'w0': 0.3314139908347824, 'w1': 0.7422557960034972, 'w2': 0.5965270742663804}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,036 [INFO] Trial 41 | Weights: [0.221, 0.323, 0.455] | RMSE: 36,251.0157
+[I 2025-05-12 07:39:48,038] Trial 41 finished with value: 36251.01574231902 and parameters: {'w0': 0.4111080249120055, 'w1': 0.5999511815754845, 'w2': 0.8455004654146976}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,070 [INFO] Trial 42 | Weights: [0.312, 0.245, 0.442] | RMSE: 36,328.4878
+[I 2025-05-12 07:39:48,073] Trial 42 finished with value: 36328.48782611162 and parameters: {'w0': 0.6627732955465153, 'w1': 0.5206815472727784, 'w2': 0.9383216987669019}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,111 [INFO] Trial 43 | Weights: [0.292, 0.329, 0.379] | RMSE: 36,244.3054
+[I 2025-05-12 07:39:48,113] Trial 43 finished with value: 36244.30536614963 and parameters: {'w0': 0.5519533345881815, 'w1': 0.6203221733828134, 'w2': 0.7157018573233332}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,142 [INFO] Trial 44 | Weights: [0.344, 0.312, 0.344] | RMSE: 36,270.8331
+[I 2025-05-12 07:39:48,143] Trial 44 finished with value: 36270.833122779695 and parameters: {'w0': 0.51455229462265, 'w1': 0.46704548172149396, 'w2': 0.5138920101273267}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,175 [INFO] Trial 45 | Weights: [0.162, 0.422, 0.415] | RMSE: 36,349.3891
+[I 2025-05-12 07:39:48,177] Trial 45 finished with value: 36349.38908935177 and parameters: {'w0': 0.27603270428728943, 'w1': 0.7186259389542002, 'w2': 0.7066529068393362}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,208 [INFO] Trial 46 | Weights: [0.516, 0.005, 0.48] | RMSE: 37,517.6942
+[I 2025-05-12 07:39:48,211] Trial 46 finished with value: 37517.69420574157 and parameters: {'w0': 0.4489216487842147, 'w1': 0.004000980582839597, 'w2': 0.4176344018455782}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,243 [INFO] Trial 47 | Weights: [0.372, 0.324, 0.305] | RMSE: 36,298.4755
+[I 2025-05-12 07:39:48,245] Trial 47 finished with value: 36298.47550722674 and parameters: {'w0': 0.7426579126761444, 'w1': 0.6474385477433632, 'w2': 0.6089672268848552}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,273 [INFO] Trial 48 | Weights: [0.406, 0.377, 0.217] | RMSE: 36,414.7161
+[I 2025-05-12 07:39:48,275] Trial 48 finished with value: 36414.71613317962 and parameters: {'w0': 0.6211428297150692, 'w1': 0.576249037379519, 'w2': 0.3326481598021182}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,303 [INFO] Trial 49 | Weights: [0.32, 0.389, 0.291] | RMSE: 36,322.6055
+[I 2025-05-12 07:39:48,304] Trial 49 finished with value: 36322.605469538896 and parameters: {'w0': 0.5614951042898989, 'w1': 0.6824202141558446, 'w2': 0.5107006501277211}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,332 [INFO] Trial 50 | Weights: [0.299, 0.346, 0.355] | RMSE: 36,253.0179
+[I 2025-05-12 07:39:48,334] Trial 50 finished with value: 36253.01785597687 and parameters: {'w0': 0.66846641510915, 'w1': 0.7735665647693706, 'w2': 0.7947573528588829}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,355 [INFO] Trial 51 | Weights: [0.279, 0.304, 0.417] | RMSE: 36,248.6198
+[I 2025-05-12 07:39:48,356] Trial 51 finished with value: 36248.61979657382 and parameters: {'w0': 0.576735251490899, 'w1': 0.6290633008790341, 'w2': 0.8607499440055101}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,383 [INFO] Trial 52 | Weights: [0.256, 0.364, 0.38] | RMSE: 36,253.1059
+[I 2025-05-12 07:39:48,384] Trial 52 finished with value: 36253.10589705236 and parameters: {'w0': 0.49549783369468936, 'w1': 0.7044125934513419, 'w2': 0.7358083946763766}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,410 [INFO] Trial 53 | Weights: [0.233, 0.326, 0.441] | RMSE: 36,245.2854
+[I 2025-05-12 07:39:48,411] Trial 53 finished with value: 36245.28537909265 and parameters: {'w0': 0.4325611198323293, 'w1': 0.6038779358988425, 'w2': 0.8175198376901669}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,435 [INFO] Trial 54 | Weights: [0.224, 0.279, 0.497] | RMSE: 36,296.9385
+[I 2025-05-12 07:39:48,436] Trial 54 finished with value: 36296.93845475581 and parameters: {'w0': 0.43278583599560777, 'w1': 0.5390929985807504, 'w2': 0.9614287334303633}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,462 [INFO] Trial 55 | Weights: [0.182, 0.41, 0.407] | RMSE: 36,319.6518
+[I 2025-05-12 07:39:48,463] Trial 55 finished with value: 36319.65184941705 and parameters: {'w0': 0.3631049909818811, 'w1': 0.8172558569905006, 'w2': 0.8110472654315378}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,486 [INFO] Trial 56 | Weights: [0.171, 0.326, 0.503] | RMSE: 36,285.9647
+[I 2025-05-12 07:39:48,487] Trial 56 finished with value: 36285.96466869111 and parameters: {'w0': 0.30618454528995, 'w1': 0.5852860065985666, 'w2': 0.9036036400525965}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,509 [INFO] Trial 57 | Weights: [0.171, 0.35, 0.48] | RMSE: 36,277.2012
+[I 2025-05-12 07:39:48,511] Trial 57 finished with value: 36277.201191179985 and parameters: {'w0': 0.23842693625315675, 'w1': 0.48885522977865137, 'w2': 0.670918590294829}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,535 [INFO] Trial 58 | Weights: [0.296, 0.269, 0.436] | RMSE: 36,287.0047
+[I 2025-05-12 07:39:48,537] Trial 58 finished with value: 36287.004686924134 and parameters: {'w0': 0.48125982297222414, 'w1': 0.43734413484598234, 'w2': 0.7088613721251869}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,559 [INFO] Trial 59 | Weights: [0.214, 0.368, 0.418] | RMSE: 36,259.3403
+[I 2025-05-12 07:39:48,560] Trial 59 finished with value: 36259.34027097736 and parameters: {'w0': 0.38685694435240553, 'w1': 0.6664153902414182, 'w2': 0.7569405852176088}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,584 [INFO] Trial 60 | Weights: [0.368, 0.517, 0.115] | RMSE: 36,880.9117
+[I 2025-05-12 07:39:48,585] Trial 60 finished with value: 36880.9117454642 and parameters: {'w0': 0.5277181427877182, 'w1': 0.7409083827774632, 'w2': 0.16495565185322736}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,612 [INFO] Trial 61 | Weights: [0.304, 0.298, 0.398] | RMSE: 36,256.0350
+[I 2025-05-12 07:39:48,613] Trial 61 finished with value: 36256.035013323206 and parameters: {'w0': 0.630246831275534, 'w1': 0.6176508009462605, 'w2': 0.8238688398129392}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,638 [INFO] Trial 62 | Weights: [0.252, 0.316, 0.433] | RMSE: 36,244.6490
+[I 2025-05-12 07:39:48,640] Trial 62 finished with value: 36244.64895570753 and parameters: {'w0': 0.5606528602257841, 'w1': 0.7022154204900489, 'w2': 0.962605064173323}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,670 [INFO] Trial 63 | Weights: [0.23, 0.323, 0.447] | RMSE: 36,247.4428
+[I 2025-05-12 07:39:48,671] Trial 63 finished with value: 36247.44277574346 and parameters: {'w0': 0.5052156727873872, 'w1': 0.7090095596291617, 'w2': 0.9811004144738493}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,706 [INFO] Trial 64 | Weights: [0.277, 0.279, 0.444] | RMSE: 36,273.6985
+[I 2025-05-12 07:39:48,707] Trial 64 finished with value: 36273.698465117835 and parameters: {'w0': 0.5537193902601638, 'w1': 0.5578166751604373, 'w2': 0.8866239870585555}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,749 [INFO] Trial 65 | Weights: [0.192, 0.374, 0.434] | RMSE: 36,271.3909
+[I 2025-05-12 07:39:48,751] Trial 65 finished with value: 36271.390913352145 and parameters: {'w0': 0.4094415300062143, 'w1': 0.7955842529603836, 'w2': 0.922742102007561}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,788 [INFO] Trial 66 | Weights: [0.23, 0.329, 0.441] | RMSE: 36,245.5157
+[I 2025-05-12 07:39:48,791] Trial 66 finished with value: 36245.51573367558 and parameters: {'w0': 0.45661151104633224, 'w1': 0.6527692814338107, 'w2': 0.8763245259239097}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,830 [INFO] Trial 67 | Weights: [0.247, 0.347, 0.406] | RMSE: 36,242.7427
+[I 2025-05-12 07:39:48,832] Trial 67 finished with value: 36242.74265928493 and parameters: {'w0': 0.46287533122246227, 'w1': 0.6513238522285074, 'w2': 0.7629046602235869}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,869 [INFO] Trial 68 | Weights: [0.23, 0.366, 0.404] | RMSE: 36,254.5162
+[I 2025-05-12 07:39:48,871] Trial 68 finished with value: 36254.516150621945 and parameters: {'w0': 0.37742640921568094, 'w1': 0.5998048669543615, 'w2': 0.6615651843365851}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,920 [INFO] Trial 69 | Weights: [0.294, 0.33, 0.376] | RMSE: 36,244.9638
+[I 2025-05-12 07:39:48,922] Trial 69 finished with value: 36244.963838834825 and parameters: {'w0': 0.6049679328159333, 'w1': 0.6789189166071917, 'w2': 0.7743451211220937}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:48,961 [INFO] Trial 70 | Weights: [0.288, 0.357, 0.355] | RMSE: 36,256.4554
+[I 2025-05-12 07:39:48,964] Trial 70 finished with value: 36256.45544741567 and parameters: {'w0': 0.6113348535604896, 'w1': 0.7596178676681259, 'w2': 0.7546008265570319}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,001 [INFO] Trial 71 | Weights: [0.273, 0.361, 0.366] | RMSE: 36,254.1254
+[I 2025-05-12 07:39:49,003] Trial 71 finished with value: 36254.125405705476 and parameters: {'w0': 0.5179631513931532, 'w1': 0.6837327833945087, 'w2': 0.6938511745240351}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,047 [INFO] Trial 72 | Weights: [0.227, 0.407, 0.366] | RMSE: 36,307.7109
+[I 2025-05-12 07:39:49,049] Trial 72 finished with value: 36307.71093178065 and parameters: {'w0': 0.48076439399979526, 'w1': 0.8627618785848598, 'w2': 0.7770384171014497}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,075 [INFO] Trial 73 | Weights: [0.319, 0.342, 0.339] | RMSE: 36,262.2712
+[I 2025-05-12 07:39:49,077] Trial 73 finished with value: 36262.27117118678 and parameters: {'w0': 0.6017118607561879, 'w1': 0.6437025560380001, 'w2': 0.6379313796549204}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,101 [INFO] Trial 74 | Weights: [0.278, 0.344, 0.378] | RMSE: 36,244.5642
+[I 2025-05-12 07:39:49,102] Trial 74 finished with value: 36244.564166327444 and parameters: {'w0': 0.427326418112545, 'w1': 0.5283376674462085, 'w2': 0.580295915751623}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,124 [INFO] Trial 75 | Weights: [0.382, 0.29, 0.328] | RMSE: 36,308.6483
+[I 2025-05-12 07:39:49,126] Trial 75 finished with value: 36308.648301447254 and parameters: {'w0': 0.6469323871939319, 'w1': 0.4914677539725953, 'w2': 0.5565215231124947}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,147 [INFO] Trial 76 | Weights: [0.232, 0.357, 0.411] | RMSE: 36,248.6844
+[I 2025-05-12 07:39:49,148] Trial 76 finished with value: 36248.68439007177 and parameters: {'w0': 0.3408176286979636, 'w1': 0.525536184773306, 'w2': 0.6052395199081491}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,171 [INFO] Trial 77 | Weights: [0.323, 0.344, 0.333] | RMSE: 36,266.3120
+[I 2025-05-12 07:39:49,172] Trial 77 finished with value: 36266.31200446565 and parameters: {'w0': 0.6975147019217081, 'w1': 0.7430648815292025, 'w2': 0.7185517243983265}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,196 [INFO] Trial 78 | Weights: [0.346, 0.35, 0.304] | RMSE: 36,290.8655
+[I 2025-05-12 07:39:49,197] Trial 78 finished with value: 36290.8654824424 and parameters: {'w0': 0.549049991410023, 'w1': 0.5567913022716754, 'w2': 0.48312341305148554}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,217 [INFO] Trial 79 | Weights: [0.31, 0.271, 0.419] | RMSE: 36,285.0533
+[I 2025-05-12 07:39:49,218] Trial 79 finished with value: 36285.05329131639 and parameters: {'w0': 0.47259269070972465, 'w1': 0.4122431286892738, 'w2': 0.637961081091371}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,240 [INFO] Trial 80 | Weights: [0.271, 0.363, 0.365] | RMSE: 36,255.7136
+[I 2025-05-12 07:39:49,242] Trial 80 finished with value: 36255.71357648068 and parameters: {'w0': 0.5094271243481725, 'w1': 0.6814538443803789, 'w2': 0.6859595428609663}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,268 [INFO] Trial 81 | Weights: [0.235, 0.335, 0.431] | RMSE: 36,243.0836
+[I 2025-05-12 07:39:49,269] Trial 81 finished with value: 36243.08361005234 and parameters: {'w0': 0.4180660286418691, 'w1': 0.5964680509331665, 'w2': 0.7673552997427016}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,290 [INFO] Trial 82 | Weights: [0.237, 0.331, 0.432] | RMSE: 36,242.9404
+[I 2025-05-12 07:39:49,291] Trial 82 finished with value: 36242.94038224682 and parameters: {'w0': 0.4175550901808736, 'w1': 0.5840274790147997, 'w2': 0.7618659194266468}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,316 [INFO] Trial 83 | Weights: [0.208, 0.3, 0.492] | RMSE: 36,278.3963
+[I 2025-05-12 07:39:49,317] Trial 83 finished with value: 36278.39625021475 and parameters: {'w0': 0.4063238962831603, 'w1': 0.585798961022224, 'w2': 0.9612377136254894}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,341 [INFO] Trial 84 | Weights: [0.333, 0.121, 0.546] | RMSE: 36,778.6112
+[I 2025-05-12 07:39:49,342] Trial 84 finished with value: 36778.61120792877 and parameters: {'w0': 0.43980926355816424, 'w1': 0.15964004230242157, 'w2': 0.7200112424516911}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,367 [INFO] Trial 85 | Weights: [0.208, 0.364, 0.427] | RMSE: 36,258.6072
+[I 2025-05-12 07:39:49,368] Trial 85 finished with value: 36258.607190825955 and parameters: {'w0': 0.36651240426549053, 'w1': 0.6411291529247247, 'w2': 0.7519622848077273}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,389 [INFO] Trial 86 | Weights: [0.214, 0.377, 0.41] | RMSE: 36,266.2718
+[I 2025-05-12 07:39:49,390] Trial 86 finished with value: 36266.27182709583 and parameters: {'w0': 0.30513681644832796, 'w1': 0.5377223039865587, 'w2': 0.5853408459901284}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,415 [INFO] Trial 87 | Weights: [0.233, 0.296, 0.471] | RMSE: 36,267.3211
+[I 2025-05-12 07:39:49,416] Trial 87 finished with value: 36267.321112910926 and parameters: {'w0': 0.39726288477770505, 'w1': 0.5032602166661228, 'w2': 0.8009785102136312}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,437 [INFO] Trial 88 | Weights: [0.253, 0.429, 0.318] | RMSE: 36,365.1477
+[I 2025-05-12 07:39:49,438] Trial 88 finished with value: 36365.147725403185 and parameters: {'w0': 0.42651119579606717, 'w1': 0.7232526457498768, 'w2': 0.5355476992074225}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,460 [INFO] Trial 89 | Weights: [0.307, 0.33, 0.362] | RMSE: 36,250.4782
+[I 2025-05-12 07:39:49,461] Trial 89 finished with value: 36250.47815087596 and parameters: {'w0': 0.5795427035490592, 'w1': 0.622688389731274, 'w2': 0.6826561387358943}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,534 [INFO] Trial 90 | Weights: [0.028, 0.344, 0.628] | RMSE: 36,506.3047
+[I 2025-05-12 07:39:49,537] Trial 90 finished with value: 36506.30471351288 and parameters: {'w0': 0.038578156530123975, 'w1': 0.4696460865585573, 'w2': 0.8585712647187769}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,569 [INFO] Trial 91 | Weights: [0.251, 0.321, 0.427] | RMSE: 36,242.3418
+[I 2025-05-12 07:39:49,571] Trial 91 finished with value: 36242.341801054834 and parameters: {'w0': 0.45951673116149794, 'w1': 0.5875534419036208, 'w2': 0.7815477347383505}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,597 [INFO] Trial 92 | Weights: [0.246, 0.307, 0.448] | RMSE: 36,252.0305
+[I 2025-05-12 07:39:49,599] Trial 92 finished with value: 36252.03045711738 and parameters: {'w0': 0.4569076510643168, 'w1': 0.5703424264144554, 'w2': 0.8334866458211354}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,691 [INFO] Trial 93 | Weights: [0.264, 0.326, 0.411] | RMSE: 36,240.1499
+[I 2025-05-12 07:39:49,693] Trial 93 finished with value: 36240.14987920737 and parameters: {'w0': 0.48897484336100716, 'w1': 0.6043997835978893, 'w2': 0.7615318199096452}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,726 [INFO] Trial 94 | Weights: [0.264, 0.323, 0.413] | RMSE: 36,240.6977
+[I 2025-05-12 07:39:49,728] Trial 94 finished with value: 36240.69770298071 and parameters: {'w0': 0.48553848049142506, 'w1': 0.5936373348911378, 'w2': 0.7596952176833092}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,760 [INFO] Trial 95 | Weights: [0.273, 0.306, 0.422] | RMSE: 36,247.8641
+[I 2025-05-12 07:39:49,762] Trial 95 finished with value: 36247.864107331756 and parameters: {'w0': 0.4949604416577325, 'w1': 0.5546470479441222, 'w2': 0.7649862108840365}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,810 [INFO] Trial 96 | Weights: [0.277, 0.308, 0.416] | RMSE: 36,246.5561
+[I 2025-05-12 07:39:49,812] Trial 96 finished with value: 36246.55612005855 and parameters: {'w0': 0.5320925700674353, 'w1': 0.5920012282152611, 'w2': 0.7994314700078223}. Best is trial 34 with value: 36239.949685748456.
+2025-05-12 07:39:49,842 [INFO] Trial 97 | Weights: [0.26, 0.335, 0.405] | RMSE: 36,239.9066
+[I 2025-05-12 07:39:49,843] Trial 97 finished with value: 36239.906644345305 and parameters: {'w0': 0.472585078572906, 'w1': 0.6099510839911387, 'w2': 0.736628873757474}. Best is trial 97 with value: 36239.906644345305.
+2025-05-12 07:39:49,866 [INFO] Trial 98 | Weights: [0.277, 0.347, 0.376] | RMSE: 36,245.7786
+[I 2025-05-12 07:39:49,867] Trial 98 finished with value: 36245.778644140475 and parameters: {'w0': 0.4832280555054487, 'w1': 0.604159234707404, 'w2': 0.6541179626551525}. Best is trial 97 with value: 36239.906644345305.
+2025-05-12 07:39:49,888 [INFO] Trial 99 | Weights: [0.253, 0.349, 0.399] | RMSE: 36,243.2303
+[I 2025-05-12 07:39:49,889] Trial 99 finished with value: 36243.23031972442 and parameters: {'w0': 0.4665481357618406, 'w1': 0.6435398733391239, 'w2': 0.7355411125352497}. Best is trial 97 with value: 36239.906644345305.
+2025-05-12 07:39:49,891 [INFO] ✅ Best weights: [0.2598 0.3353 0.4049]
+2025-05-12 07:39:49,892 [INFO] 📉 Best RMSE: 36239.9066
+2025-05-12 07:39:51,152 [INFO] 📤 Saved: test_preds_optuna_blended.npy and submission_optuna_blended.csv</code></pre>
+</div>
+</div>
+<div id="febfc8a5" class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> ElasticNetCV</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> root_mean_squared_error</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># === Load OOF + Test Predictions ===</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>oof_xgb <span class="op">=</span> np.load(<span class="st">"oof_preds_xgbreg.npy"</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>test_xgb <span class="op">=</span> np.load(<span class="st">"test_preds_xgbreg.npy"</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>ridge_oof<span class="op">=</span>np.load(<span class="st">"ridgecv_oof_preds.npy"</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>ridge_test_preds<span class="op">=</span>np.load(<span class="st">"ridgecv_test_preds.npy"</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>oof_lgb<span class="op">=</span>np.load(<span class="st">"oof_preds_lgbm.npy"</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>test_lgb<span class="op">=</span>np.load(<span class="st">"test_preds_lgbm_shap.npy"</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># === 3. Combine full meta-input feature set ===</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>X_meta <span class="op">=</span> np.hstack([</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    oof_xgb.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    ridge_oof.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    oof_lgb.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>y_meta <span class="op">=</span> train[<span class="st">'TARGET'</span>].values</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>X_meta_test <span class="op">=</span> np.hstack([</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    test_xgb.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    ridge_test_preds.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    test_lgb.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>)</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="co"># === 4. Train ElasticNetCV meta-learner ===</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>meta_model <span class="op">=</span> make_pipeline(</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    StandardScaler(),</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    ElasticNetCV(</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>        l1_ratio<span class="op">=</span>[<span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="dv">1</span>],</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>        alphas<span class="op">=</span>np.logspace(<span class="op">-</span><span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">100</span>),</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>        cv<span class="op">=</span><span class="dv">3</span>,</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>        max_iter<span class="op">=</span><span class="dv">5000</span>,</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>        n_jobs<span class="op">=-</span><span class="dv">1</span></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>meta_model.fit(X_meta, y_meta)</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a><span class="co"># === 5. Predict and evaluate (optional holdout split) ===</span></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="co"># You can skip this section if you're blending on full train</span></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>X_train, X_holdout, y_train, y_holdout <span class="op">=</span> train_test_split(X_meta, y_meta, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>meta_model.fit(X_train, y_train)</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>holdout_preds <span class="op">=</span> meta_model.predict(X_holdout)</span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>rmse <span class="op">=</span> root_mean_squared_error(y_holdout, holdout_preds)</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"ElasticNetCV Blended Meta Holdout RMSE: </span><span class="sc">{</span>rmse<span class="sc">:,.2f}</span><span class="ss">"</span>)</span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>best_alpha <span class="op">=</span> meta_model.named_steps[<span class="st">'elasticnetcv'</span>].alpha_</span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f" Best alpha selected: </span><span class="sc">{</span>best_alpha<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a><span class="co"># === 6. Final predictions for test set ===</span></span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>meta_preds <span class="op">=</span> meta_model.predict(X_meta_test)</span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a><span class="co"># === 7. Save blended test predictions ===</span></span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>np.save(<span class="st">"test_preds_elasticnet_blended.npy"</span>, meta_preds)</span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>account_ids <span class="op">=</span> acct_test.values.ravel() </span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>submission <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ACCOUNT"</span>: account_ids,  <span class="co"># Replace with your actual ID column</span></span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>    <span class="st">"TARGET"</span>: meta_preds</span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a>submission.to_csv(<span class="st">"submission_elasticnet_blended.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">" ElasticNetCV blended stacking submission saved."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>📉 ElasticNetCV Blended Meta Holdout RMSE: 36,344.64
+🔍 Best alpha selected: 0.01
+📤 ElasticNetCV blended stacking submission saved.</code></pre>
+</div>
+</div>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
