@@ -383,7 +383,7 @@ window.Quarto = {
 <li><p>Using the EOD Historical Data API, we sequentially pulled and stored each symbol’s full trading history. A short delay between requests ensured smooth operation within API limits. Data was saved in parquet format for efficiency, with each file containing date-sorted daily records alongside the ticker identifier.</p></li>
 <li><p>By the end, the dataset was successfully assembled—503 tickers, spanning over a decade of trading data—ready for downstream analysis, model training, and alpha research.</p></li>
 </ul>
-<div id="985c8219" class="cell" data-execution_count="1">
+<div id="3c1e3edb" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -450,7 +450,7 @@ window.Quarto = {
 <p>We assembled a complete daily OHLCV history for the SPDR S&amp;P 500 ETF (SPY) spanning January 3, 2000 through today. The dataset, sourced from EOD Historical Data, contains over two decades of market activity precisely 6 columns: open, high, low, close, adjusted close, and volume.</p>
 <p>The earliest record shows SPY opening at 148.25 on January 3, 2000, closing at 145.44 with 8.16 million shares traded. From there, the data traces the ETF’s journey through market cycles, from the dot-com crash to the global financial crisis, the pandemic shock, and the subsequent bull runs.</p>
 <p>The full dataset is stored in efficient parquet format, sorted chronologically, and ready for time-series analysis, trend studies, and model development.</p>
-<div id="c1421541" class="cell" data-execution_count="2">
+<div id="1f318d64" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
@@ -494,7 +494,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="consolidated-sp-500-ohlcv-dataset">2.3 Consolidated S&amp;P 500 OHLCV Dataset</h2>
 <p>The full historical record for all S&amp;P 500 constituents has been successfully aggregated into a single, unified dataset. This compilation merges daily OHLCV and adjusted close data for</p>
 <p>every ticker, standardized in structure and cleaned for completeness.</p>
-<div id="9f8da5a7" class="cell" data-execution_count="3">
+<div id="5de75d14" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -547,7 +547,7 @@ window.Quarto = {
 <p>The S&amp;P 500 historical database has been refined to ensure analytical integrity. Tickers with insufficient history (&lt;500 trading days) were excluded, and gaps within each series were</p>
 <p>forward-filled to maintain continuity without introducing artificial backward data.</p>
 <p>The result is a clean, liquid-universe dataset—chronologically ordered and free from sparsity—stored in parquet format for fast, large-scale quantitative research and backtesting.</p>
-<div id="7aa82f8c" class="cell" data-execution_count="4">
+<div id="8e927207" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reload raw file</span></span>
@@ -577,7 +577,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="sector-enriched-sp-500-dataset">2.5 Sector-Enriched S&amp;P 500 Dataset</h2>
 <p>The cleaned S&amp;P 500 OHLCV data has been augmented with GICS sector and industry classifications sourced from Wikipedia. This final enriched dataset now enables sector-level and</p>
 <p>industry-level analysis, supporting more targeted factor research and cross-sectional studies.</p>
-<div id="70382c30" class="cell" data-execution_count="5">
+<div id="ba325f8b" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -621,7 +621,7 @@ window.Quarto = {
 <p>Options chains were successfully retrieved for the majority of S&amp;P 500 tickers, with each contract categorized by type (CALL/PUT) and tagged with expiration dates.</p>
 <p>Examples: AAPL: 2,450 contracts ADBE: 2,470 contracts ABBV: 1,162 contracts</p>
 <p>These parquet files, stored by ticker, provide a structured foundation for implied volatility modeling, skew analysis, and options-based market sentiment studies across the index.</p>
-<div id="f5b06334" class="cell" data-execution_count="6">
+<div id="a55236c4" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
@@ -696,7 +696,7 @@ window.Quarto = {
 </details>
 </div>
 <p>All individual S&amp;P 500 options files were merged into a unified dataset.</p>
-<div id="50aee4f5" class="cell" data-execution_count="7">
+<div id="0832be8b" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -736,7 +736,7 @@ window.Quarto = {
 <section id="sector-tagging-for-options-data" class="level2">
 <h2 class="anchored" data-anchor-id="sector-tagging-for-options-data">2.7 Sector Tagging for Options Data</h2>
 <p>Cached sector map was loaded, options features merged with sector/industry info.</p>
-<div id="9f140924" class="cell" data-execution_count="8">
+<div id="0c96caca" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -786,7 +786,7 @@ window.Quarto = {
 <p>Using adjusted year-end prices, key metrics such as EPS, market capitalization, P/E ratio, ROE, ROA, operating margin, dividend yield, and debt-to-equity were computed. Year-over-year</p>
 <p>EPS growth was also calculated to track profitability trends. We also need to take into account stock splits of companies too.</p>
 <p>For example, AAPL last split was on 2020-08-31 with a 4:1 split factor.</p>
-<div id="7259c8dc" class="cell" data-execution_count="9">
+<div id="b9ea4a84" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
@@ -819,7 +819,7 @@ window.Quarto = {
 2022: 16,325,819,000<br>
 2023: 15,812,547,000<br>
 2024: 15,408,095,000</p>
-<div id="5d676f7a" class="cell" data-execution_count="10">
+<div id="24efa4c9" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
@@ -981,7 +981,7 @@ window.Quarto = {
 <li><p>Each series is saved individually and combined into a single dataset for integrated analysis.</p></li>
 <li><p>These indicators provide a foundation for examining inflation, monetary policy, labor markets, liquidity, and economic cycles over the past decade.</p></li>
 </ul>
-<div id="b9dcc2ef" class="cell" data-execution_count="11">
+<div id="75989454" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fredapi <span class="im">import</span> Fred</span>
@@ -1109,7 +1109,7 @@ window.Quarto = {
 <li><p>These alphas are purely data-driven transformations of market variables, meaning they are portable across regions and asset classes.</p></li>
 <li><p>Combining them with novel machine learning features later in the pipeline helps us assess whether modern methods genuinely outperform legacy alpha construction.</p></li>
 </ul>
-<div id="3d399dc7" class="cell" data-execution_count="12">
+<div id="e93b96c5" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -1144,7 +1144,7 @@ window.Quarto = {
 <span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"✅ Forward returns saved to 'layer1_alpha_signals/returns/'"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="d2c61ca6" class="cell" data-execution_count="13">
+<div id="61243d7d" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -1334,7 +1334,7 @@ window.Quarto = {
 <span id="cb13-185"><a href="#cb13-185" aria-hidden="true" tabindex="-1"></a><span class="co"># endregion</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="7f447e65" class="cell" data-execution_count="14">
+<div id="26a79b12" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Alphas(<span class="bu">object</span>):</span>
@@ -2303,7 +2303,7 @@ window.Quarto = {
 <span id="cb14-964"><a href="#cb14-964" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (<span class="va">self</span>.close <span class="op">-</span> <span class="va">self</span>.<span class="bu">open</span>) <span class="op">/</span>((<span class="va">self</span>.high <span class="op">-</span> <span class="va">self</span>.low) <span class="op">+</span> <span class="fl">0.001</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="b6bc9d7f" class="cell" data-execution_count="15">
+<div id="0ef2da87" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -2388,7 +2388,7 @@ window.Quarto = {
 </ul>
 <p>Once the assembly was complete, the full matrix was saved as a single consolidated file. This output preserved the story of all individual alpha signals over time, ready for</p>
 <p>modeling or further analysis, ensuring that no piece of the decade-long market narrative was lost.</p>
-<div id="4e6c81f1" class="cell" data-execution_count="16">
+<div id="fb2e7229" class="cell" data-execution_count="16">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -2410,7 +2410,7 @@ window.Quarto = {
 <span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"✅ Combined all alpha files."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="13c31337" class="cell" data-execution_count="17">
+<div id="a20af142" class="cell" data-execution_count="17">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>combined_alphas[combined_alphas[<span class="st">'ticker'</span>] <span class="op">==</span> <span class="st">'AAPL'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2431,7 +2431,7 @@ window.Quarto = {
 </ul>
 <p>The resulting dataset was saved as a single file, a ready-to-use repository of market sentiment. It became a chronicle of corporate news, capturing the stories that could sway</p>
 <p>investor decisions and shape alpha signals in the market.</p>
-<div id="50b4198d" class="cell" data-execution_count="18">
+<div id="872f7690" class="cell" data-execution_count="18">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
@@ -2516,7 +2516,7 @@ window.Quarto = {
 </ul>
 <p>In the end, the sentiment scores were consolidated into a single dataset, giving a , timestamped map of market mood across all S&amp;P 500 companies. This resource became a</p>
 <p>quantitative lens on market psychology, ready for further modeling, strategy development, or historical analysis.</p>
-<div id="5e3c75c6" class="cell" data-execution_count="19">
+<div id="1106f202" class="cell" data-execution_count="19">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -2596,7 +2596,7 @@ window.Quarto = {
 </ul>
 <p>Once computed for all tickers, the indicators were consolidated into a comprehensive dataset. The result was a high-resolution map of technical signals across the market, ready to</p>
 <p>feed models or inform trading strategies. The workflow was precise, consistent, and captured the rhythm of market behavior over time.</p>
-<div id="1b0fd1d8" class="cell" data-execution_count="20">
+<div id="d10c7c47" class="cell" data-execution_count="20">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -2667,7 +2667,7 @@ window.Quarto = {
 <li><p>These engineered features compress the complexity of the options market into a daily snapshot per ticker, providing a clear, quantifiable view of trader behavior and market expectations.</p></li>
 <li><p>The resulting dataset is saved and ready to integrate with price, technical, and sentiment data for downstream modeling or strategy analysis.</p></li>
 </ul>
-<div id="6485e5b0" class="cell" data-execution_count="21">
+<div id="82f79e32" class="cell" data-execution_count="21">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -2758,7 +2758,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="alpha-fundamentals">3.8 Alpha Fundamentals</h2>
 <p>Fundamental metrics for S&amp;P 500 firms—PE, ROE, ROA, EPS, growth, leverage, margins, dividends—were cross-sectionally ranked and z-scored per report date.</p>
 <p>The processed dataset provides standardized, comparable signals across tickers, ready for integration with market, technical, and sentiment data.</p>
-<div id="b7605901" class="cell" data-execution_count="22">
+<div id="9d61c654" class="cell" data-execution_count="22">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -2802,7 +2802,7 @@ window.Quarto = {
 <span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"✅ Saved fundamental alpha signals."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="f73d4b29" class="cell" data-execution_count="23">
+<div id="f1141548" class="cell" data-execution_count="23">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>df_final[df_final[<span class="st">'ticker'</span>]<span class="op">==</span><span class="st">'AAPL'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2814,7 +2814,7 @@ window.Quarto = {
 <p>The datasets are now fully aligned and clean: all date and report_date fields are proper datetime types with no missing values, ensuring reliable merging or time-based analysis.</p>
 <p>X (market/technical data) is daily-sorted per ticker, while fundamentals is sorted by report date, reflecting quarterly/annual updates. This confirms a clear temporal structure: daily</p>
 <p>prices exist between periodic fundamental updates, allowing forward-looking integration of fundamental signals into market data without gaps or misalignment.</p>
-<div id="eeb65941" class="cell" data-execution_count="24">
+<div id="029bb1ee" class="cell" data-execution_count="24">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure date types</span></span>
@@ -2850,7 +2850,7 @@ window.Quarto = {
 <p>Finally, for days with multiple fundamental reports, we kept only the latest available per (ticker, date).</p></li>
 <li><p>The result is a fully merged dataset ready for modeling, combining daily market dynamics with option, sentiment, technical, and fundamental insights.</p></li>
 </ul>
-<div id="e6d89d15" class="cell" data-execution_count="25">
+<div id="6529b3fe" class="cell" data-execution_count="25">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -2897,7 +2897,7 @@ window.Quarto = {
 <section id="alpha-signal-merging-and-forward-returns-alignment" class="level1">
 <h1>3.11 Alpha Signal Merging and Forward Returns Alignment</h1>
 <p>” This document outlines the process of preparing the Layer 1 dataset by merging various alpha signals and aligning them with forward returns for downstream modeling.</p>
-<div id="543e6be7" class="cell" data-execution_count="26">
+<div id="762f5b71" class="cell" data-execution_count="26">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ───────────────────────────────</span></span>
@@ -2939,7 +2939,7 @@ window.Quarto = {
 <p>We then assessed missingness across features. Most features are complete, but some fundamental metrics like dividendYield and epsGrowthYoY have ~10–13% missing values, while a few</p>
 <p>alphas and market features show minor gaps (&lt;5%). This provides a clear roadmap for imputation or feature selection, balancing data completeness with predictive richness.</p>
 <p>In short, the dataset is now ready for modeling, with a clean general-purpose feature set and a separate untouched 2025 set for robust evaluation.</p>
-<div id="996d3734" class="cell" data-execution_count="27">
+<div id="b1539138" class="cell" data-execution_count="27">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 🔐 STEP 1 — Save the untouched 2025 subset FIRST (preserving all columns)</span></span>
@@ -2981,7 +2981,7 @@ window.Quarto = {
 <p>~10%), but the majority of technical, alpha, and categorical features were now complete.</p>
 <p>In essence, we transformed a partially incomplete dataset into a robust, temporally consistent, and leakage-free foundation ready for modeling, preserving both historical fidelity</p>
 <p>zand cross-sectional structure.</p>
-<div id="808dc8cd" class="cell" data-execution_count="28">
+<div id="19c72e49" class="cell" data-execution_count="28">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Sort to ensure time order</span></span>
@@ -3010,7 +3010,7 @@ window.Quarto = {
 <span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>        X_model_clean[col] <span class="op">=</span> imputer(X_model_clean, col)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="8d2e0250" class="cell" data-execution_count="29">
+<div id="f04432db" class="cell" data-execution_count="29">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>alpha_cols <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> X_model_clean.columns <span class="cf">if</span> col.startswith(<span class="st">"alpha"</span>)]</span>
@@ -3021,7 +3021,7 @@ window.Quarto = {
 <span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>        X_model_clean[col] <span class="op">=</span> X_model_clean[col].fillna(<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="47f20fdf" class="cell" data-execution_count="30">
+<div id="eac7d8bf" class="cell" data-execution_count="30">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> leakage_free_ffill_then_median(df, col, time_col):</span>
@@ -3061,7 +3061,7 @@ window.Quarto = {
 <p>In contrast, market-based rank features such as marketCap_rank and peRatio_rank are nearly complete, with only 4,685 missing values each, indicating that valuation data is largely</p>
 <p>available. Technical indicators also demonstrate high completeness: volatility_21d has 546 missing, Bollinger Bands (bb_lower, bb_middle, bb_upper) have 494 each, and rsi_14 shows</p>
 <p>only 488 missing.</p>
-<div id="d49788f6" class="cell" data-execution_count="31">
+<div id="69381c63" class="cell" data-execution_count="31">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>X_model_clean.isna().<span class="bu">sum</span>().sort_values(ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -3078,7 +3078,7 @@ window.Quarto = {
 <p>bounded ratios. Several alpha features remain NaN due to lack of data or inapplicability across certain stocks.</p>
 <p>Overall, these results highlight heterogeneous distributions, emphasizing the need for robust scaling and normalization in downstream modeling, particularly for highly skewed alpha</p>
 <p>signals and earnings-based fundamentals.</p>
-<div id="f255e3d5" class="cell" data-execution_count="32">
+<div id="5ea171f7" class="cell" data-execution_count="32">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ffill_then_time_median(df, col):</span>
@@ -3098,7 +3098,7 @@ window.Quarto = {
 <span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>        X_model_clean[col] <span class="op">=</span> ffill_then_time_median(X_model_clean, col)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="210f0689" class="cell" data-execution_count="33">
+<div id="57ae0909" class="cell" data-execution_count="33">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>report_date_cols <span class="op">=</span> [<span class="st">"dividendYield"</span>, <span class="st">"epsGrowthYoY"</span>, <span class="st">"peRatio"</span>]</span>
@@ -3165,7 +3165,7 @@ window.Quarto = {
 <p>These preprocessing steps ensure that both linear and tree-based models receive well-conditioned, scale-consistent inputs, with PCA compressing redundant alpha signals for linear</p>
 <p>models and adaptive clipping controlling extreme values for tree-based models. The approach balances the need to reduce noise and outlier impact while retaining informative</p>
 <p>cross-sectional patterns essential for predictive performance.</p>
-<div id="7646ac0e" class="cell" data-execution_count="34">
+<div id="819e0683" class="cell" data-execution_count="34">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -3279,7 +3279,7 @@ window.Quarto = {
 <li><p>Tree datasets: X_tree_train (1,085,402 × 140), X_tree_test (53,500 × 140)</p></li>
 <li><p>All leakage and infinite values handled, ready for model training.</p></li>
 </ul>
-<div id="f6f6b08f" class="cell" data-execution_count="35">
+<div id="50aaf0db" class="cell" data-execution_count="35">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: List suspicious columns to drop</span></span>
@@ -3301,7 +3301,7 @@ window.Quarto = {
 <span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"🚨 Leakage columns in X_tree_test:"</span>, leakage_in_X_tree_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="cf029551" class="cell" data-execution_count="36">
+<div id="f61aaea8" class="cell" data-execution_count="36">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 🔻 Drop 'ticker' column if present in any of the datasets</span></span>
@@ -3316,7 +3316,7 @@ window.Quarto = {
 <span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"🧹 Dropped 'ticker' from </span><span class="sc">{</span>df_name<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="cbeef3db" class="cell" data-execution_count="37">
+<div id="bd58fdb0" class="cell" data-execution_count="37">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -3335,7 +3335,7 @@ window.Quarto = {
 <span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"✅ No inf/-inf values found in </span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="d3bfeb86" class="cell" data-execution_count="38">
+<div id="832e90ff" class="cell" data-execution_count="38">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -3347,7 +3347,7 @@ window.Quarto = {
 <span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"✅ Replaced +inf and -inf values in X_tree_train and X_tree_test with 0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="1ef73d67" class="cell" data-execution_count="39">
+<div id="efe38f65" class="cell" data-execution_count="39">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ───────────────────────────────</span></span>
@@ -3412,7 +3412,7 @@ window.Quarto = {
 <pre><code>Overall, the study demonstrates that combining IC-based and SHAP-based feature selection allows Ridge regression to capture subtle predictive signals in highly noisy financial 
 
 data, although the overall explanatory power remains limited due to the stochastic nature of short-term returns.</code></pre>
-<div id="18b40762" class="cell" data-execution_count="40">
+<div id="03d24c22" class="cell" data-execution_count="40">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -3617,7 +3617,7 @@ data, although the overall explanatory power remains limited due to the stochast
 <p>for reproducibility.</p>
 <p>Overall, the study demonstrates that combining IC- and SHAP-based feature selection with ElasticNetCV allows the extraction of subtle signals in highly noisy financial data,</p>
 <p>although the short-term predictability remains limited.</p>
-<div id="5128e6af" class="cell" data-execution_count="41">
+<div id="1c78741d" class="cell" data-execution_count="41">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -3774,7 +3774,7 @@ data, although the overall explanatory power remains limited due to the stochast
 <li><p>Using this feature set, we performed 3-fold GroupKFold cross-validation with dates as the grouping variable, ensuring temporal separation between training and validation sets. Each fold was trained with ElasticNetCV across multiple l1_ratio values. The model’s regularization parameters remained small (average alpha ≈ 0.000914), reflecting modest but measurable predictive signal over 21 days. The out-of-fold predictions achieved an RMSE of 0.0977, an R² of 0.0465, and a Spearman IC of 0.1783, indicating improved predictability compared to the 1-day forward return model.</p></li>
 <li><p>Finally, we computed daily IC to assess the temporal stability of the predictions. Visual inspection with a rolling 5-day mean revealed periods of slightly higher correlation, suggesting that the model captures some persistent predictive structure in the 21-day horizon. All outputs, including OOF predictions, metrics, daily IC values, and plots, were saved for reproducibility and further analysis.</p></li>
 </ul>
-<div id="783bc9c6" class="cell" data-execution_count="42">
+<div id="d8ce4f66" class="cell" data-execution_count="42">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -3941,7 +3941,7 @@ data, although the overall explanatory power remains limited due to the stochast
 <p>In conclusion, the results demonstrate that combining IC- and SHAP-based feature selection with ElasticNetCV enables extraction of weak but detectable signals from high-dimensional,</p>
 <p>noisy financial data over a 21-day horizon. While the predictive power remains limited, the approach highlights the utility of integrating linear correlation with model-driven</p>
 <p>importance to enhance feature selection in quantitative return forecasting.</p>
-<div id="10e8e96e" class="cell" data-execution_count="43">
+<div id="11bb9e35" class="cell" data-execution_count="43">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -4164,7 +4164,7 @@ data, although the overall explanatory power remains limited due to the stochast
 <h2 class="anchored" data-anchor-id="step-5-deliverables">Step 5: Deliverables</h2>
 <p>Saved predictions, metrics, daily IC, and a visual IC plot for downstream analysis.</p>
 <p>Outcome: A concise, interpretable model capturing meaningful signals for forward returns, robust across time.</p>
-<div id="5348b2fb" class="cell" data-execution_count="44">
+<div id="2a900312" class="cell" data-execution_count="44">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -4367,7 +4367,7 @@ data, although the overall explanatory power remains limited due to the stochast
 <p>1542, showing consistent signal over time. All out-of-fold predictions, metrics, and daily IC trends were saved to support further analysis.</p>
 <p>By combining IC and SHAP for feature selection, this approach provides a transparent and interpretable framework for forward return forecasting, capturing subtle but consistent</p>
 <p>predictive signals in the data.</p>
-<div id="88da70c0" class="cell" data-execution_count="45">
+<div id="7ce89788" class="cell" data-execution_count="45">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -4884,7 +4884,7 @@ data, although the overall explanatory power remains limited due to the stochast
 <p>These a graphs and values resemble the code execution outputs, where high IC values (e.g., 0.99) indicate strong model fit in this dataset, and SHAP plots highlight key features via bar</p>
 <p>. The rolling IC curves demonstrate model stability over time, computed as 252-day rolling averages of daily ICs. For actual image generation of these graphs, do you want me to generate</p>
 <p>a images?</p>
-<div id="c431d24d" class="cell" data-execution_count="46">
+<div id="6c2ba246" class="cell" data-execution_count="46">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -5352,7 +5352,7 @@ data, although the overall explanatory power remains limited due to the stochast
 </ul>
 <p>Layer 3 acts as a market thermometer , parsing real dynamics and adapting models to regime-specific conditions.</p>
 <p>This sets the stage for Layer 4: Ensemble Modeling &amp; Meta-Models , where regime awareness informs more sophisticated blending of predictive models.</p>
-<div id="6652b13f" class="cell" data-execution_count="47">
+<div id="86792624" class="cell" data-execution_count="47">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -5648,7 +5648,7 @@ data, although the overall explanatory power remains limited due to the stochast
 <p>Layer 4 creates a “super-model” - by blending diverse perspectives with regime-aware precision -.</p>
 <p>It delivers reduced errors, greater stability, and adaptability—positioning the system for trading integration - and scalable alpha generation -.</p>
 <p>This sets the stage for Layer 5: Risk-Aware Portfolio Construction -, where ensemble forecasts drive optimal allocation and drawdown control.</p>
-<div id="5770d192" class="cell" data-execution_count="48">
+<div id="f211312b" class="cell" data-execution_count="48">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -6133,7 +6133,7 @@ In practice, these would be real predictions from trained models on features in 
 <li><p>Real-World Analogy : Like adaptive cruise control that adjusts for road conditions, regime-aware ensembles prevent “model drift” as conditions change.</p></li>
 <li><p>Limitations : Since base predictions are simulated, weight shifts reflect noise as much as structural differences. In real-world application, results would reflect actual model strengths/weaknesses.</p></li>
 </ul>
-<div id="1690da30" class="cell" data-execution_count="49">
+<div id="4954950e" class="cell" data-execution_count="49">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -6554,7 +6554,7 @@ In practice, these would be real predictions from trained models on features in 
 <li><p>Lowering transaction costs through smarter rebalancing.</p></li>
 </ul>
 <p>Together, these changes could transform a low-return, low-IC strategy into a more robust alpha generator with stronger predictive signals and better cost efficiency.</p>
-<div id="41f3bed6" class="cell" data-execution_count="50">
+<div id="aaabe398" class="cell" data-execution_count="50">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -6679,7 +6679,7 @@ In practice, these would be real predictions from trained models on features in 
 <span id="cb51-120"><a href="#cb51-120" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>sector<span class="sc">}</span><span class="ss">: Avg Daily Ret = </span><span class="sc">{</span>metrics[<span class="st">'avg_ret'</span>]<span class="sc">:.6f}</span><span class="ss">, Sharpe = </span><span class="sc">{</span>metrics[<span class="st">'sharpe'</span>]<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="ba83a15e" class="cell" data-execution_count="51">
+<div id="c91521ac" class="cell" data-execution_count="51">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>pip install google<span class="op">-</span>generativeai pandas numpy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -6849,12 +6849,12 @@ Example feature importances (placeholders):
 
 2. Backtest standalone formula (expected IC ≈ 0.02–0.05).  
 
-::: {#89fcb3f3 .cell execution_count=52}
+::: {#18fc0bb5 .cell execution_count=52}
 ``` {.python .cell-code}
 # Initialize the Gemini API
 gemini_model = genai.GenerativeModel('models/gemini-1.5-flash')</code></pre>
 <p>:::</p>
-<div id="7cc0d3b6" class="cell" data-execution_count="53">
+<div id="a5a2da12" class="cell" data-execution_count="53">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate_alpha_prompt(features):</span>
@@ -6890,7 +6890,7 @@ gemini_model = genai.GenerativeModel('models/gemini-1.5-flash')</code></pre>
 <span id="cb54-31"><a href="#cb54-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(alpha_prompt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="2cf18976" class="cell" data-execution_count="54">
+<div id="b2c6d9c8" class="cell" data-execution_count="54">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming gemini_model is initialized from previous steps</span></span>
@@ -6922,7 +6922,7 @@ gemini_model = genai.GenerativeModel('models/gemini-1.5-flash')</code></pre>
 <span id="cb55-27"><a href="#cb55-27" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Gemini model not initialized. Please run the previous cell."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="4b727596" class="cell" data-execution_count="55">
+<div id="18a2a0eb" class="cell" data-execution_count="55">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate_research_report(data_summary, analysis_results):</span>
@@ -6965,7 +6965,7 @@ gemini_model = genai.GenerativeModel('models/gemini-1.5-flash')</code></pre>
 <span id="cb56-38"><a href="#cb56-38" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(research_prompt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="85adaeb6" class="cell" data-execution_count="56">
+<div id="72216080" class="cell" data-execution_count="56">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming gemini_model is initialized</span></span>
@@ -6981,7 +6981,7 @@ gemini_model = genai.GenerativeModel('models/gemini-1.5-flash')</code></pre>
 <span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Gemini model not initialized. Please run the previous cell."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="d8f02fe5" class="cell" data-execution_count="57">
+<div id="9d06a037" class="cell" data-execution_count="57">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> google.generativeai <span class="im">as</span> genai</span>
@@ -6995,7 +6995,7 @@ gemini_model = genai.GenerativeModel('models/gemini-1.5-flash')</code></pre>
 <span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Error listing models: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="3823f8dc" class="cell" data-execution_count="58">
+<div id="d2f814ab" class="cell" data-execution_count="58">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
