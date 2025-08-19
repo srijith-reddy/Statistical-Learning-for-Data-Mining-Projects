@@ -1,6 +1,6 @@
 # Srijith Reddy | Portfolio
 
-Welcome to my portfolio! I’m **Srijith Reddy**, a data science enthusiast currently exploring the intersection of statistics, optimization, and machine learning. This site showcases three major projects completed as part of the graduate course **STA 9890: Statistical Learning for Data Mining** at Baruch College.
+Welcome to my portfolio! I’m **Srijith Reddy**, a data science enthusiast currently exploring the intersection of statistics, optimization, and machine learning. This site showcases major projects completed as part of the graduate course **STA 9890: Statistical Learning for Data Mining** at Baruch College.
 
 Each project reflects a thoughtful blend of statistical theory and practical modeling for real-world challenges.
 
@@ -11,6 +11,16 @@ Each project reflects a thoughtful blend of statistical theory and practical mod
 ---
 
 ## 🔍 Featured Projects
+
+### 📊 [End-to-End Quant Alpha Pipeline](https://srijith-reddy.github.io/Statistical-Learning-for-Data-Mining-Projects/project4.html)
+- **Goal**: Build a full-stack research workflow for equity alphas.
+- **Data**: OHLCV, options, and macroeconomic indicators.
+- **Techniques**:
+  - SHAP- and IC-based feature pruning.
+  - ElasticNet ensembles, Optuna-tuned XGBoost/LightGBM.
+  - HMM-based regime detection and CVXPY portfolio optimization.
+- **Impact**:
+  - Delivered robust out-of-sample IC and Sharpe improvements.
 
 ### 🏠 [Property Valuation Modeling](https://srijith-reddy.github.io/Statistical-Learning-for-Data-Mining-Projects/project3.html)
 - **Goal**: Predict 2019 assessed property values using historical real estate and protest data.
