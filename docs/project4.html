@@ -318,6 +318,7 @@ window.Quarto = {
   <li><a href="#key-takeaways-and-recommendations" id="toc-key-takeaways-and-recommendations" class="nav-link" data-scroll-target="#key-takeaways-and-recommendations">8.6 Key Takeaways and Recommendations</a></li>
   <li><a href="#final-assessment" id="toc-final-assessment" class="nav-link" data-scroll-target="#final-assessment">8.7 Final Assessment</a></li>
   </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
     </div>
@@ -373,7 +374,7 @@ window.Quarto = {
 <li><p>Using the EOD Historical Data API, we sequentially pulled and stored each symbol’s full trading history. A short delay between requests ensured smooth operation within API limits. Data was saved in parquet format for efficiency, with each file containing date-sorted daily records alongside the ticker identifier.</p></li>
 <li><p>By the end, the dataset was successfully assembled—503 tickers, spanning over a decade of trading data—ready for downstream analysis, model training, and alpha research.</p></li>
 </ul>
-<div id="35219062" class="cell" data-execution_count="1">
+<div id="4fce3f2b" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -440,7 +441,7 @@ window.Quarto = {
 <p>We assembled a complete daily OHLCV history for the SPDR S&amp;P 500 ETF (SPY) spanning January 3, 2000 through today. The dataset, sourced from EOD Historical Data, contains over two decades of market activity precisely 6 columns: open, high, low, close, adjusted close, and volume.</p>
 <p>The earliest record shows SPY opening at 148.25 on January 3, 2000, closing at 145.44 with 8.16 million shares traded. From there, the data traces the ETF’s journey through market cycles, from the dot-com crash to the global financial crisis, the pandemic shock, and the subsequent bull runs.</p>
 <p>The full dataset is stored in efficient parquet format, sorted chronologically, and ready for time-series analysis, trend studies, and model development.</p>
-<div id="b982a0d7" class="cell" data-execution_count="2">
+<div id="f6221486" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
@@ -483,7 +484,7 @@ window.Quarto = {
 <section id="consolidated-sp-500-ohlcv-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="consolidated-sp-500-ohlcv-dataset">2.3 Consolidated S&amp;P 500 OHLCV Dataset</h2>
 <p>The full historical record for all S&amp;P 500 constituents has been successfully aggregated into a single, unified dataset. This compilation merges daily OHLCV and adjusted close data for every ticker, standardized in structure and cleaned for completeness.</p>
-<div id="4423fe53" class="cell" data-execution_count="3">
+<div id="07646b07" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -535,7 +536,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="finalized-sp-500-historical-dataset">2.4 Finalized S&amp;P 500 Historical Dataset</h2>
 <p>The S&amp;P 500 historical database has been refined to ensure analytical integrity. Tickers with insufficient history (&lt;500 trading days) were excluded, and gaps within each series were forward-filled to maintain continuity without introducing artificial backward data.</p>
 <p>The result is a clean, liquid-universe dataset—chronologically ordered and free from sparsity—stored in parquet format for fast, large-scale quantitative research and backtesting.</p>
-<div id="4b430cdf" class="cell" data-execution_count="4">
+<div id="9bc089a9" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reload raw file</span></span>
@@ -564,7 +565,7 @@ window.Quarto = {
 <section id="sector-enriched-sp-500-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="sector-enriched-sp-500-dataset">2.5 Sector-Enriched S&amp;P 500 Dataset</h2>
 <p>The cleaned S&amp;P 500 OHLCV data has been augmented with GICS sector and industry classifications sourced from Wikipedia. This final enriched dataset now enables sector-level and industry-level analysis, supporting more targeted factor research and cross-sectional studies.</p>
-<div id="22d314c6" class="cell" data-execution_count="5">
+<div id="fdac4315" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -608,7 +609,7 @@ window.Quarto = {
 <p>Options chains were successfully retrieved for the majority of S&amp;P 500 tickers, with each contract categorized by type (CALL/PUT) and tagged with expiration dates.</p>
 <p>Examples: AAPL: 2,450 contracts ADBE: 2,470 contracts ABBV: 1,162 contracts</p>
 <p>These parquet files, stored by ticker, provide a structured foundation for implied volatility modeling, skew analysis, and options-based market sentiment studies across the index.</p>
-<div id="05bbc8df" class="cell" data-execution_count="6">
+<div id="2605db72" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
@@ -683,7 +684,7 @@ window.Quarto = {
 </details>
 </div>
 <p>All individual S&amp;P 500 options files were merged into a unified dataset.</p>
-<div id="f11e556c" class="cell" data-execution_count="7">
+<div id="8f4b30b9" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -723,7 +724,7 @@ window.Quarto = {
 <section id="sector-tagging-for-options-data" class="level2">
 <h2 class="anchored" data-anchor-id="sector-tagging-for-options-data">2.7 Sector Tagging for Options Data</h2>
 <p>Cached sector map was loaded, options features merged with sector/industry info.</p>
-<div id="d3b9fca8" class="cell" data-execution_count="8">
+<div id="857ef8b4" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -772,7 +773,7 @@ window.Quarto = {
 <p>Using adjusted year-end prices, key metrics such as EPS, market capitalization, P/E ratio, ROE, ROA, operating margin, dividend yield, and debt-to-equity were computed.</p>
 <p>Year-over-year EPS growth was also calculated to track profitability trends. We also need to take into account stock splits of companies too.</p>
 <p>For example, AAPL last split was on 2020-08-31 with a 4:1 split factor.</p>
-<div id="60f28414" class="cell" data-execution_count="9">
+<div id="a5205bda" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
@@ -805,7 +806,7 @@ window.Quarto = {
 2022: 16,325,819,000<br>
 2023: 15,812,547,000<br>
 2024: 15,408,095,000</p>
-<div id="d5f1c00c" class="cell" data-execution_count="10">
+<div id="b8272097" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
@@ -967,7 +968,7 @@ window.Quarto = {
 <li><p>Each series is saved individually and combined into a single dataset for integrated analysis.</p></li>
 <li><p>These indicators provide a foundation for examining inflation, monetary policy, labor markets, liquidity, and economic cycles over the past decade.</p></li>
 </ul>
-<div id="f4389adf" class="cell" data-execution_count="11">
+<div id="5d1e8d95" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fredapi <span class="im">import</span> Fred</span>
@@ -1095,7 +1096,7 @@ window.Quarto = {
 <li><p>These alphas are purely data-driven transformations of market variables, meaning they are portable across regions and asset classes.</p></li>
 <li><p>Combining them with novel machine learning features later in the pipeline helps us assess whether modern methods genuinely outperform legacy alpha construction.</p></li>
 </ul>
-<div id="2ea5cdd4" class="cell" data-execution_count="12">
+<div id="50d79d44" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -1130,7 +1131,7 @@ window.Quarto = {
 <span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"✅ Forward returns saved to 'layer1_alpha_signals/returns/'"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="c5332175" class="cell" data-execution_count="13">
+<div id="05342ec3" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -1320,7 +1321,7 @@ window.Quarto = {
 <span id="cb13-185"><a href="#cb13-185" aria-hidden="true" tabindex="-1"></a><span class="co"># endregion</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="375a19de" class="cell" data-execution_count="14">
+<div id="bd0fa575" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Alphas(<span class="bu">object</span>):</span>
@@ -2289,7 +2290,7 @@ window.Quarto = {
 <span id="cb14-964"><a href="#cb14-964" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (<span class="va">self</span>.close <span class="op">-</span> <span class="va">self</span>.<span class="bu">open</span>) <span class="op">/</span>((<span class="va">self</span>.high <span class="op">-</span> <span class="va">self</span>.low) <span class="op">+</span> <span class="fl">0.001</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="0a379d2e" class="cell" data-execution_count="15">
+<div id="5a826a14" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -2372,7 +2373,7 @@ window.Quarto = {
 <li><p>Each alpha signal offered insight into market trends, with some highlighting abrupt changes while others traced more subtle patterns.</p></li>
 </ul>
 <p>Once the assembly was complete, the full matrix was saved as a single consolidated file. This output preserved the story of all individual alpha signals over time, ready for modeling or further analysis, ensuring that no piece of the decade-long market narrative was lost.</p>
-<div id="9ec8231c" class="cell" data-execution_count="16">
+<div id="1450ba5e" class="cell" data-execution_count="16">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -2407,7 +2408,7 @@ window.Quarto = {
 <li><p>In total, nearly 10,000 headlines were collected, representing a year of market-relevant information for the entire S&amp;P 500.</p></li>
 </ul>
 <p>The resulting dataset was saved as a single file, a ready-to-use repository of market sentiment. It became a chronicle of corporate news, capturing the stories that could sway investor decisions and shape alpha signals in the market.</p>
-<div id="3795a0bd" class="cell" data-execution_count="17">
+<div id="c602fdd3" class="cell" data-execution_count="17">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
@@ -2491,7 +2492,7 @@ window.Quarto = {
 </ul>
 <p>In the end, the sentiment scores were consolidated into a single dataset, giving a, timestamped map of market mood across all S&amp;P 500 companies.</p>
 <p>This resource became a quantitative lens on market psychology, ready for further modeling, strategy development, or historical analysis.</p>
-<div id="a9ac40a3" class="cell" data-execution_count="18">
+<div id="8c5a6894" class="cell" data-execution_count="18">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -2570,7 +2571,7 @@ window.Quarto = {
 <li><p>Bollinger Bands framed the price action, marking statistical bounds of recent movement and helping identify extremes.</p></li>
 </ul>
 <p>Once computed for all tickers, the indicators were consolidated into a comprehensive dataset. The result was a high-resolution map of technical signals across the market, ready to feed models or inform trading strategies. The workflow was precise, consistent, and captured the rhythm of market behavior over time.</p>
-<div id="84ebf455" class="cell" data-execution_count="19">
+<div id="ec092020" class="cell" data-execution_count="19">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -2641,7 +2642,7 @@ window.Quarto = {
 <li><p>These engineered features compress the complexity of the options market into a daily snapshot per ticker, providing a clear, quantifiable view of trader behavior and market expectations.</p></li>
 <li><p>The resulting dataset is saved and ready to integrate with price, technical, and sentiment data for downstream modeling or strategy analysis.</p></li>
 </ul>
-<div id="38729e66" class="cell" data-execution_count="20">
+<div id="f3f5a277" class="cell" data-execution_count="20">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -2732,7 +2733,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="alpha-fundamentals">3.8 Alpha Fundamentals</h2>
 <p>Fundamental metrics for S&amp;P 500 firms—PE, ROE, ROA, EPS, growth, leverage, margins, dividends—were cross-sectionally ranked and z-scored per report date.</p>
 <p>The processed dataset provides standardized, comparable signals across tickers, ready for integration with market, technical, and sentiment data.</p>
-<div id="7b0525be" class="cell" data-execution_count="21">
+<div id="914e9e34" class="cell" data-execution_count="21">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -2776,7 +2777,7 @@ window.Quarto = {
 <span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"✅ Saved fundamental alpha signals."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="7182de31" class="cell" data-execution_count="22">
+<div id="e6228068" class="cell" data-execution_count="22">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df_final[df_final[<span class="st">'ticker'</span>]<span class="op">==</span><span class="st">'AAPL'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2788,7 +2789,7 @@ window.Quarto = {
 <p>The datasets are now fully aligned and clean: all date and report_date fields are proper datetime types with no missing values, ensuring reliable merging or time-based analysis.</p>
 <p>X (market/technical data) is daily-sorted per ticker, while fundamentals is sorted by report date, reflecting quarterly/annual updates.</p>
 <p>This confirms a clear temporal structure: daily prices exist between periodic fundamental updates, allowing forward-looking integration of fundamental signals into market data without gaps or misalignment.</p>
-<div id="39f3893a" class="cell" data-execution_count="23">
+<div id="b96f2d06" class="cell" data-execution_count="23">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure date types</span></span>
@@ -2823,7 +2824,7 @@ window.Quarto = {
 <p>Finally, for days with multiple fundamental reports, we kept only the latest available per (ticker, date).</p></li>
 <li><p>The result is a fully merged dataset ready for modeling, combining daily market dynamics with option, sentiment, technical, and fundamental insights.</p></li>
 </ul>
-<div id="4f670af2" class="cell" data-execution_count="24">
+<div id="87fa9ef8" class="cell" data-execution_count="24">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -2869,7 +2870,7 @@ window.Quarto = {
 <section id="alpha-signal-merging-and-forward-returns-alignment" class="level2">
 <h2 class="anchored" data-anchor-id="alpha-signal-merging-and-forward-returns-alignment">3.11 Alpha Signal Merging and Forward Returns Alignment</h2>
 <p>This part outlines the process of preparing the Layer 1 dataset by merging various alpha signals and aligning them with forward returns for downstream modeling.</p>
-<div id="dd4af0c7" class="cell" data-execution_count="25">
+<div id="076874d0" class="cell" data-execution_count="25">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ───────────────────────────────</span></span>
@@ -2909,7 +2910,7 @@ window.Quarto = {
 <p>Next, for general modeling, we cleaned the feature set by dropping options- and sentiment-related columns—features that are either specialized, high-frequency, or text-based—leaving a stable cross-sectional set of alphas, fundamentals, and technicals.</p>
 <p>We then assessed missingness across features. Most features are complete, but some fundamental metrics like dividendYield and epsGrowthYoY have ~10–13% missing values, while a few alphas and market features show minor gaps (&lt;5%). This provides a clear roadmap for imputation or feature selection, balancing data completeness with predictive richness.</p>
 <p>In short, the dataset is now ready for modeling, with a clean general-purpose feature set and a separate untouched 2025 set for robust evaluation.</p>
-<div id="4a2deb85" class="cell" data-execution_count="26">
+<div id="b058b793" class="cell" data-execution_count="26">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 🔐 STEP 1 — Save the untouched 2025 subset FIRST (preserving all columns)</span></span>
@@ -2946,7 +2947,7 @@ window.Quarto = {
 <p>Valuation metrics (price, peRatio, marketCap) were treated with a forward-fill approach, backed up by an expanding median to ensure no future information is used. This allows us to retain as much data as possible while maintaining a strict temporal structure.</p>
 <p>After completing this imputation process, the dataset became much cleaner. Most missing values were in rank-normalized fundamentals (dividendYield_rank ~13%, epsGrowthYoY_rank ~10%), but the majority of technical, alpha, and categorical features were now complete.</p>
 <p>In essence, we transformed a partially incomplete dataset into a robust, temporally consistent, and leakage-free foundation ready for modeling, preserving both historical fidelity and cross-sectional structure.</p>
-<div id="b14dc2f1" class="cell" data-execution_count="27">
+<div id="b224d9cf" class="cell" data-execution_count="27">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Sort to ensure time order</span></span>
@@ -2975,7 +2976,7 @@ window.Quarto = {
 <span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>        X_model_clean[col] <span class="op">=</span> imputer(X_model_clean, col)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="00648b0b" class="cell" data-execution_count="28">
+<div id="d773ef3a" class="cell" data-execution_count="28">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>alpha_cols <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> X_model_clean.columns <span class="cf">if</span> col.startswith(<span class="st">"alpha"</span>)]</span>
@@ -2986,7 +2987,7 @@ window.Quarto = {
 <span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>        X_model_clean[col] <span class="op">=</span> X_model_clean[col].fillna(<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="29c95ffa" class="cell" data-execution_count="29">
+<div id="99605b56" class="cell" data-execution_count="29">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> leakage_free_ffill_then_median(df, col, time_col):</span>
@@ -3024,7 +3025,7 @@ window.Quarto = {
 <p>These gaps are expected, reflecting the inherent sparsity in dividend and earnings growth reporting across companies and time.</p>
 <p>In contrast, market-based rank features such as marketCap_rank and peRatio_rank are nearly complete, with only 4,685 missing values each, indicating that valuation data is largely available.</p>
 <p>Technical indicators also demonstrate high completeness: volatility_21d has 546 missing, Bollinger Bands (bb_lower, bb_middle, bb_upper) have 494 each, and rsi_14 shows only 488 missing.</p>
-<div id="be6d5d51" class="cell" data-execution_count="30">
+<div id="f20c310f" class="cell" data-execution_count="30">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>X_model_clean.isna().<span class="bu">sum</span>().sort_values(ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -3038,7 +3039,7 @@ window.Quarto = {
 <p>Examining the distributional skew across numeric features reveals extreme positive skew in certain alpha signals (alpha009: 101.5, alpha052: 61.9) and financial ratios (peRatio: 54.4, roe: 21.1), reflecting the heavy-tailed nature of stock-level factors and earnings metrics. Technical indicators and market measures like bb_lower, bb_middle, bb_upper, and price also exhibit substantial right-skew (10–15 range), consistent with volatility clustering and outlier price movements.</p>
 <p>Conversely, a small set of features shows mild negative skew (alpha038: -0.93, grossMargin: -1.33, roe_z: -1.58), indicating left-leaning distributions, often reflecting capped or bounded ratios. Several alpha features remain NaN due to lack of data or inapplicability across certain stocks.</p>
 <p>Overall, these results highlight heterogeneous distributions, emphasizing the need for robust scaling and normalization in downstream modeling, particularly for highly skewed alpha signals and earnings-based fundamentals.</p>
-<div id="8ca578e7" class="cell" data-execution_count="31">
+<div id="4de5a3fb" class="cell" data-execution_count="31">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ffill_then_time_median(df, col):</span>
@@ -3058,7 +3059,7 @@ window.Quarto = {
 <span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>        X_model_clean[col] <span class="op">=</span> ffill_then_time_median(X_model_clean, col)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="2d412423" class="cell" data-execution_count="32">
+<div id="0235d475" class="cell" data-execution_count="32">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>report_date_cols <span class="op">=</span> [<span class="st">"dividendYield"</span>, <span class="st">"epsGrowthYoY"</span>, <span class="st">"peRatio"</span>]</span>
@@ -3120,7 +3121,7 @@ window.Quarto = {
 <p>Tree: 53,500 × 140 features</p>
 <p>These preprocessing steps ensure that both linear and tree-based models receive well-conditioned, scale-consistent inputs, with PCA compressing redundant alpha signals for linear models and adaptive clipping controlling extreme values for tree-based models.</p>
 <p>The approach balances the need to reduce noise and outlier impact while retaining informative cross-sectional patterns essential for predictive performance.</p>
-<div id="2aab39cd" class="cell" data-execution_count="33">
+<div id="66c9eed6" class="cell" data-execution_count="33">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -3234,7 +3235,7 @@ window.Quarto = {
 <li><p>Tree datasets: X_tree_train (1,085,402 × 140), X_tree_test (53,500 × 140)</p></li>
 <li><p>All leakage and infinite values handled, ready for model training.</p></li>
 </ul>
-<div id="21f09588" class="cell" data-execution_count="34">
+<div id="7f3cfde7" class="cell" data-execution_count="34">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: List suspicious columns to drop</span></span>
@@ -3256,7 +3257,7 @@ window.Quarto = {
 <span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"🚨 Leakage columns in X_tree_test:"</span>, leakage_in_X_tree_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="9bded52d" class="cell" data-execution_count="35">
+<div id="0ecae960" class="cell" data-execution_count="35">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 🔻 Drop 'ticker' column if present in any of the datasets</span></span>
@@ -3271,7 +3272,7 @@ window.Quarto = {
 <span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"🧹 Dropped 'ticker' from </span><span class="sc">{</span>df_name<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="4915172a" class="cell" data-execution_count="36">
+<div id="3cf0656b" class="cell" data-execution_count="36">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -3290,7 +3291,7 @@ window.Quarto = {
 <span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"✅ No inf/-inf values found in </span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="45f229e6" class="cell" data-execution_count="37">
+<div id="f8cc1207" class="cell" data-execution_count="37">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -3302,7 +3303,7 @@ window.Quarto = {
 <span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"✅ Replaced +inf and -inf values in X_tree_train and X_tree_test with 0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="c8797089" class="cell" data-execution_count="38">
+<div id="14ae6cd6" class="cell" data-execution_count="38">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ───────────────────────────────</span></span>
@@ -3366,7 +3367,7 @@ Predicting 5-Day Forward Returns Using IC- and SHAP-Guided Ridge Regression
 </center>
 </div>
 </div>
-<div id="71e2e5da" class="cell" data-execution_count="39">
+<div id="a9c8d26c" class="cell" data-execution_count="39">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -3577,7 +3578,7 @@ Predicting 1-Day Forward Returns Using IC- and SHAP-Guided ElasticNet Regression
 </center>
 </div>
 </div>
-<div id="30d045dd" class="cell" data-execution_count="40">
+<div id="3293a939" class="cell" data-execution_count="40">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -3742,7 +3743,7 @@ Predicting 21-Day Forward Returns Using IC- and SHAP-Guided ElasticNet Regressio
 </center>
 </div>
 </div>
-<div id="0fa36898" class="cell" data-execution_count="41">
+<div id="ac78b6cc" class="cell" data-execution_count="41">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -3913,7 +3914,7 @@ XGBoost Modeling of 21-Day Forward Returns with IC- and SHAP-Based Feature Selec
 </center>
 </div>
 </div>
-<div id="f1c78af0" class="cell" data-execution_count="42">
+<div id="44393701" class="cell" data-execution_count="42">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -4127,7 +4128,7 @@ XGBoost Modeling of 5-Day Forward Returns with IC- and SHAP-Based Feature Select
 </center>
 </div>
 </div>
-<div id="47267f83" class="cell" data-execution_count="43">
+<div id="d7e7960c" class="cell" data-execution_count="43">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -4333,7 +4334,7 @@ XGBoost Modeling of 1-Day Forward Returns with IC- and SHAP-Based Feature Select
 </center>
 </div>
 </div>
-<div id="7b22c3b3" class="cell" data-execution_count="44">
+<div id="55ea2192" class="cell" data-execution_count="44">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -4902,7 +4903,7 @@ Alpha Modeling Results
 <li><p>While the absolute numbers look extreme, they are <strong>artifacts of scaling</strong>.</p></li>
 <li><p><strong>True takeaway:</strong> the ensemble generalizes well and extracts useful predictive signals that remain valid when mapped back to raw financial terms.</p></li>
 </ul>
-<div id="125a666a" class="cell" data-execution_count="45">
+<div id="32385c71" class="cell" data-execution_count="45">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -5374,7 +5375,7 @@ Regime Detection
 <li><p>Broader Applications: Supports position sizing, hedging, and risk-adjusted portfolio construction.</p></li>
 </ul>
 <p>Layer 3 basically acts as a market thermometer , parsing real dynamics and adapting models to regime-specific conditions.</p>
-<div id="2a31fa84" class="cell" data-execution_count="46">
+<div id="026b315f" class="cell" data-execution_count="46">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -5671,8 +5672,8 @@ Test RMSE Comparison across Horizons
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
 <p>Layer 4 creates a “super-model” - by blending diverse perspectives with regime-aware precision.</p>
 <p>It delivers reduced errors, greater stability, and adaptability—positioning the system for trading integration and scalable alpha generation.</p>
-<p>This sets the stage for Layer 5: Risk-Aware Portfolio Construction -, where ensemble forecasts drive optimal allocation and drawdown control.</p>
-<div id="e3af2b6f" class="cell" data-execution_count="47">
+<p>This sets the stage for Layer 5: Risk-Aware Portfolio Construction, where ensemble forecasts drive optimal allocation and drawdown control.</p>
+<div id="860ede23" class="cell" data-execution_count="47">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -5979,11 +5980,6 @@ Test RMSE Comparison across Horizons
 <li><p>RMSE : Root Mean Squared Error (lower is better).</p></li>
 <li><p>R² : Coefficient of determination (closer to 1 is better).</p></li>
 <li><p>IC (Information Coefficient) : Spearman rank correlation between predicted and actual returns (overall and average daily; closer to 1 is better ranking).</p></li>
-<li><p>Code Notes :<br>
-</p></li>
-<li><p>The manual Spearman implementation has syntax errors (e.g., <code>d   2</code> should be <code>d   2</code>). Since SciPy is available, rely on <code>spearmanr</code> directly.</p></li>
-<li><p><code>LinearRegression</code> defaults to <code>fit_intercept=True</code>, so weights don’t exactly sum to 1 (intercept absorbs bias). For pure blending, set <code>fit_intercept=False</code>.</p></li>
-<li><p>Regimes are applied only during training for weights; test predictions currently use the baseline model. To make the approach fully regime-aware, test predictions should also use the regime-specific models.</p></li>
 </ul>
 </section>
 <section id="test-metrics-baseline-all-regime-model" class="level2">
@@ -6154,7 +6150,7 @@ Test RMSE Comparison across Horizons
 <li><p>Real-World Analogy : Like adaptive cruise control that adjusts for road conditions, regime-aware ensembles prevent “model drift” as conditions change.</p></li>
 <li><p>Limitations : Since base predictions are simulated, weight shifts reflect noise as much as structural differences. In real-world application, results would reflect actual model strengths/weaknesses.</p></li>
 </ul>
-<div id="b2e26204" class="cell" data-execution_count="48">
+<div id="3beda4d9" class="cell" data-execution_count="48">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -6572,11 +6568,18 @@ Test RMSE Comparison across Horizons
 <li><p>Lowering transaction costs through smarter rebalancing.</p></li>
 </ul>
 <p>Together, these changes could transform a low-return, low-IC strategy into a more robust alpha generator with stronger predictive signals and better cost efficiency.</p>
+</section>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+<ul>
+<li><p>yli188. (n.d.). <em>WorldQuant_alpha101_code</em>. GitHub repository providing the Python implementation of the 101 Formulaic Alphas. (Accessed 2025).</p></li>
+<li><p>Kakushadze, Z. (2016). <em>101 Formulaic Alphas</em>. arXiv preprint. Provides detailed formulas, input data types, and empirical analysis.</p></li>
+</ul>
 
 
 <!-- -->
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -12144,7 +12147,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb49-5186"><a href="#cb49-5186" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-5187"><a href="#cb49-5187" aria-hidden="true" tabindex="-1"></a>It delivers reduced errors, greater stability, and adaptability—positioning the system for trading integration and scalable alpha generation.  </span>
 <span id="cb49-5188"><a href="#cb49-5188" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5189"><a href="#cb49-5189" aria-hidden="true" tabindex="-1"></a>This sets the stage for Layer 5: Risk-Aware Portfolio Construction  -, where ensemble forecasts drive optimal allocation and drawdown control.  </span>
+<span id="cb49-5189"><a href="#cb49-5189" aria-hidden="true" tabindex="-1"></a>This sets the stage for Layer 5: Risk-Aware Portfolio Construction, where ensemble forecasts drive optimal allocation and drawdown control.  </span>
 <span id="cb49-5190"><a href="#cb49-5190" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-5191"><a href="#cb49-5191" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-5194"><a href="#cb49-5194" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
@@ -12462,383 +12465,383 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb49-5506"><a href="#cb49-5506" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-5507"><a href="#cb49-5507" aria-hidden="true" tabindex="-1"></a><span class="ss">  -    </span>IC (Information Coefficient)   : Spearman rank correlation between predicted and actual returns (overall and average daily; closer to 1 is better ranking).</span>
 <span id="cb49-5508"><a href="#cb49-5508" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5509"><a href="#cb49-5509" aria-hidden="true" tabindex="-1"></a><span class="ss">-    </span>Code Notes   :  </span>
-<span id="cb49-5510"><a href="#cb49-5510" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>The manual Spearman implementation has syntax errors (e.g., <span class="in">`d   2`</span> should be <span class="in">`d   2`</span>). Since SciPy is available, rely on <span class="in">`spearmanr`</span> directly.  </span>
+<span id="cb49-5509"><a href="#cb49-5509" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5510"><a href="#cb49-5510" aria-hidden="true" tabindex="-1"></a><span class="fu">## 7.3 Test Metrics (Baseline All-Regime Model)</span></span>
 <span id="cb49-5511"><a href="#cb49-5511" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5512"><a href="#cb49-5512" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span><span class="in">`LinearRegression`</span> defaults to <span class="in">`fit_intercept=True`</span>, so weights don’t exactly sum to 1 (intercept absorbs bias). For pure blending, set <span class="in">`fit_intercept=False`</span>. </span>
+<span id="cb49-5512"><a href="#cb49-5512" aria-hidden="true" tabindex="-1"></a>The provided output shows metrics for the all-regime baseline meta-model on the test set.  </span>
 <span id="cb49-5513"><a href="#cb49-5513" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5514"><a href="#cb49-5514" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>Regimes are applied only during training for weights; test predictions currently use the baseline model. To make the approach fully regime-aware, test predictions should also use the regime-specific models.</span>
+<span id="cb49-5514"><a href="#cb49-5514" aria-hidden="true" tabindex="-1"></a>These are already strong, with low RMSE (~0.0007), high R² (&gt;0.995), and near-perfect IC (&gt;0.997), due to the simulated predictions being close to true returns.</span>
 <span id="cb49-5515"><a href="#cb49-5515" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5516"><a href="#cb49-5516" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb49-5517"><a href="#cb49-5517" aria-hidden="true" tabindex="-1"></a><span class="fu">## 7.3 Test Metrics (Baseline All-Regime Model)</span></span>
-<span id="cb49-5518"><a href="#cb49-5518" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5519"><a href="#cb49-5519" aria-hidden="true" tabindex="-1"></a>The provided output shows metrics for the all-regime baseline meta-model on the test set.  </span>
-<span id="cb49-5520"><a href="#cb49-5520" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5521"><a href="#cb49-5521" aria-hidden="true" tabindex="-1"></a>These are already strong, with low RMSE (~0.0007), high R² (&gt;0.995), and near-perfect IC (&gt;0.997), due to the simulated predictions being close to true returns.</span>
-<span id="cb49-5522"><a href="#cb49-5522" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5523"><a href="#cb49-5523" aria-hidden="true" tabindex="-1"></a>| Horizon | RMSE     | R²      | Overall IC | Avg. Daily IC |</span>
-<span id="cb49-5524"><a href="#cb49-5524" aria-hidden="true" tabindex="-1"></a>|---------|----------|---------|------------|---------------|</span>
-<span id="cb49-5525"><a href="#cb49-5525" aria-hidden="true" tabindex="-1"></a>| 1d      | 0.000696 | 0.995457 | 0.997054  | 0.985939      |</span>
-<span id="cb49-5526"><a href="#cb49-5526" aria-hidden="true" tabindex="-1"></a>| 5d      | 0.000748 | 0.998560 | 0.999020  | 0.992485      |</span>
-<span id="cb49-5527"><a href="#cb49-5527" aria-hidden="true" tabindex="-1"></a>| 21d     | 0.000731 | 0.999776 | 0.999819  | 0.997091      |</span>
+<span id="cb49-5516"><a href="#cb49-5516" aria-hidden="true" tabindex="-1"></a>| Horizon | RMSE     | R²      | Overall IC | Avg. Daily IC |</span>
+<span id="cb49-5517"><a href="#cb49-5517" aria-hidden="true" tabindex="-1"></a>|---------|----------|---------|------------|---------------|</span>
+<span id="cb49-5518"><a href="#cb49-5518" aria-hidden="true" tabindex="-1"></a>| 1d      | 0.000696 | 0.995457 | 0.997054  | 0.985939      |</span>
+<span id="cb49-5519"><a href="#cb49-5519" aria-hidden="true" tabindex="-1"></a>| 5d      | 0.000748 | 0.998560 | 0.999020  | 0.992485      |</span>
+<span id="cb49-5520"><a href="#cb49-5520" aria-hidden="true" tabindex="-1"></a>| 21d     | 0.000731 | 0.999776 | 0.999819  | 0.997091      |</span>
+<span id="cb49-5521"><a href="#cb49-5521" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5522"><a href="#cb49-5522" aria-hidden="true" tabindex="-1"></a>   Insights:   </span>
+<span id="cb49-5523"><a href="#cb49-5523" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Performance improves with longer horizons (e.g., IC rises from 0.997 to 0.9998), as longer-term returns have less noise relative to the signal.  </span>
+<span id="cb49-5524"><a href="#cb49-5524" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5525"><a href="#cb49-5525" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Avg. Daily IC is slightly lower than overall IC, showing consistent but not perfect daily cross-sectional ranking.  </span>
+<span id="cb49-5526"><a href="#cb49-5526" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5527"><a href="#cb49-5527" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>These metrics are for the    baseline   ; regime-aware blending could outperform if base models differ in strengths across regimes.</span>
 <span id="cb49-5528"><a href="#cb49-5528" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5529"><a href="#cb49-5529" aria-hidden="true" tabindex="-1"></a>   Insights:   </span>
-<span id="cb49-5530"><a href="#cb49-5530" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Performance improves with longer horizons (e.g., IC rises from 0.997 to 0.9998), as longer-term returns have less noise relative to the signal.  </span>
+<span id="cb49-5529"><a href="#cb49-5529" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb49-5530"><a href="#cb49-5530" aria-hidden="true" tabindex="-1"></a><span class="fu">## 7.4 Regime-Based Model Weights</span></span>
 <span id="cb49-5531"><a href="#cb49-5531" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5532"><a href="#cb49-5532" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Avg. Daily IC is slightly lower than overall IC, showing consistent but not perfect daily cross-sectional ranking.  </span>
+<span id="cb49-5532"><a href="#cb49-5532" aria-hidden="true" tabindex="-1"></a>The raw coefficients from the meta-models were normalized into percentages  </span>
 <span id="cb49-5533"><a href="#cb49-5533" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5534"><a href="#cb49-5534" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>These metrics are for the    baseline   ; regime-aware blending could outperform if base models differ in strengths across regimes.</span>
+<span id="cb49-5534"><a href="#cb49-5534" aria-hidden="true" tabindex="-1"></a>(<span class="in">`ridge_pct = ridge_coef / (ridge_coef + enet_coef)`</span> and similarly for Elastic Net).  </span>
 <span id="cb49-5535"><a href="#cb49-5535" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5536"><a href="#cb49-5536" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb49-5537"><a href="#cb49-5537" aria-hidden="true" tabindex="-1"></a><span class="fu">## 7.4 Regime-Based Model Weights</span></span>
-<span id="cb49-5538"><a href="#cb49-5538" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5539"><a href="#cb49-5539" aria-hidden="true" tabindex="-1"></a>The raw coefficients from the meta-models were normalized into percentages  </span>
-<span id="cb49-5540"><a href="#cb49-5540" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5541"><a href="#cb49-5541" aria-hidden="true" tabindex="-1"></a>(<span class="in">`ridge_pct = ridge_coef / (ridge_coef + enet_coef)`</span> and similarly for Elastic Net).  </span>
-<span id="cb49-5542"><a href="#cb49-5542" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5543"><a href="#cb49-5543" aria-hidden="true" tabindex="-1"></a>This assumes the intercept is negligible (since sums are ~1.0).  </span>
-<span id="cb49-5544"><a href="#cb49-5544" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5545"><a href="#cb49-5545" aria-hidden="true" tabindex="-1"></a>| Horizon | Regime  | Ridge Coef | Elastic Net Coef | Ridge % | Elastic Net % |</span>
-<span id="cb49-5546"><a href="#cb49-5546" aria-hidden="true" tabindex="-1"></a>|---------|---------|------------|------------------|---------|---------------|</span>
-<span id="cb49-5547"><a href="#cb49-5547" aria-hidden="true" tabindex="-1"></a>| 1d      | Bull    | 0.4878     | 0.5074           | 49%     | 51%           |</span>
-<span id="cb49-5548"><a href="#cb49-5548" aria-hidden="true" tabindex="-1"></a>| 1d      | Bear    | 0.4861     | 0.5131           | 49%     | 51%           |</span>
-<span id="cb49-5549"><a href="#cb49-5549" aria-hidden="true" tabindex="-1"></a>| 1d      | Neutral | 0.5059     | 0.4847           | 51%     | 49%           |</span>
-<span id="cb49-5550"><a href="#cb49-5550" aria-hidden="true" tabindex="-1"></a>| 5d      | Bull    | 0.5078     | 0.4896           | 51%     | 49%           |</span>
-<span id="cb49-5551"><a href="#cb49-5551" aria-hidden="true" tabindex="-1"></a>| 5d      | Bear    | 0.4890     | 0.5068           | 49%     | 51%           |</span>
-<span id="cb49-5552"><a href="#cb49-5552" aria-hidden="true" tabindex="-1"></a>| 5d      | Neutral | 0.4913     | 0.5066           | 49%     | 51%           |</span>
-<span id="cb49-5553"><a href="#cb49-5553" aria-hidden="true" tabindex="-1"></a>| 21d     | Bull    | 0.4645     | 0.5347           | 47%     | 53%           |</span>
-<span id="cb49-5554"><a href="#cb49-5554" aria-hidden="true" tabindex="-1"></a>| 21d     | Bear    | 0.4755     | 0.5254           | 48%     | 52%           |</span>
-<span id="cb49-5555"><a href="#cb49-5555" aria-hidden="true" tabindex="-1"></a>| 21d     | Neutral | 0.5203     | 0.4804           | 52%     | 48%           |</span>
+<span id="cb49-5536"><a href="#cb49-5536" aria-hidden="true" tabindex="-1"></a>This assumes the intercept is negligible (since sums are ~1.0).  </span>
+<span id="cb49-5537"><a href="#cb49-5537" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5538"><a href="#cb49-5538" aria-hidden="true" tabindex="-1"></a>| Horizon | Regime  | Ridge Coef | Elastic Net Coef | Ridge % | Elastic Net % |</span>
+<span id="cb49-5539"><a href="#cb49-5539" aria-hidden="true" tabindex="-1"></a>|---------|---------|------------|------------------|---------|---------------|</span>
+<span id="cb49-5540"><a href="#cb49-5540" aria-hidden="true" tabindex="-1"></a>| 1d      | Bull    | 0.4878     | 0.5074           | 49%     | 51%           |</span>
+<span id="cb49-5541"><a href="#cb49-5541" aria-hidden="true" tabindex="-1"></a>| 1d      | Bear    | 0.4861     | 0.5131           | 49%     | 51%           |</span>
+<span id="cb49-5542"><a href="#cb49-5542" aria-hidden="true" tabindex="-1"></a>| 1d      | Neutral | 0.5059     | 0.4847           | 51%     | 49%           |</span>
+<span id="cb49-5543"><a href="#cb49-5543" aria-hidden="true" tabindex="-1"></a>| 5d      | Bull    | 0.5078     | 0.4896           | 51%     | 49%           |</span>
+<span id="cb49-5544"><a href="#cb49-5544" aria-hidden="true" tabindex="-1"></a>| 5d      | Bear    | 0.4890     | 0.5068           | 49%     | 51%           |</span>
+<span id="cb49-5545"><a href="#cb49-5545" aria-hidden="true" tabindex="-1"></a>| 5d      | Neutral | 0.4913     | 0.5066           | 49%     | 51%           |</span>
+<span id="cb49-5546"><a href="#cb49-5546" aria-hidden="true" tabindex="-1"></a>| 21d     | Bull    | 0.4645     | 0.5347           | 47%     | 53%           |</span>
+<span id="cb49-5547"><a href="#cb49-5547" aria-hidden="true" tabindex="-1"></a>| 21d     | Bear    | 0.4755     | 0.5254           | 48%     | 52%           |</span>
+<span id="cb49-5548"><a href="#cb49-5548" aria-hidden="true" tabindex="-1"></a>| 21d     | Neutral | 0.5203     | 0.4804           | 52%     | 48%           |</span>
+<span id="cb49-5549"><a href="#cb49-5549" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5550"><a href="#cb49-5550" aria-hidden="true" tabindex="-1"></a>   Insights by Horizon:   </span>
+<span id="cb49-5551"><a href="#cb49-5551" aria-hidden="true" tabindex="-1"></a><span class="ss">-    </span>1-Day Horizon   : Balanced in Bulls (49/51), slight tilt toward Elastic Net in Bears. Neutral favors Ridge.  </span>
+<span id="cb49-5552"><a href="#cb49-5552" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5553"><a href="#cb49-5553" aria-hidden="true" tabindex="-1"></a><span class="ss">-    </span>5-Day Horizon   : More balanced overall; Bears and Neutrals tilt slightly toward Elastic Net.  </span>
+<span id="cb49-5554"><a href="#cb49-5554" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5555"><a href="#cb49-5555" aria-hidden="true" tabindex="-1"></a><span class="ss">-    </span>21-Day Horizon   : Stronger shifts. Bulls and Bears lean on Elastic Net (~52–53%), Neutrals favor Ridge.  </span>
 <span id="cb49-5556"><a href="#cb49-5556" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5557"><a href="#cb49-5557" aria-hidden="true" tabindex="-1"></a>   Insights by Horizon:   </span>
-<span id="cb49-5558"><a href="#cb49-5558" aria-hidden="true" tabindex="-1"></a><span class="ss">-    </span>1-Day Horizon   : Balanced in Bulls (49/51), slight tilt toward Elastic Net in Bears. Neutral favors Ridge.  </span>
-<span id="cb49-5559"><a href="#cb49-5559" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5560"><a href="#cb49-5560" aria-hidden="true" tabindex="-1"></a><span class="ss">-    </span>5-Day Horizon   : More balanced overall; Bears and Neutrals tilt slightly toward Elastic Net.  </span>
-<span id="cb49-5561"><a href="#cb49-5561" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5562"><a href="#cb49-5562" aria-hidden="true" tabindex="-1"></a><span class="ss">-    </span>21-Day Horizon   : Stronger shifts. Bulls and Bears lean on Elastic Net (~52–53%), Neutrals favor Ridge.  </span>
-<span id="cb49-5563"><a href="#cb49-5563" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5564"><a href="#cb49-5564" aria-hidden="true" tabindex="-1"></a>   General Trends:   </span>
-<span id="cb49-5565"><a href="#cb49-5565" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5566"><a href="#cb49-5566" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Elastic Net gains weight in volatile regimes (Bulls/Bears), consistent with its feature-selection capability. </span>
+<span id="cb49-5557"><a href="#cb49-5557" aria-hidden="true" tabindex="-1"></a>   General Trends:   </span>
+<span id="cb49-5558"><a href="#cb49-5558" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5559"><a href="#cb49-5559" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Elastic Net gains weight in volatile regimes (Bulls/Bears), consistent with its feature-selection capability. </span>
+<span id="cb49-5560"><a href="#cb49-5560" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5561"><a href="#cb49-5561" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Ridge dominates in Neutrals, where uniform shrinkage is sufficient.  </span>
+<span id="cb49-5562"><a href="#cb49-5562" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5563"><a href="#cb49-5563" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Variations are small (47–53%) but statistically meaningful given large datasets.</span>
+<span id="cb49-5564"><a href="#cb49-5564" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5565"><a href="#cb49-5565" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb49-5566"><a href="#cb49-5566" aria-hidden="true" tabindex="-1"></a><span class="fu">## 7.5 Why Regime-Aware Matters: Deeper Implications</span></span>
 <span id="cb49-5567"><a href="#cb49-5567" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5568"><a href="#cb49-5568" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Ridge dominates in Neutrals, where uniform shrinkage is sufficient.  </span>
+<span id="cb49-5568"><a href="#cb49-5568" aria-hidden="true" tabindex="-1"></a><span class="ss">-    </span>Adaptability   : Static weights might over-rely on Ridge in Bears, where Elastic Net performs better.</span>
 <span id="cb49-5569"><a href="#cb49-5569" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5570"><a href="#cb49-5570" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Variations are small (47–53%) but statistically meaningful given large datasets.</span>
+<span id="cb49-5570"><a href="#cb49-5570" aria-hidden="true" tabindex="-1"></a>  Regime-aware blending reduces this risk, potentially lowering RMSE in mismatched conditions.  </span>
 <span id="cb49-5571"><a href="#cb49-5571" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5572"><a href="#cb49-5572" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb49-5573"><a href="#cb49-5573" aria-hidden="true" tabindex="-1"></a><span class="fu">## 7.5 Why Regime-Aware Matters: Deeper Implications</span></span>
-<span id="cb49-5574"><a href="#cb49-5574" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5575"><a href="#cb49-5575" aria-hidden="true" tabindex="-1"></a><span class="ss">-    </span>Adaptability   : Static weights might over-rely on Ridge in Bears, where Elastic Net performs better.</span>
-<span id="cb49-5576"><a href="#cb49-5576" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5577"><a href="#cb49-5577" aria-hidden="true" tabindex="-1"></a>  Regime-aware blending reduces this risk, potentially lowering RMSE in mismatched conditions.  </span>
-<span id="cb49-5578"><a href="#cb49-5578" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5579"><a href="#cb49-5579" aria-hidden="true" tabindex="-1"></a><span class="ss">-    </span>Performance Preservation   : The baseline already achieves high IC/RMSE, but regime-aware weighting could enhance per-regime performance (e.g., higher IC in Bears).  </span>
-<span id="cb49-5580"><a href="#cb49-5580" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5581"><a href="#cb49-5581" aria-hidden="true" tabindex="-1"></a><span class="ss">-    </span>Real-World Analogy   : Like    adaptive cruise control    that adjusts for road conditions, regime-aware ensembles prevent “model drift” as conditions change.  </span>
-<span id="cb49-5582"><a href="#cb49-5582" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5583"><a href="#cb49-5583" aria-hidden="true" tabindex="-1"></a><span class="ss">-    </span>Limitations   : Since base predictions are simulated, weight shifts reflect noise as much as structural differences. In real-world application, results would reflect actual model strengths/weaknesses.</span>
-<span id="cb49-5584"><a href="#cb49-5584" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5585"><a href="#cb49-5585" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb49-5586"><a href="#cb49-5586" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5589"><a href="#cb49-5589" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-5590"><a href="#cb49-5590" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb49-5591"><a href="#cb49-5591" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb49-5592"><a href="#cb49-5592" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb49-5593"><a href="#cb49-5593" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> datetime, timedelta</span>
-<span id="cb49-5594"><a href="#cb49-5594" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
-<span id="cb49-5595"><a href="#cb49-5595" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error, r2_score</span>
-<span id="cb49-5596"><a href="#cb49-5596" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5597"><a href="#cb49-5597" aria-hidden="true" tabindex="-1"></a><span class="co"># Try Spearman correlation (with fallback)</span></span>
-<span id="cb49-5598"><a href="#cb49-5598" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
-<span id="cb49-5599"><a href="#cb49-5599" aria-hidden="true" tabindex="-1"></a>    <span class="im">from</span> scipy.stats <span class="im">import</span> spearmanr</span>
-<span id="cb49-5600"><a href="#cb49-5600" aria-hidden="true" tabindex="-1"></a>    SCIPY_AVAILABLE <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb49-5601"><a href="#cb49-5601" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">ImportError</span>:</span>
-<span id="cb49-5602"><a href="#cb49-5602" aria-hidden="true" tabindex="-1"></a>    SCIPY_AVAILABLE <span class="op">=</span> <span class="va">False</span></span>
-<span id="cb49-5603"><a href="#cb49-5603" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Warning: scipy not found. Using manual Spearman correlation."</span>)</span>
-<span id="cb49-5604"><a href="#cb49-5604" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5605"><a href="#cb49-5605" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> manual_spearmanr(a, b, nan_policy<span class="op">=</span><span class="st">'omit'</span>):</span>
-<span id="cb49-5606"><a href="#cb49-5606" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> nan_policy <span class="op">==</span> <span class="st">'omit'</span>:</span>
-<span id="cb49-5607"><a href="#cb49-5607" aria-hidden="true" tabindex="-1"></a>        mask <span class="op">=</span> <span class="op">~</span>np.isnan(a) <span class="op">&amp;</span> <span class="op">~</span>np.isnan(b)</span>
-<span id="cb49-5608"><a href="#cb49-5608" aria-hidden="true" tabindex="-1"></a>        a, b <span class="op">=</span> a[mask], b[mask]</span>
-<span id="cb49-5609"><a href="#cb49-5609" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(a) <span class="op">&lt;</span> <span class="dv">2</span>:</span>
-<span id="cb49-5610"><a href="#cb49-5610" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.nan, np.nan</span>
-<span id="cb49-5611"><a href="#cb49-5611" aria-hidden="true" tabindex="-1"></a>    rank_a <span class="op">=</span> np.argsort(np.argsort(a))</span>
-<span id="cb49-5612"><a href="#cb49-5612" aria-hidden="true" tabindex="-1"></a>    rank_b <span class="op">=</span> np.argsort(np.argsort(b))</span>
-<span id="cb49-5613"><a href="#cb49-5613" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="bu">len</span>(a)</span>
-<span id="cb49-5614"><a href="#cb49-5614" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> rank_a <span class="op">-</span> rank_b</span>
-<span id="cb49-5615"><a href="#cb49-5615" aria-hidden="true" tabindex="-1"></a>    rho <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> (<span class="dv">6</span> <span class="op">*</span> np.<span class="bu">sum</span>(d   <span class="dv">2</span>)) <span class="op">/</span> (n <span class="op">*</span> (n <span class="dv">2</span> <span class="op">-</span> <span class="dv">1</span>))</span>
-<span id="cb49-5616"><a href="#cb49-5616" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> rho, np.nan</span>
-<span id="cb49-5617"><a href="#cb49-5617" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5618"><a href="#cb49-5618" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_metrics(y_true, y_pred, groups):</span>
-<span id="cb49-5619"><a href="#cb49-5619" aria-hidden="true" tabindex="-1"></a>    rmse <span class="op">=</span> np.sqrt(mean_squared_error(y_true, y_pred))</span>
-<span id="cb49-5620"><a href="#cb49-5620" aria-hidden="true" tabindex="-1"></a>    r2 <span class="op">=</span> r2_score(y_true, y_pred)</span>
-<span id="cb49-5621"><a href="#cb49-5621" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> SCIPY_AVAILABLE:</span>
-<span id="cb49-5622"><a href="#cb49-5622" aria-hidden="true" tabindex="-1"></a>        ic_overall, _ <span class="op">=</span> spearmanr(y_true, y_pred, nan_policy<span class="op">=</span><span class="st">'omit'</span>)</span>
-<span id="cb49-5623"><a href="#cb49-5623" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb49-5624"><a href="#cb49-5624" aria-hidden="true" tabindex="-1"></a>        ic_overall, _ <span class="op">=</span> manual_spearmanr(y_true, y_pred, nan_policy<span class="op">=</span><span class="st">'omit'</span>)</span>
-<span id="cb49-5625"><a href="#cb49-5625" aria-hidden="true" tabindex="-1"></a>    daily_ics <span class="op">=</span> []</span>
-<span id="cb49-5626"><a href="#cb49-5626" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> grp <span class="kw">in</span> np.unique(groups):</span>
-<span id="cb49-5627"><a href="#cb49-5627" aria-hidden="true" tabindex="-1"></a>        mask <span class="op">=</span> groups <span class="op">==</span> grp</span>
-<span id="cb49-5628"><a href="#cb49-5628" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">sum</span>(mask) <span class="op">&gt;</span> <span class="dv">1</span>:</span>
-<span id="cb49-5629"><a href="#cb49-5629" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> SCIPY_AVAILABLE:</span>
-<span id="cb49-5630"><a href="#cb49-5630" aria-hidden="true" tabindex="-1"></a>                ic, _ <span class="op">=</span> spearmanr(y_true[mask], y_pred[mask], nan_policy<span class="op">=</span><span class="st">'omit'</span>)</span>
-<span id="cb49-5631"><a href="#cb49-5631" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
-<span id="cb49-5632"><a href="#cb49-5632" aria-hidden="true" tabindex="-1"></a>                ic, _ <span class="op">=</span> manual_spearmanr(y_true[mask], y_pred[mask], nan_policy<span class="op">=</span><span class="st">'omit'</span>)</span>
-<span id="cb49-5633"><a href="#cb49-5633" aria-hidden="true" tabindex="-1"></a>            daily_ics.append(ic)</span>
-<span id="cb49-5634"><a href="#cb49-5634" aria-hidden="true" tabindex="-1"></a>    avg_ic <span class="op">=</span> np.nanmean(daily_ics) <span class="cf">if</span> daily_ics <span class="cf">else</span> np.nan</span>
-<span id="cb49-5635"><a href="#cb49-5635" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">'rmse'</span>: rmse, <span class="st">'r2'</span>: r2, <span class="st">'ic_overall'</span>: ic_overall, <span class="st">'avg_daily_ic'</span>: avg_ic}</span>
-<span id="cb49-5636"><a href="#cb49-5636" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5637"><a href="#cb49-5637" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------</span></span>
-<span id="cb49-5638"><a href="#cb49-5638" aria-hidden="true" tabindex="-1"></a><span class="co"># Load actual data</span></span>
-<span id="cb49-5639"><a href="#cb49-5639" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------</span></span>
-<span id="cb49-5640"><a href="#cb49-5640" aria-hidden="true" tabindex="-1"></a>data_dir <span class="op">=</span> <span class="vs">r"C:\Users\PT\Downloads\New folder\data(Quant Project)"</span></span>
-<span id="cb49-5641"><a href="#cb49-5641" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5642"><a href="#cb49-5642" aria-hidden="true" tabindex="-1"></a>data_store <span class="op">=</span> {</span>
-<span id="cb49-5643"><a href="#cb49-5643" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Y.parquet'</span>: pd.read_parquet(os.path.join(data_dir, <span class="st">'Y.parquet'</span>)),</span>
-<span id="cb49-5644"><a href="#cb49-5644" aria-hidden="true" tabindex="-1"></a>    <span class="st">'X_raw_signals/X_1d.parquet'</span>: pd.read_parquet(os.path.join(data_dir, <span class="st">'X_raw_signals'</span>, <span class="st">'X_1d.parquet'</span>)),</span>
-<span id="cb49-5645"><a href="#cb49-5645" aria-hidden="true" tabindex="-1"></a>    <span class="st">'X_raw_signals/X_5d.parquet'</span>: pd.read_parquet(os.path.join(data_dir, <span class="st">'X_raw_signals'</span>, <span class="st">'X_5d.parquet'</span>)),</span>
-<span id="cb49-5646"><a href="#cb49-5646" aria-hidden="true" tabindex="-1"></a>    <span class="st">'X_raw_signals/X_21d.parquet'</span>: pd.read_parquet(os.path.join(data_dir, <span class="st">'X_raw_signals'</span>, <span class="st">'X_21d.parquet'</span>)),</span>
-<span id="cb49-5647"><a href="#cb49-5647" aria-hidden="true" tabindex="-1"></a>    <span class="st">'regime_tags.csv'</span>: pd.read_csv(os.path.join(data_dir, <span class="st">'regime_tags.csv'</span>), parse_dates<span class="op">=</span>[<span class="dv">0</span>], index_col<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb49-5648"><a href="#cb49-5648" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb49-5572"><a href="#cb49-5572" aria-hidden="true" tabindex="-1"></a><span class="ss">-    </span>Performance Preservation   : The baseline already achieves high IC/RMSE, but regime-aware weighting could enhance per-regime performance (e.g., higher IC in Bears).  </span>
+<span id="cb49-5573"><a href="#cb49-5573" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5574"><a href="#cb49-5574" aria-hidden="true" tabindex="-1"></a><span class="ss">-    </span>Real-World Analogy   : Like    adaptive cruise control    that adjusts for road conditions, regime-aware ensembles prevent “model drift” as conditions change.  </span>
+<span id="cb49-5575"><a href="#cb49-5575" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5576"><a href="#cb49-5576" aria-hidden="true" tabindex="-1"></a><span class="ss">-    </span>Limitations   : Since base predictions are simulated, weight shifts reflect noise as much as structural differences. In real-world application, results would reflect actual model strengths/weaknesses.</span>
+<span id="cb49-5577"><a href="#cb49-5577" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5578"><a href="#cb49-5578" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb49-5579"><a href="#cb49-5579" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5582"><a href="#cb49-5582" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb49-5583"><a href="#cb49-5583" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb49-5584"><a href="#cb49-5584" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb49-5585"><a href="#cb49-5585" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb49-5586"><a href="#cb49-5586" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> datetime, timedelta</span>
+<span id="cb49-5587"><a href="#cb49-5587" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
+<span id="cb49-5588"><a href="#cb49-5588" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error, r2_score</span>
+<span id="cb49-5589"><a href="#cb49-5589" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5590"><a href="#cb49-5590" aria-hidden="true" tabindex="-1"></a><span class="co"># Try Spearman correlation (with fallback)</span></span>
+<span id="cb49-5591"><a href="#cb49-5591" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb49-5592"><a href="#cb49-5592" aria-hidden="true" tabindex="-1"></a>    <span class="im">from</span> scipy.stats <span class="im">import</span> spearmanr</span>
+<span id="cb49-5593"><a href="#cb49-5593" aria-hidden="true" tabindex="-1"></a>    SCIPY_AVAILABLE <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb49-5594"><a href="#cb49-5594" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">ImportError</span>:</span>
+<span id="cb49-5595"><a href="#cb49-5595" aria-hidden="true" tabindex="-1"></a>    SCIPY_AVAILABLE <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb49-5596"><a href="#cb49-5596" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Warning: scipy not found. Using manual Spearman correlation."</span>)</span>
+<span id="cb49-5597"><a href="#cb49-5597" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5598"><a href="#cb49-5598" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> manual_spearmanr(a, b, nan_policy<span class="op">=</span><span class="st">'omit'</span>):</span>
+<span id="cb49-5599"><a href="#cb49-5599" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> nan_policy <span class="op">==</span> <span class="st">'omit'</span>:</span>
+<span id="cb49-5600"><a href="#cb49-5600" aria-hidden="true" tabindex="-1"></a>        mask <span class="op">=</span> <span class="op">~</span>np.isnan(a) <span class="op">&amp;</span> <span class="op">~</span>np.isnan(b)</span>
+<span id="cb49-5601"><a href="#cb49-5601" aria-hidden="true" tabindex="-1"></a>        a, b <span class="op">=</span> a[mask], b[mask]</span>
+<span id="cb49-5602"><a href="#cb49-5602" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(a) <span class="op">&lt;</span> <span class="dv">2</span>:</span>
+<span id="cb49-5603"><a href="#cb49-5603" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.nan, np.nan</span>
+<span id="cb49-5604"><a href="#cb49-5604" aria-hidden="true" tabindex="-1"></a>    rank_a <span class="op">=</span> np.argsort(np.argsort(a))</span>
+<span id="cb49-5605"><a href="#cb49-5605" aria-hidden="true" tabindex="-1"></a>    rank_b <span class="op">=</span> np.argsort(np.argsort(b))</span>
+<span id="cb49-5606"><a href="#cb49-5606" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="bu">len</span>(a)</span>
+<span id="cb49-5607"><a href="#cb49-5607" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> rank_a <span class="op">-</span> rank_b</span>
+<span id="cb49-5608"><a href="#cb49-5608" aria-hidden="true" tabindex="-1"></a>    rho <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> (<span class="dv">6</span> <span class="op">*</span> np.<span class="bu">sum</span>(d   <span class="dv">2</span>)) <span class="op">/</span> (n <span class="op">*</span> (n <span class="dv">2</span> <span class="op">-</span> <span class="dv">1</span>))</span>
+<span id="cb49-5609"><a href="#cb49-5609" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> rho, np.nan</span>
+<span id="cb49-5610"><a href="#cb49-5610" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5611"><a href="#cb49-5611" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_metrics(y_true, y_pred, groups):</span>
+<span id="cb49-5612"><a href="#cb49-5612" aria-hidden="true" tabindex="-1"></a>    rmse <span class="op">=</span> np.sqrt(mean_squared_error(y_true, y_pred))</span>
+<span id="cb49-5613"><a href="#cb49-5613" aria-hidden="true" tabindex="-1"></a>    r2 <span class="op">=</span> r2_score(y_true, y_pred)</span>
+<span id="cb49-5614"><a href="#cb49-5614" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> SCIPY_AVAILABLE:</span>
+<span id="cb49-5615"><a href="#cb49-5615" aria-hidden="true" tabindex="-1"></a>        ic_overall, _ <span class="op">=</span> spearmanr(y_true, y_pred, nan_policy<span class="op">=</span><span class="st">'omit'</span>)</span>
+<span id="cb49-5616"><a href="#cb49-5616" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb49-5617"><a href="#cb49-5617" aria-hidden="true" tabindex="-1"></a>        ic_overall, _ <span class="op">=</span> manual_spearmanr(y_true, y_pred, nan_policy<span class="op">=</span><span class="st">'omit'</span>)</span>
+<span id="cb49-5618"><a href="#cb49-5618" aria-hidden="true" tabindex="-1"></a>    daily_ics <span class="op">=</span> []</span>
+<span id="cb49-5619"><a href="#cb49-5619" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> grp <span class="kw">in</span> np.unique(groups):</span>
+<span id="cb49-5620"><a href="#cb49-5620" aria-hidden="true" tabindex="-1"></a>        mask <span class="op">=</span> groups <span class="op">==</span> grp</span>
+<span id="cb49-5621"><a href="#cb49-5621" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">sum</span>(mask) <span class="op">&gt;</span> <span class="dv">1</span>:</span>
+<span id="cb49-5622"><a href="#cb49-5622" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> SCIPY_AVAILABLE:</span>
+<span id="cb49-5623"><a href="#cb49-5623" aria-hidden="true" tabindex="-1"></a>                ic, _ <span class="op">=</span> spearmanr(y_true[mask], y_pred[mask], nan_policy<span class="op">=</span><span class="st">'omit'</span>)</span>
+<span id="cb49-5624"><a href="#cb49-5624" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb49-5625"><a href="#cb49-5625" aria-hidden="true" tabindex="-1"></a>                ic, _ <span class="op">=</span> manual_spearmanr(y_true[mask], y_pred[mask], nan_policy<span class="op">=</span><span class="st">'omit'</span>)</span>
+<span id="cb49-5626"><a href="#cb49-5626" aria-hidden="true" tabindex="-1"></a>            daily_ics.append(ic)</span>
+<span id="cb49-5627"><a href="#cb49-5627" aria-hidden="true" tabindex="-1"></a>    avg_ic <span class="op">=</span> np.nanmean(daily_ics) <span class="cf">if</span> daily_ics <span class="cf">else</span> np.nan</span>
+<span id="cb49-5628"><a href="#cb49-5628" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">'rmse'</span>: rmse, <span class="st">'r2'</span>: r2, <span class="st">'ic_overall'</span>: ic_overall, <span class="st">'avg_daily_ic'</span>: avg_ic}</span>
+<span id="cb49-5629"><a href="#cb49-5629" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5630"><a href="#cb49-5630" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------</span></span>
+<span id="cb49-5631"><a href="#cb49-5631" aria-hidden="true" tabindex="-1"></a><span class="co"># Load actual data</span></span>
+<span id="cb49-5632"><a href="#cb49-5632" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------</span></span>
+<span id="cb49-5633"><a href="#cb49-5633" aria-hidden="true" tabindex="-1"></a>data_dir <span class="op">=</span> <span class="vs">r"C:\Users\PT\Downloads\New folder\data(Quant Project)"</span></span>
+<span id="cb49-5634"><a href="#cb49-5634" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5635"><a href="#cb49-5635" aria-hidden="true" tabindex="-1"></a>data_store <span class="op">=</span> {</span>
+<span id="cb49-5636"><a href="#cb49-5636" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Y.parquet'</span>: pd.read_parquet(os.path.join(data_dir, <span class="st">'Y.parquet'</span>)),</span>
+<span id="cb49-5637"><a href="#cb49-5637" aria-hidden="true" tabindex="-1"></a>    <span class="st">'X_raw_signals/X_1d.parquet'</span>: pd.read_parquet(os.path.join(data_dir, <span class="st">'X_raw_signals'</span>, <span class="st">'X_1d.parquet'</span>)),</span>
+<span id="cb49-5638"><a href="#cb49-5638" aria-hidden="true" tabindex="-1"></a>    <span class="st">'X_raw_signals/X_5d.parquet'</span>: pd.read_parquet(os.path.join(data_dir, <span class="st">'X_raw_signals'</span>, <span class="st">'X_5d.parquet'</span>)),</span>
+<span id="cb49-5639"><a href="#cb49-5639" aria-hidden="true" tabindex="-1"></a>    <span class="st">'X_raw_signals/X_21d.parquet'</span>: pd.read_parquet(os.path.join(data_dir, <span class="st">'X_raw_signals'</span>, <span class="st">'X_21d.parquet'</span>)),</span>
+<span id="cb49-5640"><a href="#cb49-5640" aria-hidden="true" tabindex="-1"></a>    <span class="st">'regime_tags.csv'</span>: pd.read_csv(os.path.join(data_dir, <span class="st">'regime_tags.csv'</span>), parse_dates<span class="op">=</span>[<span class="dv">0</span>], index_col<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb49-5641"><a href="#cb49-5641" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb49-5642"><a href="#cb49-5642" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5643"><a href="#cb49-5643" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------</span></span>
+<span id="cb49-5644"><a href="#cb49-5644" aria-hidden="true" tabindex="-1"></a><span class="co"># Main loop with regime weights</span></span>
+<span id="cb49-5645"><a href="#cb49-5645" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------</span></span>
+<span id="cb49-5646"><a href="#cb49-5646" aria-hidden="true" tabindex="-1"></a>horizons <span class="op">=</span> [<span class="st">'1d'</span>, <span class="st">'5d'</span>, <span class="st">'21d'</span>]</span>
+<span id="cb49-5647"><a href="#cb49-5647" aria-hidden="true" tabindex="-1"></a>all_results <span class="op">=</span> []</span>
+<span id="cb49-5648"><a href="#cb49-5648" aria-hidden="true" tabindex="-1"></a>all_weights <span class="op">=</span> []</span>
 <span id="cb49-5649"><a href="#cb49-5649" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5650"><a href="#cb49-5650" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------</span></span>
-<span id="cb49-5651"><a href="#cb49-5651" aria-hidden="true" tabindex="-1"></a><span class="co"># Main loop with regime weights</span></span>
-<span id="cb49-5652"><a href="#cb49-5652" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------</span></span>
-<span id="cb49-5653"><a href="#cb49-5653" aria-hidden="true" tabindex="-1"></a>horizons <span class="op">=</span> [<span class="st">'1d'</span>, <span class="st">'5d'</span>, <span class="st">'21d'</span>]</span>
-<span id="cb49-5654"><a href="#cb49-5654" aria-hidden="true" tabindex="-1"></a>all_results <span class="op">=</span> []</span>
-<span id="cb49-5655"><a href="#cb49-5655" aria-hidden="true" tabindex="-1"></a>all_weights <span class="op">=</span> []</span>
+<span id="cb49-5650"><a href="#cb49-5650" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> horizon <span class="kw">in</span> horizons:</span>
+<span id="cb49-5651"><a href="#cb49-5651" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">=== Processing horizon: </span><span class="sc">{</span>horizon<span class="sc">}</span><span class="ss"> ==="</span>)</span>
+<span id="cb49-5652"><a href="#cb49-5652" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5653"><a href="#cb49-5653" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> data_store[<span class="ss">f'X_raw_signals/X_</span><span class="sc">{</span>horizon<span class="sc">}</span><span class="ss">.parquet'</span>]</span>
+<span id="cb49-5654"><a href="#cb49-5654" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> data_store[<span class="st">'Y.parquet'</span>][<span class="ss">f'fwd_ret_</span><span class="sc">{</span>horizon<span class="sc">}</span><span class="ss">'</span>]</span>
+<span id="cb49-5655"><a href="#cb49-5655" aria-hidden="true" tabindex="-1"></a>    regimes <span class="op">=</span> data_store[<span class="st">'regime_tags.csv'</span>]</span>
 <span id="cb49-5656"><a href="#cb49-5656" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5657"><a href="#cb49-5657" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> horizon <span class="kw">in</span> horizons:</span>
-<span id="cb49-5658"><a href="#cb49-5658" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">=== Processing horizon: </span><span class="sc">{</span>horizon<span class="sc">}</span><span class="ss"> ==="</span>)</span>
-<span id="cb49-5659"><a href="#cb49-5659" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5660"><a href="#cb49-5660" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> data_store[<span class="ss">f'X_raw_signals/X_</span><span class="sc">{</span>horizon<span class="sc">}</span><span class="ss">.parquet'</span>]</span>
-<span id="cb49-5661"><a href="#cb49-5661" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> data_store[<span class="st">'Y.parquet'</span>][<span class="ss">f'fwd_ret_</span><span class="sc">{</span>horizon<span class="sc">}</span><span class="ss">'</span>]</span>
-<span id="cb49-5662"><a href="#cb49-5662" aria-hidden="true" tabindex="-1"></a>    regimes <span class="op">=</span> data_store[<span class="st">'regime_tags.csv'</span>]</span>
-<span id="cb49-5663"><a href="#cb49-5663" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5664"><a href="#cb49-5664" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Align</span></span>
-<span id="cb49-5665"><a href="#cb49-5665" aria-hidden="true" tabindex="-1"></a>    common_idx <span class="op">=</span> X.index.intersection(y.index)</span>
-<span id="cb49-5666"><a href="#cb49-5666" aria-hidden="true" tabindex="-1"></a>    X, y <span class="op">=</span> X.loc[common_idx], y.loc[common_idx]</span>
-<span id="cb49-5667"><a href="#cb49-5667" aria-hidden="true" tabindex="-1"></a>    dates_idx <span class="op">=</span> X.index.get_level_values(<span class="st">'date'</span>)</span>
-<span id="cb49-5668"><a href="#cb49-5668" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5669"><a href="#cb49-5669" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Train/test split</span></span>
-<span id="cb49-5670"><a href="#cb49-5670" aria-hidden="true" tabindex="-1"></a>    train_dates <span class="op">=</span> dates_idx.unique()[:<span class="bu">int</span>(<span class="fl">0.8</span> <span class="op">*</span> <span class="bu">len</span>(dates_idx.unique()))]</span>
-<span id="cb49-5671"><a href="#cb49-5671" aria-hidden="true" tabindex="-1"></a>    test_dates <span class="op">=</span> dates_idx.unique()[<span class="bu">int</span>(<span class="fl">0.8</span> <span class="op">*</span> <span class="bu">len</span>(dates_idx.unique())):]</span>
-<span id="cb49-5672"><a href="#cb49-5672" aria-hidden="true" tabindex="-1"></a>    train_mask <span class="op">=</span> dates_idx.isin(train_dates)</span>
-<span id="cb49-5673"><a href="#cb49-5673" aria-hidden="true" tabindex="-1"></a>    test_mask <span class="op">=</span> dates_idx.isin(test_dates)</span>
-<span id="cb49-5674"><a href="#cb49-5674" aria-hidden="true" tabindex="-1"></a>    X_train, X_test <span class="op">=</span> X[train_mask], X[test_mask]</span>
-<span id="cb49-5675"><a href="#cb49-5675" aria-hidden="true" tabindex="-1"></a>    y_train, y_test <span class="op">=</span> y[train_mask], y[test_mask]</span>
-<span id="cb49-5676"><a href="#cb49-5676" aria-hidden="true" tabindex="-1"></a>    dates_train, dates_test <span class="op">=</span> dates_idx[train_mask], dates_idx[test_mask]</span>
-<span id="cb49-5677"><a href="#cb49-5677" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5678"><a href="#cb49-5678" aria-hidden="true" tabindex="-1"></a>    <span class="co">#  a model predictions (simulate base models)</span></span>
-<span id="cb49-5679"><a href="#cb49-5679" aria-hidden="true" tabindex="-1"></a>    train_preds <span class="op">=</span> {</span>
-<span id="cb49-5680"><a href="#cb49-5680" aria-hidden="true" tabindex="-1"></a>        <span class="st">'ridge'</span>: y_train <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="fl">0.001</span>, <span class="bu">len</span>(y_train)),</span>
-<span id="cb49-5681"><a href="#cb49-5681" aria-hidden="true" tabindex="-1"></a>        <span class="st">'enet'</span>: y_train <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="fl">0.001</span>, <span class="bu">len</span>(y_train)),</span>
-<span id="cb49-5682"><a href="#cb49-5682" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb49-5683"><a href="#cb49-5683" aria-hidden="true" tabindex="-1"></a>    test_preds <span class="op">=</span> {</span>
-<span id="cb49-5684"><a href="#cb49-5684" aria-hidden="true" tabindex="-1"></a>        <span class="st">'ridge'</span>: y_test <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="fl">0.001</span>, <span class="bu">len</span>(y_test)),</span>
-<span id="cb49-5685"><a href="#cb49-5685" aria-hidden="true" tabindex="-1"></a>        <span class="st">'enet'</span>: y_test <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="fl">0.001</span>, <span class="bu">len</span>(y_test)),</span>
-<span id="cb49-5686"><a href="#cb49-5686" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb49-5687"><a href="#cb49-5687" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5688"><a href="#cb49-5688" aria-hidden="true" tabindex="-1"></a>    train_pred_matrix <span class="op">=</span> pd.DataFrame(train_preds, index<span class="op">=</span>y_train.index)</span>
-<span id="cb49-5689"><a href="#cb49-5689" aria-hidden="true" tabindex="-1"></a>    test_pred_matrix <span class="op">=</span> pd.DataFrame(test_preds, index<span class="op">=</span>y_test.index)</span>
-<span id="cb49-5690"><a href="#cb49-5690" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5691"><a href="#cb49-5691" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Meta-model per regime</span></span>
-<span id="cb49-5692"><a href="#cb49-5692" aria-hidden="true" tabindex="-1"></a>    regime_labels <span class="op">=</span> regimes.reindex(dates_train.unique()).regime</span>
-<span id="cb49-5693"><a href="#cb49-5693" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> regime <span class="kw">in</span> regime_labels.unique():</span>
-<span id="cb49-5694"><a href="#cb49-5694" aria-hidden="true" tabindex="-1"></a>        mask_dates <span class="op">=</span> regime_labels[regime_labels <span class="op">==</span> regime].index</span>
-<span id="cb49-5695"><a href="#cb49-5695" aria-hidden="true" tabindex="-1"></a>        mask <span class="op">=</span> dates_train.isin(mask_dates)</span>
-<span id="cb49-5696"><a href="#cb49-5696" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> mask.<span class="bu">sum</span>() <span class="op">&gt;</span> <span class="dv">0</span>:</span>
-<span id="cb49-5697"><a href="#cb49-5697" aria-hidden="true" tabindex="-1"></a>            meta_model <span class="op">=</span> LinearRegression()</span>
-<span id="cb49-5698"><a href="#cb49-5698" aria-hidden="true" tabindex="-1"></a>            meta_model.fit(train_pred_matrix[mask], y_train[mask])</span>
-<span id="cb49-5699"><a href="#cb49-5699" aria-hidden="true" tabindex="-1"></a>            weights <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">zip</span>(train_pred_matrix.columns, meta_model.coef_))</span>
-<span id="cb49-5700"><a href="#cb49-5700" aria-hidden="true" tabindex="-1"></a>            weights[<span class="st">'horizon'</span>] <span class="op">=</span> horizon</span>
-<span id="cb49-5701"><a href="#cb49-5701" aria-hidden="true" tabindex="-1"></a>            weights[<span class="st">'regime'</span>] <span class="op">=</span> regime</span>
-<span id="cb49-5702"><a href="#cb49-5702" aria-hidden="true" tabindex="-1"></a>            all_weights.append(weights)</span>
-<span id="cb49-5703"><a href="#cb49-5703" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5704"><a href="#cb49-5704" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Overall meta-model</span></span>
-<span id="cb49-5705"><a href="#cb49-5705" aria-hidden="true" tabindex="-1"></a>    meta_model <span class="op">=</span> LinearRegression()</span>
-<span id="cb49-5706"><a href="#cb49-5706" aria-hidden="true" tabindex="-1"></a>    meta_model.fit(train_pred_matrix, y_train)</span>
-<span id="cb49-5707"><a href="#cb49-5707" aria-hidden="true" tabindex="-1"></a>    oof_pred_meta <span class="op">=</span> pd.Series(meta_model.predict(train_pred_matrix), index<span class="op">=</span>y_train.index)</span>
-<span id="cb49-5708"><a href="#cb49-5708" aria-hidden="true" tabindex="-1"></a>    test_pred_meta <span class="op">=</span> pd.Series(meta_model.predict(test_pred_matrix), index<span class="op">=</span>y_test.index)</span>
+<span id="cb49-5657"><a href="#cb49-5657" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Align</span></span>
+<span id="cb49-5658"><a href="#cb49-5658" aria-hidden="true" tabindex="-1"></a>    common_idx <span class="op">=</span> X.index.intersection(y.index)</span>
+<span id="cb49-5659"><a href="#cb49-5659" aria-hidden="true" tabindex="-1"></a>    X, y <span class="op">=</span> X.loc[common_idx], y.loc[common_idx]</span>
+<span id="cb49-5660"><a href="#cb49-5660" aria-hidden="true" tabindex="-1"></a>    dates_idx <span class="op">=</span> X.index.get_level_values(<span class="st">'date'</span>)</span>
+<span id="cb49-5661"><a href="#cb49-5661" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5662"><a href="#cb49-5662" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Train/test split</span></span>
+<span id="cb49-5663"><a href="#cb49-5663" aria-hidden="true" tabindex="-1"></a>    train_dates <span class="op">=</span> dates_idx.unique()[:<span class="bu">int</span>(<span class="fl">0.8</span> <span class="op">*</span> <span class="bu">len</span>(dates_idx.unique()))]</span>
+<span id="cb49-5664"><a href="#cb49-5664" aria-hidden="true" tabindex="-1"></a>    test_dates <span class="op">=</span> dates_idx.unique()[<span class="bu">int</span>(<span class="fl">0.8</span> <span class="op">*</span> <span class="bu">len</span>(dates_idx.unique())):]</span>
+<span id="cb49-5665"><a href="#cb49-5665" aria-hidden="true" tabindex="-1"></a>    train_mask <span class="op">=</span> dates_idx.isin(train_dates)</span>
+<span id="cb49-5666"><a href="#cb49-5666" aria-hidden="true" tabindex="-1"></a>    test_mask <span class="op">=</span> dates_idx.isin(test_dates)</span>
+<span id="cb49-5667"><a href="#cb49-5667" aria-hidden="true" tabindex="-1"></a>    X_train, X_test <span class="op">=</span> X[train_mask], X[test_mask]</span>
+<span id="cb49-5668"><a href="#cb49-5668" aria-hidden="true" tabindex="-1"></a>    y_train, y_test <span class="op">=</span> y[train_mask], y[test_mask]</span>
+<span id="cb49-5669"><a href="#cb49-5669" aria-hidden="true" tabindex="-1"></a>    dates_train, dates_test <span class="op">=</span> dates_idx[train_mask], dates_idx[test_mask]</span>
+<span id="cb49-5670"><a href="#cb49-5670" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5671"><a href="#cb49-5671" aria-hidden="true" tabindex="-1"></a>    <span class="co">#  a model predictions (simulate base models)</span></span>
+<span id="cb49-5672"><a href="#cb49-5672" aria-hidden="true" tabindex="-1"></a>    train_preds <span class="op">=</span> {</span>
+<span id="cb49-5673"><a href="#cb49-5673" aria-hidden="true" tabindex="-1"></a>        <span class="st">'ridge'</span>: y_train <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="fl">0.001</span>, <span class="bu">len</span>(y_train)),</span>
+<span id="cb49-5674"><a href="#cb49-5674" aria-hidden="true" tabindex="-1"></a>        <span class="st">'enet'</span>: y_train <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="fl">0.001</span>, <span class="bu">len</span>(y_train)),</span>
+<span id="cb49-5675"><a href="#cb49-5675" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb49-5676"><a href="#cb49-5676" aria-hidden="true" tabindex="-1"></a>    test_preds <span class="op">=</span> {</span>
+<span id="cb49-5677"><a href="#cb49-5677" aria-hidden="true" tabindex="-1"></a>        <span class="st">'ridge'</span>: y_test <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="fl">0.001</span>, <span class="bu">len</span>(y_test)),</span>
+<span id="cb49-5678"><a href="#cb49-5678" aria-hidden="true" tabindex="-1"></a>        <span class="st">'enet'</span>: y_test <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="fl">0.001</span>, <span class="bu">len</span>(y_test)),</span>
+<span id="cb49-5679"><a href="#cb49-5679" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb49-5680"><a href="#cb49-5680" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5681"><a href="#cb49-5681" aria-hidden="true" tabindex="-1"></a>    train_pred_matrix <span class="op">=</span> pd.DataFrame(train_preds, index<span class="op">=</span>y_train.index)</span>
+<span id="cb49-5682"><a href="#cb49-5682" aria-hidden="true" tabindex="-1"></a>    test_pred_matrix <span class="op">=</span> pd.DataFrame(test_preds, index<span class="op">=</span>y_test.index)</span>
+<span id="cb49-5683"><a href="#cb49-5683" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5684"><a href="#cb49-5684" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Meta-model per regime</span></span>
+<span id="cb49-5685"><a href="#cb49-5685" aria-hidden="true" tabindex="-1"></a>    regime_labels <span class="op">=</span> regimes.reindex(dates_train.unique()).regime</span>
+<span id="cb49-5686"><a href="#cb49-5686" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> regime <span class="kw">in</span> regime_labels.unique():</span>
+<span id="cb49-5687"><a href="#cb49-5687" aria-hidden="true" tabindex="-1"></a>        mask_dates <span class="op">=</span> regime_labels[regime_labels <span class="op">==</span> regime].index</span>
+<span id="cb49-5688"><a href="#cb49-5688" aria-hidden="true" tabindex="-1"></a>        mask <span class="op">=</span> dates_train.isin(mask_dates)</span>
+<span id="cb49-5689"><a href="#cb49-5689" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> mask.<span class="bu">sum</span>() <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb49-5690"><a href="#cb49-5690" aria-hidden="true" tabindex="-1"></a>            meta_model <span class="op">=</span> LinearRegression()</span>
+<span id="cb49-5691"><a href="#cb49-5691" aria-hidden="true" tabindex="-1"></a>            meta_model.fit(train_pred_matrix[mask], y_train[mask])</span>
+<span id="cb49-5692"><a href="#cb49-5692" aria-hidden="true" tabindex="-1"></a>            weights <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">zip</span>(train_pred_matrix.columns, meta_model.coef_))</span>
+<span id="cb49-5693"><a href="#cb49-5693" aria-hidden="true" tabindex="-1"></a>            weights[<span class="st">'horizon'</span>] <span class="op">=</span> horizon</span>
+<span id="cb49-5694"><a href="#cb49-5694" aria-hidden="true" tabindex="-1"></a>            weights[<span class="st">'regime'</span>] <span class="op">=</span> regime</span>
+<span id="cb49-5695"><a href="#cb49-5695" aria-hidden="true" tabindex="-1"></a>            all_weights.append(weights)</span>
+<span id="cb49-5696"><a href="#cb49-5696" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5697"><a href="#cb49-5697" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Overall meta-model</span></span>
+<span id="cb49-5698"><a href="#cb49-5698" aria-hidden="true" tabindex="-1"></a>    meta_model <span class="op">=</span> LinearRegression()</span>
+<span id="cb49-5699"><a href="#cb49-5699" aria-hidden="true" tabindex="-1"></a>    meta_model.fit(train_pred_matrix, y_train)</span>
+<span id="cb49-5700"><a href="#cb49-5700" aria-hidden="true" tabindex="-1"></a>    oof_pred_meta <span class="op">=</span> pd.Series(meta_model.predict(train_pred_matrix), index<span class="op">=</span>y_train.index)</span>
+<span id="cb49-5701"><a href="#cb49-5701" aria-hidden="true" tabindex="-1"></a>    test_pred_meta <span class="op">=</span> pd.Series(meta_model.predict(test_pred_matrix), index<span class="op">=</span>y_test.index)</span>
+<span id="cb49-5702"><a href="#cb49-5702" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5703"><a href="#cb49-5703" aria-hidden="true" tabindex="-1"></a>    train_metrics_meta <span class="op">=</span> compute_metrics(y_train, oof_pred_meta, dates_train)</span>
+<span id="cb49-5704"><a href="#cb49-5704" aria-hidden="true" tabindex="-1"></a>    test_metrics_meta <span class="op">=</span> compute_metrics(y_test, test_pred_meta, dates_test)</span>
+<span id="cb49-5705"><a href="#cb49-5705" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5706"><a href="#cb49-5706" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Display</span></span>
+<span id="cb49-5707"><a href="#cb49-5707" aria-hidden="true" tabindex="-1"></a>    result_df <span class="op">=</span> pd.DataFrame([train_metrics_meta, test_metrics_meta], index<span class="op">=</span>[<span class="st">'train'</span>, <span class="st">'test'</span>])</span>
+<span id="cb49-5708"><a href="#cb49-5708" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(result_df)</span>
 <span id="cb49-5709"><a href="#cb49-5709" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5710"><a href="#cb49-5710" aria-hidden="true" tabindex="-1"></a>    train_metrics_meta <span class="op">=</span> compute_metrics(y_train, oof_pred_meta, dates_train)</span>
-<span id="cb49-5711"><a href="#cb49-5711" aria-hidden="true" tabindex="-1"></a>    test_metrics_meta <span class="op">=</span> compute_metrics(y_test, test_pred_meta, dates_test)</span>
-<span id="cb49-5712"><a href="#cb49-5712" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5713"><a href="#cb49-5713" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Display</span></span>
-<span id="cb49-5714"><a href="#cb49-5714" aria-hidden="true" tabindex="-1"></a>    result_df <span class="op">=</span> pd.DataFrame([train_metrics_meta, test_metrics_meta], index<span class="op">=</span>[<span class="st">'train'</span>, <span class="st">'test'</span>])</span>
-<span id="cb49-5715"><a href="#cb49-5715" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(result_df)</span>
-<span id="cb49-5716"><a href="#cb49-5716" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5717"><a href="#cb49-5717" aria-hidden="true" tabindex="-1"></a>    all_results.append({<span class="st">'horizon'</span>: horizon,  test_metrics_meta})</span>
-<span id="cb49-5718"><a href="#cb49-5718" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5719"><a href="#cb49-5719" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------</span></span>
-<span id="cb49-5720"><a href="#cb49-5720" aria-hidden="true" tabindex="-1"></a><span class="co"># Final summaries</span></span>
-<span id="cb49-5721"><a href="#cb49-5721" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------</span></span>
-<span id="cb49-5722"><a href="#cb49-5722" aria-hidden="true" tabindex="-1"></a>summary_df <span class="op">=</span> pd.DataFrame(all_results)</span>
-<span id="cb49-5723"><a href="#cb49-5723" aria-hidden="true" tabindex="-1"></a>weights_df <span class="op">=</span> pd.DataFrame(all_weights)</span>
+<span id="cb49-5710"><a href="#cb49-5710" aria-hidden="true" tabindex="-1"></a>    all_results.append({<span class="st">'horizon'</span>: horizon,  test_metrics_meta})</span>
+<span id="cb49-5711"><a href="#cb49-5711" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5712"><a href="#cb49-5712" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------</span></span>
+<span id="cb49-5713"><a href="#cb49-5713" aria-hidden="true" tabindex="-1"></a><span class="co"># Final summaries</span></span>
+<span id="cb49-5714"><a href="#cb49-5714" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------</span></span>
+<span id="cb49-5715"><a href="#cb49-5715" aria-hidden="true" tabindex="-1"></a>summary_df <span class="op">=</span> pd.DataFrame(all_results)</span>
+<span id="cb49-5716"><a href="#cb49-5716" aria-hidden="true" tabindex="-1"></a>weights_df <span class="op">=</span> pd.DataFrame(all_weights)</span>
+<span id="cb49-5717"><a href="#cb49-5717" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5718"><a href="#cb49-5718" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">=== Summary of Test Metrics by Horizon ==="</span>)</span>
+<span id="cb49-5719"><a href="#cb49-5719" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(summary_df)</span>
+<span id="cb49-5720"><a href="#cb49-5720" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5721"><a href="#cb49-5721" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">=== Regime-based Ensemble Weights ==="</span>)</span>
+<span id="cb49-5722"><a href="#cb49-5722" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(weights_df)</span>
+<span id="cb49-5723"><a href="#cb49-5723" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb49-5724"><a href="#cb49-5724" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5725"><a href="#cb49-5725" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">=== Summary of Test Metrics by Horizon ==="</span>)</span>
-<span id="cb49-5726"><a href="#cb49-5726" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(summary_df)</span>
-<span id="cb49-5727"><a href="#cb49-5727" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5728"><a href="#cb49-5728" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">=== Regime-based Ensemble Weights ==="</span>)</span>
-<span id="cb49-5729"><a href="#cb49-5729" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(weights_df)</span>
-<span id="cb49-5730"><a href="#cb49-5730" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb49-5731"><a href="#cb49-5731" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5732"><a href="#cb49-5732" aria-hidden="true" tabindex="-1"></a><span class="fu"># 8. Layer 6: Backtesting &amp; Evaluation</span></span>
-<span id="cb49-5733"><a href="#cb49-5733" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5734"><a href="#cb49-5734" aria-hidden="true" tabindex="-1"></a><span class="fu">## 8.1 Final Findings Report – Backtest &amp; Attribution Analysis</span></span>
+<span id="cb49-5725"><a href="#cb49-5725" aria-hidden="true" tabindex="-1"></a><span class="fu"># 8. Layer 6: Backtesting &amp; Evaluation</span></span>
+<span id="cb49-5726"><a href="#cb49-5726" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5727"><a href="#cb49-5727" aria-hidden="true" tabindex="-1"></a><span class="fu">## 8.1 Final Findings Report – Backtest &amp; Attribution Analysis</span></span>
+<span id="cb49-5728"><a href="#cb49-5728" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5729"><a href="#cb49-5729" aria-hidden="true" tabindex="-1"></a>This report provides a comprehensive analysis of the backtest results for our **regime-aware ensemble model** applied to a **dynamic portfolio construction framework**. </span>
+<span id="cb49-5730"><a href="#cb49-5730" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5731"><a href="#cb49-5731" aria-hidden="true" tabindex="-1"></a>The strategy was designed to adapt allocations depending on market regimes (Bull, Bear, Neutral), with weights between base models (Ridge, Elastic Net) recalibrated within each regime.  </span>
+<span id="cb49-5732"><a href="#cb49-5732" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5733"><a href="#cb49-5733" aria-hidden="true" tabindex="-1"></a>The backtest incorporates realistic frictions:</span>
+<span id="cb49-5734"><a href="#cb49-5734" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Transaction costs**: 5 basis points (bps) per trade  </span>
 <span id="cb49-5735"><a href="#cb49-5735" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5736"><a href="#cb49-5736" aria-hidden="true" tabindex="-1"></a>This report provides a comprehensive analysis of the backtest results for our **regime-aware ensemble model** applied to a **dynamic portfolio construction framework**. </span>
+<span id="cb49-5736"><a href="#cb49-5736" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Slippage**: 2 bps to capture execution delays and price impact  </span>
 <span id="cb49-5737"><a href="#cb49-5737" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5738"><a href="#cb49-5738" aria-hidden="true" tabindex="-1"></a>The strategy was designed to adapt allocations depending on market regimes (Bull, Bear, Neutral), with weights between base models (Ridge, Elastic Net) recalibrated within each regime.  </span>
+<span id="cb49-5738"><a href="#cb49-5738" aria-hidden="true" tabindex="-1"></a>Positions were adjusted daily based on the model’s forward-return predictions, starting from a Net Asset Value (NAV) of **1.0**. The test period covers historical market data (dates aligned with prior training/testing splits). The universe was a diversified equity portfolio across multiple sectors.</span>
 <span id="cb49-5739"><a href="#cb49-5739" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5740"><a href="#cb49-5740" aria-hidden="true" tabindex="-1"></a>The backtest incorporates realistic frictions:</span>
-<span id="cb49-5741"><a href="#cb49-5741" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Transaction costs**: 5 basis points (bps) per trade  </span>
-<span id="cb49-5742"><a href="#cb49-5742" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5743"><a href="#cb49-5743" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Slippage**: 2 bps to capture execution delays and price impact  </span>
-<span id="cb49-5744"><a href="#cb49-5744" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5745"><a href="#cb49-5745" aria-hidden="true" tabindex="-1"></a>Positions were adjusted daily based on the model’s forward-return predictions, starting from a Net Asset Value (NAV) of **1.0**. The test period covers historical market data (dates aligned with prior training/testing splits). The universe was a diversified equity portfolio across multiple sectors.</span>
-<span id="cb49-5746"><a href="#cb49-5746" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5747"><a href="#cb49-5747" aria-hidden="true" tabindex="-1"></a>The analysis evaluates performance at the **portfolio level**, by **feature groups** (OHLCV, Options, and Fundamental), and by **key sectors** (Technology, Consumer). </span>
-<span id="cb49-5748"><a href="#cb49-5748" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5749"><a href="#cb49-5749" aria-hidden="true" tabindex="-1"></a>Metrics were calculated using standard definitions:  </span>
-<span id="cb49-5750"><a href="#cb49-5750" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5751"><a href="#cb49-5751" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Cumulative Return**: Compounded daily return over the test period.  </span>
-<span id="cb49-5752"><a href="#cb49-5752" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5753"><a href="#cb49-5753" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Sharpe Ratio**: Excess return (over 0% risk-free) divided by portfolio volatility (annualized).  </span>
-<span id="cb49-5754"><a href="#cb49-5754" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5755"><a href="#cb49-5755" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Sortino Ratio**: Similar to Sharpe but penalizes only downside volatility (below 0% return). </span>
-<span id="cb49-5756"><a href="#cb49-5756" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5757"><a href="#cb49-5757" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Max Drawdown**: Maximum peak-to-trough NAV decline.  </span>
-<span id="cb49-5758"><a href="#cb49-5758" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5759"><a href="#cb49-5759" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Win Rate**: Percentage of days with positive returns.  </span>
-<span id="cb49-5760"><a href="#cb49-5760" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5761"><a href="#cb49-5761" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Information Coefficient (IC)**: Spearman rank correlation between predicted and realized returns.  </span>
-<span id="cb49-5762"><a href="#cb49-5762" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5763"><a href="#cb49-5763" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Average Turnover**: Daily rebalancing activity, expressed as a fraction of portfolio value. </span>
-<span id="cb49-5764"><a href="#cb49-5764" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5765"><a href="#cb49-5765" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Average Net Exposure**: Mean absolute exposure to the market (after netting long and short positions).  </span>
-<span id="cb49-5766"><a href="#cb49-5766" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5767"><a href="#cb49-5767" aria-hidden="true" tabindex="-1"></a>All calculations use **out-of-sample test data** to preserve realism and avoid overfitting.</span>
-<span id="cb49-5768"><a href="#cb49-5768" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5769"><a href="#cb49-5769" aria-hidden="true" tabindex="-1"></a><span class="fu">## 8.2 Portfolio-Level Performance</span></span>
-<span id="cb49-5770"><a href="#cb49-5770" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5771"><a href="#cb49-5771" aria-hidden="true" tabindex="-1"></a>The regime-aware ensemble delivered **modest positive returns** with controlled risk, but also showed areas for improvement. Below is a summary of performance metrics with explanatory context.</span>
-<span id="cb49-5772"><a href="#cb49-5772" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5773"><a href="#cb49-5773" aria-hidden="true" tabindex="-1"></a>| Metric                  | Value                  | Insights |</span>
-<span id="cb49-5774"><a href="#cb49-5774" aria-hidden="true" tabindex="-1"></a>|-------------------------|------------------------|----------|</span>
-<span id="cb49-5775"><a href="#cb49-5775" aria-hidden="true" tabindex="-1"></a>| Cumulative Return      | +2.96% (0.0296) | Positive, though modest. Underperformed equity benchmarks (~5–10%), likely due to cautious exposure during Bear/Neutral regimes. |</span>
-<span id="cb49-5776"><a href="#cb49-5776" aria-hidden="true" tabindex="-1"></a>| Sharpe Ratio           | 0.27 (0.2670) | Indicates returns scaled modestly to risk. Positive but below institutional standards (&gt;1). High turnover and costs weighed on efficiency. |</span>
-<span id="cb49-5777"><a href="#cb49-5777" aria-hidden="true" tabindex="-1"></a>| Sortino Ratio          | 0.48 (0.4817) | Better than Sharpe, showing the model was relatively effective in avoiding large downside moves. |</span>
-<span id="cb49-5778"><a href="#cb49-5778" aria-hidden="true" tabindex="-1"></a>| Max Drawdown           | -15.21% (-0.1521) | Largest decline from peak. This coincided with prolonged Bear phases where OHLCV signals underperformed. Highlights need for improved stop-loss or regime detection. |</span>
-<span id="cb49-5779"><a href="#cb49-5779" aria-hidden="true" tabindex="-1"></a>| Win Rate               | 51.98% (0.520) | Slightly above random chance. On winning days, average gain was +0.15%, compared to -0.12% losses on down days. |</span>
-<span id="cb49-5780"><a href="#cb49-5780" aria-hidden="true" tabindex="-1"></a>| Information Coefficient (IC) | 0.022 (0.0222) | Weak but positive predictive power. Signal quality was better at longer horizons (5d, 21d) than at 1d. |</span>
-<span id="cb49-5781"><a href="#cb49-5781" aria-hidden="true" tabindex="-1"></a>| Average Turnover       | 53.05% (0.531) | Active daily rebalancing. Regime switching amplified trading frequency. Frictions (7 bps) reduced net returns by ~0.5–1% annually. |</span>
-<span id="cb49-5782"><a href="#cb49-5782" aria-hidden="true" tabindex="-1"></a>| Average Net Exposure   | 91.53% (0.915) | Consistently long-biased. Exposure dipped to ~70% in Bear phases and reached 100% in Bulls. |</span>
-<span id="cb49-5783"><a href="#cb49-5783" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5784"><a href="#cb49-5784" aria-hidden="true" tabindex="-1"></a><span class="fu">## 8.3 NAV and Drawdown Progression</span></span>
-<span id="cb49-5785"><a href="#cb49-5785" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5786"><a href="#cb49-5786" aria-hidden="true" tabindex="-1"></a>The NAV curve showed several short rallies followed by moderate pullbacks. Below is a small sample of NAV evolution and drawdowns during the early test period.</span>
-<span id="cb49-5787"><a href="#cb49-5787" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5788"><a href="#cb49-5788" aria-hidden="true" tabindex="-1"></a>| Day | NAV       | Drawdown | Commentary |</span>
-<span id="cb49-5789"><a href="#cb49-5789" aria-hidden="true" tabindex="-1"></a>|-----|-----------|----------|------------|</span>
-<span id="cb49-5790"><a href="#cb49-5790" aria-hidden="true" tabindex="-1"></a>| 0   | 1.0000    | 0.0000   | Portfolio initialized at NAV = 1.0. |</span>
-<span id="cb49-5791"><a href="#cb49-5791" aria-hidden="true" tabindex="-1"></a>| 1   | 1.0040    | 0.0000   | Early Bull signals generated small gains. |</span>
-<span id="cb49-5792"><a href="#cb49-5792" aria-hidden="true" tabindex="-1"></a>| 2   | 1.0107    | 0.0000   | Continued upward momentum; Options data helped identify outperformers. |</span>
-<span id="cb49-5793"><a href="#cb49-5793" aria-hidden="true" tabindex="-1"></a>| 3   | 1.0263    | 0.0000   | Peak during sample window; ~2.6% cumulative gain. |</span>
-<span id="cb49-5794"><a href="#cb49-5794" aria-hidden="true" tabindex="-1"></a>| 4   | 1.0241    | -0.0021  | Small drawdown (~0.21%), triggered by Neutral regime shift. |</span>
-<span id="cb49-5795"><a href="#cb49-5795" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5796"><a href="#cb49-5796" aria-hidden="true" tabindex="-1"></a>Across the full test period, multiple drawdowns &gt;5% were observed, particularly during Bear regimes with high volatility. These periods coincided with OHLCV-driven allocations overwhelming stronger signals.</span>
-<span id="cb49-5797"><a href="#cb49-5797" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5798"><a href="#cb49-5798" aria-hidden="true" tabindex="-1"></a><span class="fu">## 8.4 Feature Group Attribution</span></span>
-<span id="cb49-5799"><a href="#cb49-5799" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5800"><a href="#cb49-5800" aria-hidden="true" tabindex="-1"></a>We analyzed contributions of different **feature groups** by simulating hypothetical sub-portfolios using only one group’s signals, then scaling contributions relative to total returns.</span>
-<span id="cb49-5801"><a href="#cb49-5801" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5802"><a href="#cb49-5802" aria-hidden="true" tabindex="-1"></a>| Feature Group | Cumulative Return | Sharpe Ratio | Insights |</span>
-<span id="cb49-5803"><a href="#cb49-5803" aria-hidden="true" tabindex="-1"></a>|---------------|------------------|--------------|----------|</span>
-<span id="cb49-5804"><a href="#cb49-5804" aria-hidden="true" tabindex="-1"></a>| OHLCV         | -27.0%           | -3.12        | Strong negative impact. Price/volume features failed in volatile regimes, generating whipsaws. Needs tighter integration with regime detection or downweighting in Bears. |</span>
-<span id="cb49-5805"><a href="#cb49-5805" aria-hidden="true" tabindex="-1"></a>| Options       | +28.0%           | 2.75         | Strongest alpha source. Options-derived metrics (IV, skew, Greeks) captured sentiment effectively, especially in Bulls. This group alone would have outperformed the overall portfolio. |</span>
-<span id="cb49-5806"><a href="#cb49-5806" aria-hidden="true" tabindex="-1"></a>| Fundamental   | +0.8%            | 0.21         | Provided stability but limited alpha. Worked best in Neutral regimes on longer horizons (21d), when fundamentals aligned with price trends. |</span>
-<span id="cb49-5807"><a href="#cb49-5807" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5808"><a href="#cb49-5808" aria-hidden="true" tabindex="-1"></a>The **positive portfolio outcome** came from Options signals offsetting OHLCV’s drag, with Fundamentals adding stability. Bulls boosted Options-based returns significantly (+40%), while Bears amplified OHLCV losses (-35%). This demonstrates the **value of regime-aware weighting**, though further pruning of weak signals is needed.</span>
-<span id="cb49-5809"><a href="#cb49-5809" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5810"><a href="#cb49-5810" aria-hidden="true" tabindex="-1"></a><span class="fu">## 8.5 Sector-Level Decomposition</span></span>
+<span id="cb49-5740"><a href="#cb49-5740" aria-hidden="true" tabindex="-1"></a>The analysis evaluates performance at the **portfolio level**, by **feature groups** (OHLCV, Options, and Fundamental), and by **key sectors** (Technology, Consumer). </span>
+<span id="cb49-5741"><a href="#cb49-5741" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5742"><a href="#cb49-5742" aria-hidden="true" tabindex="-1"></a>Metrics were calculated using standard definitions:  </span>
+<span id="cb49-5743"><a href="#cb49-5743" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5744"><a href="#cb49-5744" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Cumulative Return**: Compounded daily return over the test period.  </span>
+<span id="cb49-5745"><a href="#cb49-5745" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5746"><a href="#cb49-5746" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Sharpe Ratio**: Excess return (over 0% risk-free) divided by portfolio volatility (annualized).  </span>
+<span id="cb49-5747"><a href="#cb49-5747" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5748"><a href="#cb49-5748" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Sortino Ratio**: Similar to Sharpe but penalizes only downside volatility (below 0% return). </span>
+<span id="cb49-5749"><a href="#cb49-5749" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5750"><a href="#cb49-5750" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Max Drawdown**: Maximum peak-to-trough NAV decline.  </span>
+<span id="cb49-5751"><a href="#cb49-5751" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5752"><a href="#cb49-5752" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Win Rate**: Percentage of days with positive returns.  </span>
+<span id="cb49-5753"><a href="#cb49-5753" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5754"><a href="#cb49-5754" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Information Coefficient (IC)**: Spearman rank correlation between predicted and realized returns.  </span>
+<span id="cb49-5755"><a href="#cb49-5755" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5756"><a href="#cb49-5756" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Average Turnover**: Daily rebalancing activity, expressed as a fraction of portfolio value. </span>
+<span id="cb49-5757"><a href="#cb49-5757" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5758"><a href="#cb49-5758" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Average Net Exposure**: Mean absolute exposure to the market (after netting long and short positions).  </span>
+<span id="cb49-5759"><a href="#cb49-5759" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5760"><a href="#cb49-5760" aria-hidden="true" tabindex="-1"></a>All calculations use **out-of-sample test data** to preserve realism and avoid overfitting.</span>
+<span id="cb49-5761"><a href="#cb49-5761" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5762"><a href="#cb49-5762" aria-hidden="true" tabindex="-1"></a><span class="fu">## 8.2 Portfolio-Level Performance</span></span>
+<span id="cb49-5763"><a href="#cb49-5763" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5764"><a href="#cb49-5764" aria-hidden="true" tabindex="-1"></a>The regime-aware ensemble delivered **modest positive returns** with controlled risk, but also showed areas for improvement. Below is a summary of performance metrics with explanatory context.</span>
+<span id="cb49-5765"><a href="#cb49-5765" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5766"><a href="#cb49-5766" aria-hidden="true" tabindex="-1"></a>| Metric                  | Value                  | Insights |</span>
+<span id="cb49-5767"><a href="#cb49-5767" aria-hidden="true" tabindex="-1"></a>|-------------------------|------------------------|----------|</span>
+<span id="cb49-5768"><a href="#cb49-5768" aria-hidden="true" tabindex="-1"></a>| Cumulative Return      | +2.96% (0.0296) | Positive, though modest. Underperformed equity benchmarks (~5–10%), likely due to cautious exposure during Bear/Neutral regimes. |</span>
+<span id="cb49-5769"><a href="#cb49-5769" aria-hidden="true" tabindex="-1"></a>| Sharpe Ratio           | 0.27 (0.2670) | Indicates returns scaled modestly to risk. Positive but below institutional standards (&gt;1). High turnover and costs weighed on efficiency. |</span>
+<span id="cb49-5770"><a href="#cb49-5770" aria-hidden="true" tabindex="-1"></a>| Sortino Ratio          | 0.48 (0.4817) | Better than Sharpe, showing the model was relatively effective in avoiding large downside moves. |</span>
+<span id="cb49-5771"><a href="#cb49-5771" aria-hidden="true" tabindex="-1"></a>| Max Drawdown           | -15.21% (-0.1521) | Largest decline from peak. This coincided with prolonged Bear phases where OHLCV signals underperformed. Highlights need for improved stop-loss or regime detection. |</span>
+<span id="cb49-5772"><a href="#cb49-5772" aria-hidden="true" tabindex="-1"></a>| Win Rate               | 51.98% (0.520) | Slightly above random chance. On winning days, average gain was +0.15%, compared to -0.12% losses on down days. |</span>
+<span id="cb49-5773"><a href="#cb49-5773" aria-hidden="true" tabindex="-1"></a>| Information Coefficient (IC) | 0.022 (0.0222) | Weak but positive predictive power. Signal quality was better at longer horizons (5d, 21d) than at 1d. |</span>
+<span id="cb49-5774"><a href="#cb49-5774" aria-hidden="true" tabindex="-1"></a>| Average Turnover       | 53.05% (0.531) | Active daily rebalancing. Regime switching amplified trading frequency. Frictions (7 bps) reduced net returns by ~0.5–1% annually. |</span>
+<span id="cb49-5775"><a href="#cb49-5775" aria-hidden="true" tabindex="-1"></a>| Average Net Exposure   | 91.53% (0.915) | Consistently long-biased. Exposure dipped to ~70% in Bear phases and reached 100% in Bulls. |</span>
+<span id="cb49-5776"><a href="#cb49-5776" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5777"><a href="#cb49-5777" aria-hidden="true" tabindex="-1"></a><span class="fu">## 8.3 NAV and Drawdown Progression</span></span>
+<span id="cb49-5778"><a href="#cb49-5778" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5779"><a href="#cb49-5779" aria-hidden="true" tabindex="-1"></a>The NAV curve showed several short rallies followed by moderate pullbacks. Below is a small sample of NAV evolution and drawdowns during the early test period.</span>
+<span id="cb49-5780"><a href="#cb49-5780" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5781"><a href="#cb49-5781" aria-hidden="true" tabindex="-1"></a>| Day | NAV       | Drawdown | Commentary |</span>
+<span id="cb49-5782"><a href="#cb49-5782" aria-hidden="true" tabindex="-1"></a>|-----|-----------|----------|------------|</span>
+<span id="cb49-5783"><a href="#cb49-5783" aria-hidden="true" tabindex="-1"></a>| 0   | 1.0000    | 0.0000   | Portfolio initialized at NAV = 1.0. |</span>
+<span id="cb49-5784"><a href="#cb49-5784" aria-hidden="true" tabindex="-1"></a>| 1   | 1.0040    | 0.0000   | Early Bull signals generated small gains. |</span>
+<span id="cb49-5785"><a href="#cb49-5785" aria-hidden="true" tabindex="-1"></a>| 2   | 1.0107    | 0.0000   | Continued upward momentum; Options data helped identify outperformers. |</span>
+<span id="cb49-5786"><a href="#cb49-5786" aria-hidden="true" tabindex="-1"></a>| 3   | 1.0263    | 0.0000   | Peak during sample window; ~2.6% cumulative gain. |</span>
+<span id="cb49-5787"><a href="#cb49-5787" aria-hidden="true" tabindex="-1"></a>| 4   | 1.0241    | -0.0021  | Small drawdown (~0.21%), triggered by Neutral regime shift. |</span>
+<span id="cb49-5788"><a href="#cb49-5788" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5789"><a href="#cb49-5789" aria-hidden="true" tabindex="-1"></a>Across the full test period, multiple drawdowns &gt;5% were observed, particularly during Bear regimes with high volatility. These periods coincided with OHLCV-driven allocations overwhelming stronger signals.</span>
+<span id="cb49-5790"><a href="#cb49-5790" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5791"><a href="#cb49-5791" aria-hidden="true" tabindex="-1"></a><span class="fu">## 8.4 Feature Group Attribution</span></span>
+<span id="cb49-5792"><a href="#cb49-5792" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5793"><a href="#cb49-5793" aria-hidden="true" tabindex="-1"></a>We analyzed contributions of different **feature groups** by simulating hypothetical sub-portfolios using only one group’s signals, then scaling contributions relative to total returns.</span>
+<span id="cb49-5794"><a href="#cb49-5794" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5795"><a href="#cb49-5795" aria-hidden="true" tabindex="-1"></a>| Feature Group | Cumulative Return | Sharpe Ratio | Insights |</span>
+<span id="cb49-5796"><a href="#cb49-5796" aria-hidden="true" tabindex="-1"></a>|---------------|------------------|--------------|----------|</span>
+<span id="cb49-5797"><a href="#cb49-5797" aria-hidden="true" tabindex="-1"></a>| OHLCV         | -27.0%           | -3.12        | Strong negative impact. Price/volume features failed in volatile regimes, generating whipsaws. Needs tighter integration with regime detection or downweighting in Bears. |</span>
+<span id="cb49-5798"><a href="#cb49-5798" aria-hidden="true" tabindex="-1"></a>| Options       | +28.0%           | 2.75         | Strongest alpha source. Options-derived metrics (IV, skew, Greeks) captured sentiment effectively, especially in Bulls. This group alone would have outperformed the overall portfolio. |</span>
+<span id="cb49-5799"><a href="#cb49-5799" aria-hidden="true" tabindex="-1"></a>| Fundamental   | +0.8%            | 0.21         | Provided stability but limited alpha. Worked best in Neutral regimes on longer horizons (21d), when fundamentals aligned with price trends. |</span>
+<span id="cb49-5800"><a href="#cb49-5800" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5801"><a href="#cb49-5801" aria-hidden="true" tabindex="-1"></a>The **positive portfolio outcome** came from Options signals offsetting OHLCV’s drag, with Fundamentals adding stability. Bulls boosted Options-based returns significantly (+40%), while Bears amplified OHLCV losses (-35%). This demonstrates the **value of regime-aware weighting**, though further pruning of weak signals is needed.</span>
+<span id="cb49-5802"><a href="#cb49-5802" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5803"><a href="#cb49-5803" aria-hidden="true" tabindex="-1"></a><span class="fu">## 8.5 Sector-Level Decomposition</span></span>
+<span id="cb49-5804"><a href="#cb49-5804" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5805"><a href="#cb49-5805" aria-hidden="true" tabindex="-1"></a>We conducted sector attribution for Technology and Consumer, which were the most influential contributors.</span>
+<span id="cb49-5806"><a href="#cb49-5806" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5807"><a href="#cb49-5807" aria-hidden="true" tabindex="-1"></a>| Sector      | Avg Daily Return | Sharpe Ratio | Insights |</span>
+<span id="cb49-5808"><a href="#cb49-5808" aria-hidden="true" tabindex="-1"></a>|-------------|------------------|--------------|----------|</span>
+<span id="cb49-5809"><a href="#cb49-5809" aria-hidden="true" tabindex="-1"></a>| Technology  | -0.012% (-0.00012) | -0.19       | Tech lagged due to volatility during Bear regimes. The model reduced exposure but not enough to offset losses. Net drag: ~-1.2% of portfolio return. |</span>
+<span id="cb49-5810"><a href="#cb49-5810" aria-hidden="true" tabindex="-1"></a>| Consumer    | +0.080% (0.0008)  | 1.30        | Consistently strong contributor. Bull/Neutral regimes tilted toward Consumer, capturing resilience (e.g., post-pandemic spending trends). Net contribution: ~+0.8% of portfolio return. |</span>
 <span id="cb49-5811"><a href="#cb49-5811" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5812"><a href="#cb49-5812" aria-hidden="true" tabindex="-1"></a>We conducted sector attribution for Technology and Consumer, which were the most influential contributors.</span>
+<span id="cb49-5812"><a href="#cb49-5812" aria-hidden="true" tabindex="-1"></a>This decomposition shows partial success in **sector rotation**. Consumer exposure added value, but Technology remained a weak spot, suggesting a need for **sector-specific regime filters** (e.g., “Tech-Bear” vs. “Market-Bear”).</span>
 <span id="cb49-5813"><a href="#cb49-5813" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5814"><a href="#cb49-5814" aria-hidden="true" tabindex="-1"></a>| Sector      | Avg Daily Return | Sharpe Ratio | Insights |</span>
-<span id="cb49-5815"><a href="#cb49-5815" aria-hidden="true" tabindex="-1"></a>|-------------|------------------|--------------|----------|</span>
-<span id="cb49-5816"><a href="#cb49-5816" aria-hidden="true" tabindex="-1"></a>| Technology  | -0.012% (-0.00012) | -0.19       | Tech lagged due to volatility during Bear regimes. The model reduced exposure but not enough to offset losses. Net drag: ~-1.2% of portfolio return. |</span>
-<span id="cb49-5817"><a href="#cb49-5817" aria-hidden="true" tabindex="-1"></a>| Consumer    | +0.080% (0.0008)  | 1.30        | Consistently strong contributor. Bull/Neutral regimes tilted toward Consumer, capturing resilience (e.g., post-pandemic spending trends). Net contribution: ~+0.8% of portfolio return. |</span>
-<span id="cb49-5818"><a href="#cb49-5818" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5819"><a href="#cb49-5819" aria-hidden="true" tabindex="-1"></a>This decomposition shows partial success in **sector rotation**. Consumer exposure added value, but Technology remained a weak spot, suggesting a need for **sector-specific regime filters** (e.g., “Tech-Bear” vs. “Market-Bear”).</span>
+<span id="cb49-5814"><a href="#cb49-5814" aria-hidden="true" tabindex="-1"></a><span class="fu">## 8.6 Key Takeaways and Recommendations</span></span>
+<span id="cb49-5815"><a href="#cb49-5815" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5816"><a href="#cb49-5816" aria-hidden="true" tabindex="-1"></a>The backtest demonstrates that the regime-aware ensemble strategy has **potential but requires refinement**.  </span>
+<span id="cb49-5817"><a href="#cb49-5817" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5818"><a href="#cb49-5818" aria-hidden="true" tabindex="-1"></a>**Strengths**</span>
+<span id="cb49-5819"><a href="#cb49-5819" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Positive overall return (+2.96%) despite challenging markets.  </span>
 <span id="cb49-5820"><a href="#cb49-5820" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5821"><a href="#cb49-5821" aria-hidden="true" tabindex="-1"></a><span class="fu">## 8.6 Key Takeaways and Recommendations</span></span>
+<span id="cb49-5821"><a href="#cb49-5821" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Options features were the **dominant alpha driver** (+28%).  </span>
 <span id="cb49-5822"><a href="#cb49-5822" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5823"><a href="#cb49-5823" aria-hidden="true" tabindex="-1"></a>The backtest demonstrates that the regime-aware ensemble strategy has **potential but requires refinement**.  </span>
+<span id="cb49-5823"><a href="#cb49-5823" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Consumer sector tilts improved diversification and resilience.  </span>
 <span id="cb49-5824"><a href="#cb49-5824" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5825"><a href="#cb49-5825" aria-hidden="true" tabindex="-1"></a>**Strengths**</span>
-<span id="cb49-5826"><a href="#cb49-5826" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Positive overall return (+2.96%) despite challenging markets.  </span>
-<span id="cb49-5827"><a href="#cb49-5827" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5828"><a href="#cb49-5828" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Options features were the **dominant alpha driver** (+28%).  </span>
+<span id="cb49-5825"><a href="#cb49-5825" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Drawdowns were smaller than typical equity benchmarks (max -15.2% vs. -20%+ in stressed periods).  </span>
+<span id="cb49-5826"><a href="#cb49-5826" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5827"><a href="#cb49-5827" aria-hidden="true" tabindex="-1"></a>**Weaknesses**</span>
+<span id="cb49-5828"><a href="#cb49-5828" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>OHLCV signals created persistent drag (-27%).  </span>
 <span id="cb49-5829"><a href="#cb49-5829" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5830"><a href="#cb49-5830" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Consumer sector tilts improved diversification and resilience.  </span>
+<span id="cb49-5830"><a href="#cb49-5830" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Tech sector remained a chronic underperformer.  </span>
 <span id="cb49-5831"><a href="#cb49-5831" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5832"><a href="#cb49-5832" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Drawdowns were smaller than typical equity benchmarks (max -15.2% vs. -20%+ in stressed periods).  </span>
+<span id="cb49-5832"><a href="#cb49-5832" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Information Coefficient (0.022) was low, suggesting weak rank-ordering of returns.  </span>
 <span id="cb49-5833"><a href="#cb49-5833" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5834"><a href="#cb49-5834" aria-hidden="true" tabindex="-1"></a>**Weaknesses**</span>
-<span id="cb49-5835"><a href="#cb49-5835" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>OHLCV signals created persistent drag (-27%).  </span>
-<span id="cb49-5836"><a href="#cb49-5836" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5837"><a href="#cb49-5837" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Tech sector remained a chronic underperformer.  </span>
-<span id="cb49-5838"><a href="#cb49-5838" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5839"><a href="#cb49-5839" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Information Coefficient (0.022) was low, suggesting weak rank-ordering of returns.  </span>
-<span id="cb49-5840"><a href="#cb49-5840" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5841"><a href="#cb49-5841" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>High turnover (53%) reduced net returns by up to 1% annually.  </span>
-<span id="cb49-5842"><a href="#cb49-5842" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5843"><a href="#cb49-5843" aria-hidden="true" tabindex="-1"></a>**Opportunities for Improvement**</span>
-<span id="cb49-5844"><a href="#cb49-5844" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Feature Optimization**  </span>
-<span id="cb49-5845"><a href="#cb49-5845" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Downweight OHLCV in Bears (cap at 20% ensemble weight).  </span>
+<span id="cb49-5834"><a href="#cb49-5834" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>High turnover (53%) reduced net returns by up to 1% annually.  </span>
+<span id="cb49-5835"><a href="#cb49-5835" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5836"><a href="#cb49-5836" aria-hidden="true" tabindex="-1"></a>**Opportunities for Improvement**</span>
+<span id="cb49-5837"><a href="#cb49-5837" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Feature Optimization**  </span>
+<span id="cb49-5838"><a href="#cb49-5838" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Downweight OHLCV in Bears (cap at 20% ensemble weight).  </span>
+<span id="cb49-5839"><a href="#cb49-5839" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5840"><a href="#cb49-5840" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Amplify Options signals in Bulls, where predictive power is highest.  </span>
+<span id="cb49-5841"><a href="#cb49-5841" aria-hidden="true" tabindex="-1"></a>   </span>
+<span id="cb49-5842"><a href="#cb49-5842" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>This could raise IC closer to 0.03+.  </span>
+<span id="cb49-5843"><a href="#cb49-5843" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5844"><a href="#cb49-5844" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Sector Rotation Enhancements**  </span>
+<span id="cb49-5845"><a href="#cb49-5845" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Build sector-specific regimes to improve exposure control.</span>
 <span id="cb49-5846"><a href="#cb49-5846" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5847"><a href="#cb49-5847" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Amplify Options signals in Bulls, where predictive power is highest.  </span>
-<span id="cb49-5848"><a href="#cb49-5848" aria-hidden="true" tabindex="-1"></a>   </span>
-<span id="cb49-5849"><a href="#cb49-5849" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>This could raise IC closer to 0.03+.  </span>
-<span id="cb49-5850"><a href="#cb49-5850" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5851"><a href="#cb49-5851" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Sector Rotation Enhancements**  </span>
-<span id="cb49-5852"><a href="#cb49-5852" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Build sector-specific regimes to improve exposure control.</span>
+<span id="cb49-5847"><a href="#cb49-5847" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Target incremental alpha of +0.5% annually.  </span>
+<span id="cb49-5848"><a href="#cb49-5848" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5849"><a href="#cb49-5849" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Risk Management Adjustments**  </span>
+<span id="cb49-5850"><a href="#cb49-5850" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Reduce turnover with threshold-based rebalancing (e.g., only trade if signal shift &gt;5%).</span>
+<span id="cb49-5851"><a href="#cb49-5851" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5852"><a href="#cb49-5852" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Could lower frictions by 20–30%.  </span>
 <span id="cb49-5853"><a href="#cb49-5853" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5854"><a href="#cb49-5854" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Target incremental alpha of +0.5% annually.  </span>
-<span id="cb49-5855"><a href="#cb49-5855" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5856"><a href="#cb49-5856" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Risk Management Adjustments**  </span>
-<span id="cb49-5857"><a href="#cb49-5857" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Reduce turnover with threshold-based rebalancing (e.g., only trade if signal shift &gt;5%).</span>
-<span id="cb49-5858"><a href="#cb49-5858" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5859"><a href="#cb49-5859" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Could lower frictions by 20–30%.  </span>
-<span id="cb49-5860"><a href="#cb49-5860" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5861"><a href="#cb49-5861" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Signal Calibration**  </span>
-<span id="cb49-5862"><a href="#cb49-5862" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Retrain meta-models on granular horizons (e.g., 3d, 10d).  </span>
-<span id="cb49-5863"><a href="#cb49-5863" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5864"><a href="#cb49-5864" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Incorporate macroeconomic regime labels (inflation shocks, Fed pivots).  </span>
-<span id="cb49-5865"><a href="#cb49-5865" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Target win rate &gt;55%.  </span>
+<span id="cb49-5854"><a href="#cb49-5854" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Signal Calibration**  </span>
+<span id="cb49-5855"><a href="#cb49-5855" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Retrain meta-models on granular horizons (e.g., 3d, 10d).  </span>
+<span id="cb49-5856"><a href="#cb49-5856" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5857"><a href="#cb49-5857" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Incorporate macroeconomic regime labels (inflation shocks, Fed pivots).  </span>
+<span id="cb49-5858"><a href="#cb49-5858" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Target win rate &gt;55%.  </span>
+<span id="cb49-5859"><a href="#cb49-5859" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5860"><a href="#cb49-5860" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Robustness Testing**  </span>
+<span id="cb49-5861"><a href="#cb49-5861" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Conduct Monte Carlo simulations on drawdowns.  </span>
+<span id="cb49-5862"><a href="#cb49-5862" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5863"><a href="#cb49-5863" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Stress-test in extreme scenarios (e.g., 2020 crash, 2022 Bear).  </span>
+<span id="cb49-5864"><a href="#cb49-5864" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5865"><a href="#cb49-5865" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Extend test period for statistical confidence.  </span>
 <span id="cb49-5866"><a href="#cb49-5866" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5867"><a href="#cb49-5867" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Robustness Testing**  </span>
-<span id="cb49-5868"><a href="#cb49-5868" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Conduct Monte Carlo simulations on drawdowns.  </span>
-<span id="cb49-5869"><a href="#cb49-5869" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5870"><a href="#cb49-5870" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Stress-test in extreme scenarios (e.g., 2020 crash, 2022 Bear).  </span>
-<span id="cb49-5871"><a href="#cb49-5871" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5872"><a href="#cb49-5872" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Extend test period for statistical confidence.  </span>
+<span id="cb49-5867"><a href="#cb49-5867" aria-hidden="true" tabindex="-1"></a><span class="fu">## 8.7 Final Assessment</span></span>
+<span id="cb49-5868"><a href="#cb49-5868" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5869"><a href="#cb49-5869" aria-hidden="true" tabindex="-1"></a>The **regime-aware ensemble** approach demonstrated that dynamic weighting across models and features provides a framework for adaptive trading. While the backtest showed only modest gains, the **risk-adjusted stability** and **clear attribution insights** suggest that this strategy can be materially improved with targeted refinements.  </span>
+<span id="cb49-5870"><a href="#cb49-5870" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5871"><a href="#cb49-5871" aria-hidden="true" tabindex="-1"></a>The next stage should prioritize:</span>
+<span id="cb49-5872"><a href="#cb49-5872" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Reducing reliance on noisy OHLCV features.  </span>
 <span id="cb49-5873"><a href="#cb49-5873" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5874"><a href="#cb49-5874" aria-hidden="true" tabindex="-1"></a><span class="fu">## 8.7 Final Assessment</span></span>
+<span id="cb49-5874"><a href="#cb49-5874" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Enhancing Options-based allocations.  </span>
 <span id="cb49-5875"><a href="#cb49-5875" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5876"><a href="#cb49-5876" aria-hidden="true" tabindex="-1"></a>The **regime-aware ensemble** approach demonstrated that dynamic weighting across models and features provides a framework for adaptive trading. While the backtest showed only modest gains, the **risk-adjusted stability** and **clear attribution insights** suggest that this strategy can be materially improved with targeted refinements.  </span>
+<span id="cb49-5876"><a href="#cb49-5876" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Introducing sector-specific regime detection.  </span>
 <span id="cb49-5877"><a href="#cb49-5877" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5878"><a href="#cb49-5878" aria-hidden="true" tabindex="-1"></a>The next stage should prioritize:</span>
-<span id="cb49-5879"><a href="#cb49-5879" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Reducing reliance on noisy OHLCV features.  </span>
-<span id="cb49-5880"><a href="#cb49-5880" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5881"><a href="#cb49-5881" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Enhancing Options-based allocations.  </span>
-<span id="cb49-5882"><a href="#cb49-5882" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5883"><a href="#cb49-5883" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Introducing sector-specific regime detection.  </span>
-<span id="cb49-5884"><a href="#cb49-5884" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5885"><a href="#cb49-5885" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Lowering transaction costs through smarter rebalancing.  </span>
-<span id="cb49-5886"><a href="#cb49-5886" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5887"><a href="#cb49-5887" aria-hidden="true" tabindex="-1"></a>Together, these changes could transform a low-return, low-IC strategy into a more robust alpha generator with stronger predictive signals and better cost efficiency.</span>
+<span id="cb49-5878"><a href="#cb49-5878" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Lowering transaction costs through smarter rebalancing.  </span>
+<span id="cb49-5879"><a href="#cb49-5879" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5880"><a href="#cb49-5880" aria-hidden="true" tabindex="-1"></a>Together, these changes could transform a low-return, low-IC strategy into a more robust alpha generator with stronger predictive signals and better cost efficiency.</span>
+<span id="cb49-5881"><a href="#cb49-5881" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5882"><a href="#cb49-5882" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
+<span id="cb49-5883"><a href="#cb49-5883" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5884"><a href="#cb49-5884" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>yli188. (n.d.). *WorldQuant_alpha101_code*. GitHub repository providing the Python implementation of the 101 Formulaic Alphas. (Accessed 2025).</span>
+<span id="cb49-5885"><a href="#cb49-5885" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5886"><a href="#cb49-5886" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Kakushadze, Z. (2016). *101 Formulaic Alphas*. arXiv preprint. Provides detailed formulas, input data types, and empirical analysis.</span>
+<span id="cb49-5887"><a href="#cb49-5887" aria-hidden="true" tabindex="-1"></a></span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
