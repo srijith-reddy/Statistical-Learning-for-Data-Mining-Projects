@@ -28,7 +28,8 @@ Developed a fairness-aware ensemble model (FairStacks) to predict NBA draft sele
 Simulated performance of Ridge vs OLS across linear and nonlinear data-generating processes. Illustrated the bias-variance decomposition with clean visualizations to explain when and why Ridge outperforms OLS under regularization.
 
 ### [End-to-End Quant Alpha Pipeline](project4.qmd)
-Built a full-stack research pipeline for equity alphas, integrating OHLCV, options, and macroeconomic data. Applied SHAP- and IC-based feature pruning, ElasticNet ensembles, and Optuna-tuned XGBoost/LightGBM models to forecast 1D/5D/21D forward returns. Extended the workflow with HMM-based regime detection and CVXPY portfolio optimization, achieving robust out-of-sample IC and Sharpe improvements.
+Developed as a summer research project, this full-stack workflow builds and evaluates equity alpha factors across multiple time horizons. Integrated OHLCV, options, and macroeconomic data, and applied SHAP- and IC-based feature pruning, ElasticNet ensembles, and Optuna-tuned XGBoost/LightGBM models to forecast 1D/5D/21D forward returns.The pipeline was later extended with HMM-based regime detection and CVXPY portfolio optimization, achieving robust out-of-sample IC and Sharpe improvements.
+
 
 ---
 
