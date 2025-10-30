@@ -16,7 +16,7 @@ You can also check out my resume at: [srijith-reddy.github.io/resume](https://sr
 
 ---
 
-##  Featured Projects
+## Featured Projects
 
 ### [Property Valuation Modeling](project3.qmd)
 Used Ridge Regression, LightGBM, and XGBoost to predict 2019 assessed property values from structured historical real estate data. Extensive feature engineering (including SHAP-based selection) and ensemble stacking yielded an RMSE of ~36K on the test set.
@@ -29,11 +29,18 @@ Simulated performance of Ridge vs OLS across linear and nonlinear data-generatin
 
 ### [End-to-End Quant Alpha Pipeline](project4.qmd)
 Built a full-stack research pipeline for equity alphas, integrating OHLCV, options, and macroeconomic data. Applied SHAP- and IC-based feature pruning, ElasticNet ensembles, and Optuna-tuned XGBoost/LightGBM models to forecast 1D/5D/21D forward returns. Extended the workflow with HMM-based regime detection and CVXPY portfolio optimization, achieving robust out-of-sample IC and Sharpe improvements.
+
+---
+
+## More of My Work
+
+Outside structured coursework, I enjoy building and experimenting with applied machine learning and generative AI systems — exploring how models learn patterns, make predictions, and create new possibilities from data.  
+My [GitHub repositories](https://github.com/srijith-reddy?tab=repositories) feature ongoing work in quantitative finance, model interpretability, and intelligent automation, along with experiments in LLM-based and generative workflows. 
 ---
 
 ## About the Course
 
-These projects were completed as part of *STA 9890: Statistical Learning for Data Mining*—a graduate-level course emphasizing predictive modeling, generalization error, model interpretability, and hands-on experimentation. The coursework combined theoretical insights with real-world data challenges.
+These projects were completed as part of *STA 9890: Statistical Learning for Data Mining* — a graduate-level course emphasizing predictive modeling, generalization error, model interpretability, and hands-on experimentation. The coursework combined theoretical insights with real-world data challenges.
 
 ---
 
