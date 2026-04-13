@@ -4,9 +4,8 @@ Welcome to my portfolio! I’m **Srijith Reddy**, a data science enthusiast curr
 
 Each project reflects a thoughtful blend of statistical theory and practical modeling for real-world challenges.
 
-📄 **Resume**: [srijith-reddy.github.io/resume](https://srijith-reddy.github.io/resume)
 
-🌐 **Live Portfolio Site**: [Statistical Learning for Data Mining Projects](https://srijith-reddy.github.io/Statistical-Learning-for-Data-Mining-Projects/)
+🌐 **Live Site**: [Statistical Learning for Data Mining Projects](https://srijith-reddy.github.io/Statistical-Learning-for-Data-Mining-Projects/)
 
 ---
 
